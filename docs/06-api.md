@@ -65,7 +65,7 @@ El documento OpenAPI declara este formato como el esquema `ProblemaApi` (con `co
 | 423 | `CuentaBloqueada` | Demasiados intentos fallidos; incluye cuándo se desbloquea |
 | 429 | `DemasiadasSolicitudes` | Límite de solicitudes; incluye `Retry-After` |
 | 500 | `ErrorInterno` | Error inesperado; solo `traceId`, nunca detalles |
-| 503 | `CorreoNoDisponible` | No se pudo enviar una invitación o un restablecimiento al personal |
+| 503 | `CorreoNoDisponible` | No se pudo enviar una invitación al personal. Al crear un usuario, incluye `usuarioId` |
 
 ## Público
 
@@ -116,6 +116,10 @@ Municipios con al menos un módulo activo: `[{ "municipioId": 6, "nombre": "Culi
   }
 ]
 ```
+
+### `GET /api/publico/modulos`
+
+Todos los módulos activos con su municipio, para el directorio de sedes del inicio: los mismos campos que el anterior más `municipioId` y `municipio`.
 
 ### `GET /api/publico/modulos/{moduloId}/ofertas`
 
@@ -285,6 +289,7 @@ Las listas se filtran a los módulos del usuario; un recurso de otro módulo res
 | GET | `/api/admin/tipos-tramite/{tipoTramiteId}` | Personal | Incluye `version` |
 | PUT | `/api/admin/tipos-tramite/{tipoTramiteId}` | Administrador | Reemplaza la lista de requisitos completa; exige `version` |
 | GET | `/api/admin/ofertas` | Personal | Parámetro `moduloId` |
+| GET | `/api/admin/ofertas/{ofertaId}` | Personal + módulo | Incluye `version` |
 | POST | `/api/admin/ofertas` | Supervisor + módulo | `{ moduloId, tipoTramiteId, diasVentana, notasSede }` |
 | PUT | `/api/admin/ofertas/{ofertaId}` | Supervisor + módulo | `{ diasVentana, notasSede, activo, version }` |
 
@@ -330,7 +335,7 @@ Solo Administrador.
 | Método | Ruta | Cuerpo | Notas |
 | --- | --- | --- | --- |
 | GET | `/api/admin/usuarios` | `busqueda`, `rol`, `activo`, paginación | |
-| POST | `/api/admin/usuarios` | `{ usuario, correo, nombre, apellidoPaterno, apellidoMaterno, rol, moduloIds }` | 201 y envía la invitación |
+| POST | `/api/admin/usuarios` | `{ usuario, correo, nombre, apellidoPaterno, apellidoMaterno, rol, moduloIds }` | 201 y envía la invitación. Si el correo falla, 503 `CorreoNoDisponible` con la extensión `usuarioId`: la cuenta quedó creada y la invitación se reenvía después |
 | GET | `/api/admin/usuarios/{usuarioId}` | — | Incluye `version`, `mfaActivo`, `ultimoAccesoEn` |
 | PUT | `/api/admin/usuarios/{usuarioId}` | `{ correo, nombre, apellidoPaterno, apellidoMaterno, rol, moduloIds, version }` | Cambia el sello de seguridad: la sesión del usuario se renueva en menos de 5 minutos |
 | POST | `/api/admin/usuarios/{usuarioId}/activacion` | `{ activo }` | |

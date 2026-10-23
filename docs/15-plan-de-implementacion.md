@@ -34,10 +34,11 @@ Objetivo: reducir el riesgo del sistema de 2016 mientras se construye la versió
 | Historia | Estado |
 | --- | --- |
 | H-1.1 | Repositorio y plantillas listos; falta proteger `main` en la plataforma de Git |
-| H-1.2 | `.github/workflows/ci.yml` con compilación, formato, pruebas, migraciones, contrato, tamaño, vulnerabilidades y gitleaks; falta la puerta de cobertura |
+| H-1.2 | `.github/workflows/ci.yml` con compilación, formato, pruebas, cobertura (Dominio 96 %, Aplicación 93 % al 2026-10-23), migraciones, contrato, tamaño, vulnerabilidades y gitleaks |
 | H-1.3 a H-1.13 | Implementadas, con pruebas de dominio, aplicación e integración |
-| H-1.14 y H-1.15 | Pendientes: necesitan la suscripción y los nombres de recursos de Azure |
-| H-1.16 | El código ya usa Data Protection en Storage y Key Vault y Application Insights cuando están configurados; falta crear los recursos |
+| H-1.14 | Bicep de QA y producción en `infra/`, validado con `bicep lint` y `build-params`; falta aplicarlo: necesita la suscripción, el grupo de Entra administrador de SQL y los valores entre `<>` de los parámetros |
+| H-1.15 | `.github/workflows/despliegue.yml` con QA, E2E, aprobación, ranura `staging`, prueba de humo e intercambio; falta crear los entornos de GitHub y la credencial federada |
+| H-1.16 | El código usa Data Protection en Storage y Key Vault y Application Insights cuando están configurados, y la plantilla crea esos recursos con sus permisos; falta aplicarla |
 
 ## Fase 2 · Agenda pública
 
@@ -53,6 +54,8 @@ Objetivo: reducir el riesgo del sistema de 2016 mientras se construye la versió
 
 **Puerta:** en QA, la prueba de carga de apertura de temporada termina con cero sobreventa y dentro de los tiempos de RNF-06; E2E y axe en verde.
 
+**Estado (2026-10-23):** H-2.1 a H-2.13 implementadas en backend y SPA, con pruebas de dominio, integración (concurrencia, reloj, idempotencia, privacidad) y de componentes. H-2.14: las 9 pruebas E2E con axe de `tests/e2e` pasan en local con Edge, en celular y escritorio (21 de 21 el 2026-10-23); en QA, los flujos 4 y 9 se omiten mientras no haya buzón de prueba. H-2.15: los escenarios de k6 de `tests/carga` están escritos y solo revisados de sintaxis. La puerta se cumple al correr ambos en QA.
+
 ## Fase 3 · Panel del personal
 
 | Épica | Historias | Referencias |
@@ -66,6 +69,8 @@ Objetivo: reducir el riesgo del sistema de 2016 mientras se construye la versió
 
 **Puerta:** supervisores y capturistas aprueban en QA una semana simulada de operación; revisión contra OWASP ASVS nivel 2 sin pendientes altos.
 
+**Estado (2026-10-23):** H-3.1 a H-3.16 implementadas, con la matriz de autorización probada en cada endpoint de `/api/admin` y pruebas de componentes del panel. H-3.16 (retención) existe desactivada hasta definir el plazo. Falta la semana simulada con operación y la revisión ASVS.
+
 ## Fase 4 · Migración y salida
 
 | Épica | Historias | Referencias |
@@ -75,6 +80,8 @@ Objetivo: reducir el riesgo del sistema de 2016 mientras se construye la versió
 | E21 Salida | H-4.4 Manuales breves y capacitación del personal · H-4.5 Corte, monitoreo reforzado y archivo de la base anterior | [13](13-despliegue-y-operacion.md), [14](14-migracion-de-datos.md) |
 
 **Puerta:** conciliación sin diferencias sin explicar, prueba de penetración sin hallazgos altos o críticos y prueba de humo en producción aprobada.
+
+**Estado (2026-10-23):** H-4.1 implementada en `tools/Tiie.Migracion` (analizar, migrar, conciliar y avisar) con pruebas unitarias y de punta a punta. El esquema de 2016 que lee es supuesto: se valida contra el script real antes del ensayo 1. H-4.2 a H-4.5 dependen de una copia de producción, del proveedor de la prueba de penetración y de operación.
 
 ## Definición de terminado
 

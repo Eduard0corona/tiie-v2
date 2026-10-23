@@ -87,6 +87,7 @@ Reglas:
 - **Datos mínimos.** No se piden documentos, domicilio ni datos del tutor en esta versión.
 - **Enmascarado** en pantallas del ciudadano, logs y auditoría: `Enmascarar.Curp("GOMA080515MSLRRNA5")` → `GOMA************A5`; correo → `a***@example.com`; celular → `******4567`.
 - **Logs sin datos personales.** Los logs nunca incluyen cuerpos de petición; una prueba revisa que los mensajes de log de los casos de uso no contengan los valores de una reserva de prueba.
+- **Telemetría sin tokens ni CURP.** Application Insights recibe `/mi-cita/{token}` con el token reemplazado y las cadenas de consulta con los valores ocultos. Los registros HTTP de App Service (`AppServiceHTTPLogs`) no se envían a Log Analytics porque guardan la URL completa.
 - **Cifrado.** En tránsito con TLS 1.2 o superior; en reposo con TDE de Azure SQL y cifrado de Storage.
 - **Acceso del personal** limitado a sus módulos y registrado en auditoría.
 
@@ -107,10 +108,11 @@ Reglas:
 
 | Secreto | Dónde vive |
 | --- | --- |
-| Acceso a Azure SQL | Sin secreto: identidad administrada (`Authentication=Active Directory Default`) |
+| Acceso a Azure SQL | Sin secreto: identidad administrada asignada por el usuario (`Authentication=Active Directory Default`) |
 | Clave secreta de Turnstile | Key Vault, como referencia en la configuración de App Service |
 | Llaves de Data Protection | Storage, protegidas con una llave de Key Vault |
-| Envío de correo | Sin secreto: identidad administrada hacia Communication Services |
+| Envío de correo | Sin secreto: identidad administrada hacia Communication Services, con las claves de acceso del recurso desactivadas |
+| Despliegue | Sin secreto: credencial federada OIDC de GitHub Actions; publicación básica (FTP y SCM) desactivada |
 | Desarrollo local | `dotnet user-secrets`; nunca en `appsettings.*.json` |
 
 CI ejecuta un escáner de secretos (por ejemplo gitleaks) en cada PR. Si un secreto llega al repositorio: primero se rota, después se limpia el historial.

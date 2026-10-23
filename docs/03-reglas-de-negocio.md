@@ -85,7 +85,7 @@ Todas las reglas se validan en el servidor, en `Tiie.Dominio` y `Tiie.Aplicacion
 
 ### RN-13 · Plazo de cambios del ciudadano
 
-- El ciudadano puede cancelar o reprogramar mientras hoy sea anterior a `FechaCita - DiasAnticipacionCambios`. Con el valor 1, el último día para hacerlo es el día anterior a la cita.
+- El ciudadano puede cancelar o reprogramar mientras hoy sea igual o anterior a `FechaCita - DiasAnticipacionCambios`. Con el valor 1, el último día para hacerlo es el día anterior a la cita.
 - El personal no tiene ese límite: puede cancelar o reprogramar hasta la hora de la cita.
 
 ### RN-14 · Recordatorio

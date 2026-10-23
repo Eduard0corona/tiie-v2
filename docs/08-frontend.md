@@ -12,18 +12,18 @@ Una sola aplicación React con TypeScript, compilada por Vite en `src/Tiie.Web/w
 | Cliente HTTP tipado | `openapi-fetch`, con tipos de `openapi-typescript` |
 | Formularios | `react-hook-form`, `zod` y `@hookform/resolvers` |
 | Estilos | `tailwindcss` 4 con `@tailwindcss/vite` |
-| Componentes base | shadcn/ui (copiados en `components/ui`, sobre Radix) e íconos `lucide-react` |
+| Componentes base | Propios en `components/ui` (alerta, botón, campo, diálogo, encabezado, grupo de opciones y selector), sin kit de componentes ni íconos |
 | Calendario | `react-day-picker` 9 |
 | Fechas | `date-fns` 4 y `@date-fns/tz` |
-| Tablas del panel | `@tanstack/react-table` |
-| Gráficas del tablero | `recharts` |
+| Tablas del panel | HTML semántico con `caption` y encabezados de columna; sin librería |
+| Gráficas del tablero | Barras con CSS dentro de tablas accesibles; sin librería |
 | Captcha | Cloudflare Turnstile con un componente envoltorio (por ejemplo `@marsidev/react-turnstile`) |
 | QR para MFA | `qrcode.react` 4, que dibuja el QR en el navegador |
 | Compilación | `vite` 8 y `typescript` 5.9 (la versión que admiten `openapi-typescript` y `typescript-eslint`) |
 | Pruebas | `vitest` 5 con `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom` y `msw` 3 |
 | Calidad | `eslint` 10 con `typescript-eslint`, `eslint-plugin-react-hooks` y `eslint-plugin-jsx-a11y`; `prettier` |
 
-Las versiones exactas están en `package.json`, sin `^`. `eslint-plugin-jsx-a11y` aún declara compatibilidad solo hasta ESLint 9; un `overrides` en `package.json` lo instala con ESLint 10, con el que funciona. Los componentes de shadcn/ui, el calendario, las tablas, las gráficas y Turnstile se agregan en la fase que los usa; en la Fase 1 `components/ui` tiene componentes propios mínimos (botón, campo, alerta).
+Las versiones exactas están en `package.json`, sin `^`. `eslint-plugin-jsx-a11y` aún declara compatibilidad solo hasta ESLint 9; un `overrides` en `package.json` lo instala con ESLint 10, con el que funciona. Las tablas y el tablero no necesitaron librería: con HTML semántico son accesibles y el JavaScript inicial queda en unos 116 KB comprimidos. Si una pantalla llega a necesitar ordenar o paginar en el cliente, se evalúa `@tanstack/react-table` en su PR.
 
 Una dependencia nueva se justifica en el PR. No se agregan jQuery, Moment.js, librerías de estado global ni kits de componentes completos.
 

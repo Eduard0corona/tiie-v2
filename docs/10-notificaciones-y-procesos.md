@@ -132,7 +132,7 @@ flowchart LR
 
 | Señal | Origen | Alerta |
 | --- | --- | --- |
-| Notificación pendiente más antigua | Métrica `tiie.notificaciones.pendientes` y consulta | Más de 15 minutos |
-| Notificaciones descartadas | Log de advertencia | Cualquiera |
-| Proceso diario sin terminar bien | `EjecucionProceso` | Resultado `Error` o sin ejecución en 26 horas |
+| Bandeja atrasada | Métrica `tiie.notificaciones.atrasadas`: pendientes o fallidas que debieron enviarse hace más de 15 minutos | Mayor que cero |
+| Notificaciones descartadas | Métrica `tiie.notificaciones.descartadas` y log de advertencia | Cualquiera |
+| Proceso diario sin terminar bien | `EjecucionProceso` y métrica `tiie.procesos.duracion` con `resultado` | Resultado `Error` o sin ejecución en 26 horas |
 | Duración de `GeneracionCupos` | Métrica `tiie.procesos.duracion` | Más de 5 minutos |

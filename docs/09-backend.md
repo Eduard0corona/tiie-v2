@@ -259,7 +259,8 @@ public sealed class RelojAgenda(TimeProvider tiempo, IOptions<OpcionesAgenda> op
 - `ILogger` con mensajes estructurados: `logger.LogInformation("Cita {Folio} creada en el cupo {CupoId}", folio, cupoId)`.
 - Cada petición que toca una cita abre un *scope* con `Folio`, para rastrearla en Application Insights.
 - Nunca se registra el cuerpo de una petición, ni CURP, nombre, correo o celular sin `Enmascarar`.
-- OpenTelemetry con `UseAzureMonitor()` envía trazas, métricas y logs. Métricas propias: `tiie.reservas`, `tiie.reservas.rechazadas` (por `codigo`), `tiie.notificaciones.pendientes`, `tiie.procesos.duracion`.
+- OpenTelemetry con `UseAzureMonitor()` envía trazas, métricas y logs. Métricas propias: `tiie.reservas` (por `origen`), `tiie.reservas.rechazadas` (por `codigo`), `tiie.notificaciones.atrasadas` (vencidas hace más de 15 minutos sin enviar), `tiie.notificaciones.descartadas` (por `tipo`) y `tiie.procesos.duracion` (por `proceso` y `resultado`). Las alertas de `infra/modulos/alertas.bicep` las consultan.
+- La telemetría de solicitudes reemplaza el token de `/mi-cita/{token}` por `{token}` y la instrumentación oculta los valores de la cadena de consulta (por ejemplo, la CURP de la búsqueda del panel).
 
 ## OpenAPI
 

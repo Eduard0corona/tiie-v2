@@ -10,6 +10,8 @@ Las reglas de agenda se prueban en el dominio con el reloj fijado; la concurrenc
 | Aplicación | xUnit, `FakeTimeProvider`, dobles de puertos | Casos de uso sin base de datos; arquitectura revisando las referencias de los ensamblados | Cada PR |
 | Integración | `WebApplicationFactory`, Testcontainers (SQL Server), Respawn | Endpoints reales, SQL, índices, concurrencia, autorización, cabeceras | Cada PR (`Category=Integracion`) |
 | Frontend | Vitest, Testing Library, MSW | `lib/`, componentes y flujos con API simulada | Cada PR |
+| Migración | xUnit (`Tiie.Migracion.Tests`) y una prueba de integración con una base de 2016 de ejemplo | Reglas de mapeo de docs/14; migrar, repetir, conciliar y avisar contra SQL Server real | Cada PR |
+| Humo | `tests/humo/humo.mjs` | Inicio, salud, disponibilidad y entrada al panel con MFA | Cada despliegue, en QA, en `staging` y en producción |
 | Extremo a extremo | Playwright y axe | Flujos completos y accesibilidad contra QA | Cada despliegue a QA |
 | Carga | k6 | Apertura de temporada y carga sostenida | Antes de la puerta de la Fase 2 y antes de cada temporada |
 
@@ -112,7 +114,16 @@ Playwright contra QA, en un perfil de celular (Pixel 7) y uno de escritorio:
 8. Supervisor: crear un bloqueo con citas afectadas y cancelarlas con aviso.
 9. Administrador: crear usuario, activar la cuenta y configurar MFA.
 
-`@axe-core/playwright` revisa cada pantalla pública; un hallazgo grave o crítico falla la ejecución.
+`@axe-core/playwright` revisa cada pantalla pública; un hallazgo grave o crítico falla la ejecución. En celular, además, ninguna pantalla puede desplazarse a lo ancho (WCAG 1.4.10).
+
+Las pruebas están en `tests/e2e` ([README](../tests/e2e/README.md)). Crean sus propios datos (CURP nuevas, citas por la API) y corren una a la vez, porque comparten plantillas, cupos y bloqueos; lo que cambian lo restauran al terminar.
+
+| Dónde | Cómo | Qué se omite |
+| --- | --- | --- |
+| Local | Sitio en Development con el correo `Archivo` y límites de solicitudes altos; `E2E_USUARIO` y `E2E_CONTRASENA` del administrador semilla (la primera corrida configura su MFA y guarda la clave en `tests/e2e/.auth/`); `E2E_CANAL=msedge` para usar el Edge instalado | El flujo 6 si no hay cupos de hoy: `GeneracionCupos` crea desde mañana, así que una base recién creada no los tiene |
+| QA | Job `e2e` de `.github/workflows/despliegue.yml`, después de cada despliegue, con `E2E_USUARIO`, `E2E_CONTRASENA` y `E2E_TOTP` de un Administrador de pruebas. QA usa las claves de prueba de Turnstile | Los flujos 4 y 9, que leen el buzón de prueba (`E2E_CARPETA_CORREOS`): en QA el correo sale por Communication Services |
+
+Sin usuario del panel se omiten los flujos 6 a 9. Producción no se despliega si el job `e2e` falla.
 
 ## Carga
 
@@ -125,13 +136,15 @@ Con k6 contra QA, escalado como producción:
 
 El pico estimado sale de la consulta de volumen por día del análisis. Hasta tenerla, se usa 10 veces el promedio diario de 2025 concentrado en 2 horas.
 
+Los escenarios son `tests/carga/apertura.js` y `tests/carga/sostenido.js` ([README](../tests/carga/README.md)). Durante la carga, QA usa las claves de prueba de Turnstile y límites de solicitudes altos, porque k6 sale de pocas IP. Con un Supervisor de pruebas (`K6_USUARIO`, `K6_CONTRASENA`, `K6_TOTP`), la apertura termina revisando cada cupo de la ventana: `Ocupados` nunca mayor que `Capacidad`.
+
 ## Puertas del CI
 
 | Puerta | Falla si |
 | --- | --- |
 | Compilación | Advertencias o `dotnet format --verify-no-changes` con cambios |
 | Pruebas .NET | Cualquier prueba falla |
-| Cobertura | `Tiie.Dominio` por debajo de 90 % o `Tiie.Aplicacion` por debajo de 80 % (pendiente: aún no está en `ci.yml`) |
+| Cobertura | `Tiie.Dominio` por debajo de 90 % o `Tiie.Aplicacion` por debajo de 80 % de líneas, sumando todos los proyectos de prueba (`tests/verificar-cobertura.mjs`; el código generado no cuenta, `tests/cobertura.config`) |
 | Frontend | Lint, tipos o pruebas fallan |
 | Contrato | `src/api/esquema.d.ts` no coincide con el OpenAPI generado |
 | Tamaño | JavaScript inicial del sitio público por encima de 200 KB comprimido |

@@ -28,10 +28,15 @@ tiie-v2/
 │  ├─ Tiie.Dominio.Tests/
 │  ├─ Tiie.Aplicacion.Tests/
 │  ├─ Tiie.Integracion.Tests/  WebApplicationFactory + SQL Server en contenedor
-│  └─ e2e/                     Playwright
-├─ tools/Tiie.Migracion/       migración de datos desde la base de 2016
+│  ├─ Tiie.Migracion.Tests/    reglas de la migración, sin base de datos
+│  ├─ e2e/                     Playwright y axe
+│  ├─ carga/                   k6
+│  └─ humo/                    prueba de humo de cada despliegue
+├─ tools/
+│  ├─ Tiie.Migracion/          migración de datos desde la base de 2016
+│  └─ reencolar-descartadas.sql
 ├─ openapi/                    documento OpenAPI generado en cada compilación
-├─ infra/                      Bicep para los recursos de Azure
+├─ infra/                      Bicep para los recursos de Azure y permisos de SQL
 └─ docs/                       esta documentación
 ```
 

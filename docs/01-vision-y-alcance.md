@@ -88,6 +88,9 @@ Cada pregunta tiene un valor predeterminado para no detener el desarrollo. Se ca
 | ¿Qué volumen pico se espera? | Dimensionar con el histórico (consulta 9 del análisis) | Plan de App Service y SKU de Azure SQL |
 | ¿Qué reportes usa hoy la operación? | Citas por rango, módulo, trámite y estado | Historias de la Fase 3 |
 | ¿Cuál es el dominio oficial y quién lo administra? | `tarjetainteligentesinaloa.org.mx`, por confirmar | Configuración de App Service y DNS |
+| ¿Qué licencia de QuestPDF corresponde? La Community solo aplica si la organización cumple sus términos | Community en desarrollo y QA; producción sin valor predeterminado: el sitio no arranca hasta decidirlo | `Documentos:LicenciaQuestPdf` y `licenciaQuestPdf` en `infra/prod.bicepparam` |
+| ¿Dónde deben residir los datos del servicio de correo? | `United States`; confirmar si Communication Services ofrece una ubicación aceptable más cercana | Parámetro `ubicacionDatosCorreo` de `infra/main.bicep` |
+| ¿Cómo se leen los correos en las pruebas E2E de QA? | Se omiten los flujos que necesitan el buzón; localmente se leen de la carpeta del proveedor `Archivo` | Ayudante de correo de `tests/e2e` |
 
 ## Glosario
 

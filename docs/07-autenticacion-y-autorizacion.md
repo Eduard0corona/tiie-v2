@@ -202,7 +202,7 @@ La SPA y la API comparten origen y usan cookies, así que hay que impedir que ot
 
 1. **Cookies `SameSite=Lax`:** el navegador no las envía en `POST` iniciados desde otro sitio.
 2. **Cabecera obligatoria `X-Tiie-Csrf: 1`** en `POST`, `PUT`, `PATCH` y `DELETE`. Un formulario de otro sitio no puede agregar cabeceras, y una petición `fetch` de otro origen con cabecera propia requiere CORS, que el sitio no habilita.
-3. **Fetch Metadata:** si `Sec-Fetch-Site` viene y no es `same-origin` ni `none`, se rechaza. Si no viene, `Origin` debe ser igual a `Sitio:UrlPublica`.
+3. **Fetch Metadata:** si `Sec-Fetch-Site` viene y no es `same-origin` ni `none`, se rechaza. Si no viene y la petición trae `Origin`, debe ser igual a `Sitio:UrlPublica`. Los navegadores actuales siempre envían `Sec-Fetch-Site`; un cliente que no es navegador, como la prueba de humo, no lleva cookies de otro sitio y puede declarar `same-origin`.
 
 ```csharp
 public sealed class FiltroCsrf(IOptions<OpcionesSitio> sitio) : IEndpointFilter

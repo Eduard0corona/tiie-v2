@@ -10,26 +10,34 @@ Se migran catálogos, plantillas, usuarios y citas futuras al modelo nuevo con u
 
 ## Herramienta
 
-`tools/Tiie.Migracion`, una aplicación de consola .NET 10 que lee la base anterior con `Microsoft.Data.SqlClient` y escribe en la nueva con `TiieDbContext`.
+`tools/Tiie.Migracion`, una aplicación de consola .NET 10 que lee la base anterior con `Microsoft.Data.SqlClient` y escribe en la nueva con `TiieDbContext`. Su [README](../tools/Tiie.Migracion/README.md) detalla opciones y reportes.
+
+> El esquema de 2016 que lee la herramienta es **supuesto** ([esquema-supuesto.sql](../tools/Tiie.Migracion/Origen/esquema-supuesto.sql)): se reconstruyó de este documento porque el script real no está en el repositorio. Antes del ensayo 1 se compara con el script de producción y se ajusta solo `Origen/LectorOrigen.cs`. `analizar` verifica primero que existan todas las tablas y columnas que lee.
 
 ```bash
 # Diagnóstico de la base anterior: no escribe nada
 dotnet run --project tools/Tiie.Migracion -- analizar --origen "<cadena 2016>"
 
-# Migración; repetible: actualiza lo que ya existe usando IdAnterior y FolioAnterior
+# Migración; repetible: reconoce lo ya migrado por IdAnterior y FolioAnterior y no lo duplica
 dotnet run --project tools/Tiie.Migracion -- migrar \
   --origen "<cadena 2016>" --destino "<cadena v2>" \
   --fecha-corte 2026-11-30 \
   --mapa-roles "0=Capturista,1=Supervisor,2=Administrador" \
   --decisiones decisiones-duplicados.csv
 
-# Comparación de conteos entre origen y destino
-dotnet run --project tools/Tiie.Migracion -- conciliar --origen "<cadena 2016>" --destino "<cadena v2>"
+# Comparación de conteos entre origen y destino (código 1 si hay diferencias)
+dotnet run --project tools/Tiie.Migracion -- conciliar --origen "<cadena 2016>" --destino "<cadena v2>"   --fecha-corte 2026-11-30 --mapa-roles "0=Capturista,1=Supervisor,2=Administrador"   --decisiones decisiones-duplicados.csv
+
+# «Aviso de migración» a cada cita migrada; solo después del cambio de DNS
+dotnet run --project tools/Tiie.Migracion -- avisar --destino "<cadena v2>"
 ```
 
 - `--mapa-roles` es obligatorio: la herramienta no adivina qué significa cada valor de `Usuario.Tipo`.
 - `--fecha-corte` es el día del corte; las citas con `FechaCita` igual o posterior se migran como vigentes.
 - Los reportes quedan en `artifacts/migracion/<fecha>/`. Contienen datos personales: se generan solo en un equipo autorizado y se borran después del corte.
+- Los catálogos que ya existen en la versión 2 no se sobrescriben: operación pudo corregirlos en el panel después de un ensayo. Las plantillas solo se reescriben con `--reemplazar-plantillas`; los totales históricos se reemplazan en cada corrida.
+- Los tokens de las citas migradas se protegen con las llaves de Data Protection del sitio (`DataProtection__BlobUri` y `DataProtection__KeyUri` en el entorno de quien migra). Sin ellas, `migrar` no corre salvo con `--llaves-locales`, que solo sirve para un destino local.
+- Al terminar, `migrar` genera los cupos de la ventana a partir de las plantillas, igual que el proceso diario.
 
 ## Mapeo
 
@@ -57,7 +65,7 @@ Citas con `Estatus = 'VIGENTE'` y `FechaCita` igual o posterior a la fecha de co
 | `Cita.CURP` y datos personales | `Solicitante` | Un solicitante por CURP normalizada, con los datos de la cita más reciente. Una CURP que no pasa la validación se migra igual y se reporta |
 | `HorarioCita` + `Horario` | `Cupo` | Un cupo por oferta, fecha y hora. `Ocupados` = citas migradas; `Capacidad` = mayor entre los turnos y las citas |
 | `Cita` | `Cita` | Estado Agendada; origen Migración; folio nuevo; folio anterior en `FolioAnterior`; token nuevo; sin aviso de privacidad aceptado |
-| — | `Notificacion` | Una «Aviso de migración» por cita, con el enlace nuevo y el comprobante |
+| — | `Notificacion` | Una «Aviso de migración» por cita con correo, con el enlace nuevo y el comprobante. La encola el comando `avisar`, no `migrar`, para que ningún correo salga antes del cambio de DNS |
 
 - Una CURP con varias citas futuras rompe RN-01. Van a `duplicados-curp.csv` y operación decide cuál conservar en `decisiones-duplicados.csv`. Sin decisión, la herramienta no migra esas citas y lo informa.
 - Las citas cuyo horario ya no existe (registros huérfanos) van a `excepciones.csv` y no se migran sin revisión.
@@ -75,15 +83,15 @@ Se suman por fecha y oferta en `HistoricoCita`. Los datos personales de esas cit
 | `Usuario` inactivo | — | No se migra |
 | `Usuario.ModuloId` | `UsuarioModulo` | Si tiene valor, se asigna; si no, se reporta para asignarlo en el panel |
 
-Después de migrar, cada usuario recibe la invitación de activación. Las contraseñas anteriores no se reutilizan: su clave de cifrado está expuesta en el repositorio anterior.
+Después del corte, un administrador envía a cada usuario la invitación de activación con «Reenviar invitación» en `/admin/usuarios`. Las contraseñas anteriores no se reutilizan: su clave de cifrado está expuesta en el repositorio anterior. Un usuario activo sin correo no se migra (`usuarios.csv`).
 
 ### Reglas del JavaScript anterior
 
 | Regla anterior | Destino |
 | --- | --- |
 | Sábados cerrados para los trámites 21, 22 y 23 | Plantillas sin sábado para esas ofertas |
-| Cierre del Polideportivo (módulo 9) por rango de fechas | `Bloqueo` del módulo, solo si el rango sigue vigente |
-| Días inhábiles escritos en el código | `Bloqueo` general para los que estén por venir |
+| Cierre del Polideportivo (módulo 9) por rango de fechas | `Bloqueo` del módulo, solo si el rango sigue vigente. Lo crea operación en `/admin/bloqueos` antes del corte |
+| Días inhábiles escritos en el código | `Bloqueo` general para los que estén por venir, creado en el panel |
 
 ## Conciliación
 
@@ -118,7 +126,7 @@ Cualquier diferencia no explicada por un reporte detiene el corte.
 | Hora 0 + 15 min | Migración final y conciliación |
 | Hora 0 + 45 min | Prueba de humo en producción con una oferta oculta: reservar, consultar y cancelar |
 | Hora 0 + 60 min | Cambio de DNS; el sitio nuevo queda público |
-| Hora 0 + 75 min | Encolar los «Aviso de migración»; vigilar la bandeja de salida |
+| Hora 0 + 75 min | Encolar los «Aviso de migración» con `avisar`; vigilar la bandeja de salida |
 | 72 horas después | Monitoreo reforzado; la base anterior pasa a solo lectura |
 
 ## Reversión
