@@ -13,3 +13,11 @@ paths = [
   # Archivos generados.
   '''src/Tiie\.Web\.Client/package-lock\.json''',
 ]
+# Identificadores públicos de roles integrados de Azure que usa infra/: no son secretos, pero la regla
+# genérica los marca cuando el nombre de la variable contiene «secret».
+regexes = [
+  '''4633458b-17de-408a-b874-0445c86b69e6''', # Key Vault Secrets User
+  '''12338af0-0e69-4776-bea7-57ae8d297424''', # Key Vault Crypto User
+  '''ba92f5b4-2d11-453d-a403-e96b0029c9fe''', # Storage Blob Data Contributor
+  '''b24988ac-6180-42a0-ab88-20f7382dd24c''', # Contributor
+]
