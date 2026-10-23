@@ -1,0 +1,18 @@
+{
+  "name": "tiie-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Pruebas extremo a extremo y de accesibilidad (docs/12-pruebas.md#extremo-a-extremo).",
+  "scripts": {
+    "test": "playwright test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.64.0",
+    "@types/node": "24.19.2",
+    "playwright-core": "1.64.0",
+    "typescript": "5.9.3"
+  }
+}

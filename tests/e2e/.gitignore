@@ -1,0 +1,5 @@
+node_modules/
+playwright-report/
+test-results/
+# Sesión del personal y, en local, la clave TOTP que la preparación configura para el administrador semilla.
+.auth/
