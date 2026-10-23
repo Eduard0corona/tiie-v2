@@ -205,6 +205,24 @@ public sealed class CitasPanelTests(FabricaTiie fabrica) : PruebaIntegracion(fab
     }
 
     [Fact]
+    public async Task RF09_la_busqueda_por_folio_anterior_se_combina_con_los_demas_filtros()
+    {
+        var (oferta, citaId, _) = await CitaWebAsync(1);
+        await ConDbAsync(db => db.Citas.Where(c => c.CitaId == citaId)
+            .ExecuteUpdateAsync(s => s.SetProperty(c => c.FolioAnterior, "A2016-0042")));
+        using var capturista = await ClienteComoAsync(Roles.Capturista, oferta.ModuloId);
+
+        async Task<ListaPaginada<CitaListado>> BuscarAsync(string consulta) =>
+            (await capturista.Http.GetFromJsonAsync<ListaPaginada<CitaListado>>($"/api/admin/citas?{consulta}", ClienteTiie.Json))!;
+
+        (await BuscarAsync("busqueda=a2016-0042")).Elementos.Single().CitaId.ShouldBe(citaId);
+        (await BuscarAsync($"busqueda=A2016-0042&estado=Agendada&desde={Jueves:yyyy-MM-dd}")).Total.ShouldBe(1);
+        (await BuscarAsync("busqueda=A2016-0042&estado=Cancelada")).Total.ShouldBe(0);
+        (await BuscarAsync($"busqueda=A2016-0042&desde={Jueves.AddDays(1):yyyy-MM-dd}")).Total.ShouldBe(0);
+        (await BuscarAsync("busqueda=NO-EXISTE")).Total.ShouldBe(0);
+    }
+
+    [Fact]
     public async Task El_detalle_incluye_notificaciones_movimientos_y_la_cita_reprogramada()
     {
         var (oferta, citaId, _) = await CitaWebAsync();
@@ -214,7 +232,10 @@ public sealed class CitasPanelTests(FabricaTiie fabrica) : PruebaIntegracion(fab
             .LeerAsync<CitaRegistrada>();
 
         var detalle = await capturista.Http.GetFromJsonAsync<DetalleCitaPersonal>($"/api/admin/citas/{citaId}", ClienteTiie.Json);
+        var detalleNueva = await capturista.Http.GetFromJsonAsync<DetalleCitaPersonal>($"/api/admin/citas/{nueva.CitaId}", ClienteTiie.Json);
 
+        detalleNueva!.Relacionadas.Single().CitaId.ShouldBe(citaId);              // la nueva apunta a su origen
+        detalleNueva.CreadaPor.ShouldNotBeNull();
         detalle!.Estado.ShouldBe(EstadoCita.Reprogramada);
         detalle.Correo.ShouldBe("ana@example.com");
         detalle.Relacionadas.Single().CitaId.ShouldBe(nueva.CitaId);

@@ -209,7 +209,7 @@ Totales diarios del sistema anterior, sin datos personales ([14](14-migracion-de
 | `Estado` | `tinyint` | No | 1 Agendada, 2 Atendida, 3 No asistió, 4 Cancelada, 5 Reprogramada |
 | `Origen` | `tinyint` | No | 1 Web, 2 Ventanilla, 3 Migración |
 | `TokenHash` | `binary(32)` | No | Único; SHA-256 del token |
-| `TokenProtegido` | `nvarchar(600)` | No | Token cifrado con Data Protection |
+| `TokenProtegido` | `varchar(600)` | No | Token cifrado con Data Protection; Base64url, solo ASCII (176 caracteres hoy) |
 | `TokenVenceEn` | `datetimeoffset(0)` | No | RN-16 |
 | `ClaveIdempotencia` | `uniqueidentifier` | Sí | Único filtrado `UX_Cita_ClaveIdempotencia` (`WHERE ClaveIdempotencia IS NOT NULL`) |
 | `VersionAvisoPrivacidad` | `varchar(20)` | Sí | Versión aceptada |
@@ -225,9 +225,14 @@ Totales diarios del sistema anterior, sin datos personales ([14](14-migracion-de
 
 Índices:
 
+- Únicos `UX_Cita_Folio (Folio)`, `UX_Cita_TokenHash (TokenHash)` y `UX_Cita_ClaveIdempotencia (ClaveIdempotencia) WHERE ClaveIdempotencia IS NOT NULL`.
 - `UX_Cita_SolicitanteActiva (SolicitanteId) WHERE Estado = 1` — RN-01.
-- `IX_Cita_Cupo (CupoId) INCLUDE (Estado)` — agenda del día y reportes.
+- `IX_Cita_Solicitante (SolicitanteId, Estado)` — búsqueda por CURP y retención.
+- `IX_Cita_Cupo (CupoId) INCLUDE (Estado, SolicitanteId, Folio, Origen)` — agenda del día, listados, tablero y reportes sin volver a la tabla.
 - `IX_Cita_FolioAnterior (FolioAnterior) WHERE FolioAnterior IS NOT NULL` — búsqueda del personal.
+- `IX_Cita_CitaOrigen`, `IX_Cita_CreadaPor` e `IX_Cita_ActualizadaPor`, de las llaves foráneas, filtrados con `IS NOT NULL` porque casi siempre están vacías.
+
+La búsqueda del personal por folio, folio anterior o CURP se resuelve con tres búsquedas exactas unidas, nunca con un `OR` entre `Cita` y `Solicitante`, que recorrería todas las citas ([18](18-analisis-de-base-de-datos.md)).
 
 **Notificacion**
 
@@ -277,7 +282,7 @@ Las tablas de Identity se renombran en `OnModelCreating`: `Usuario`, `Rol`, `Usu
 | `Cambios` | `nvarchar(max)` | Sí | JSON con valores anteriores y nuevos, datos personales enmascarados |
 | `Ip` | `varchar(45)` | Sí | |
 
-Índices `IX_Auditoria_Fecha (Fecha)` e `IX_Auditoria_Usuario (UsuarioId, Fecha)`. El usuario de base de datos de la aplicación solo tiene `INSERT` y `SELECT` sobre esta tabla.
+Índices `IX_Auditoria_Fecha (Fecha)`, `IX_Auditoria_Usuario (UsuarioId, Fecha)` e `IX_Auditoria_Entidad (Entidad, EntidadId)`, para los movimientos del detalle de una cita. El usuario de base de datos de la aplicación solo tiene `INSERT` y `SELECT` sobre esta tabla.
 
 **EjecucionProceso**
 

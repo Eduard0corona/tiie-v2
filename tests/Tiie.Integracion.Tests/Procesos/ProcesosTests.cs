@@ -2,7 +2,11 @@ using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Tiie.Aplicacion.Opciones;
 using Tiie.Aplicacion.Procesos;
+using Tiie.Aplicacion.Puertos;
+using Tiie.Aplicacion.Reloj;
 using Tiie.Dominio.Bitacora;
 using Tiie.Dominio.Citas;
 using Tiie.Dominio.Notificaciones;
@@ -178,6 +182,31 @@ public sealed partial class ProcesosTests(FabricaTiie fabrica) : PruebaIntegraci
     public async Task La_retencion_esta_desactivada_mientras_no_se_defina_el_plazo()
     {
         (await EjecutarAsync<Retencion>()).ShouldStartWith("Desactivada");
+    }
+
+    [Fact]
+    public async Task La_retencion_borra_por_lotes_las_notificaciones_enviadas_hace_mas_de_180_dias()
+    {
+        FijarReloj(Hoy, new TimeOnly(18, 0));
+        var citaId = await ReservarAsync(Jueves);                                // su confirmación sigue pendiente
+        var vieja = Local(Hoy.AddDays(-200), new TimeOnly(9, 0));
+        var reciente = Local(Hoy.AddDays(-10), new TimeOnly(9, 0));
+        // Más de un lote de enviadas viejas, una enviada reciente y una fallida vieja.
+        await ConDbAsync(db => db.Database.ExecuteSqlAsync($"""
+            INSERT dbo.Notificacion (CitaId, Tipo, Canal, Destinatario, Estado, Intentos, ProximoIntentoEn, EnviadaEn, CreadaEn)
+            SELECT TOP ({Retencion.LoteBorrado + 1}) {citaId}, 1, 1, N'ana@example.com', 2, 1, {vieja}, {vieja}, {vieja}
+            FROM sys.all_columns a CROSS JOIN sys.all_columns b;
+            INSERT dbo.Notificacion (CitaId, Tipo, Canal, Destinatario, Estado, Intentos, ProximoIntentoEn, EnviadaEn, CreadaEn)
+            VALUES ({citaId}, 1, 1, N'ana@example.com', 2, 1, {reciente}, {reciente}, {reciente}),
+                   ({citaId}, 1, 1, N'ana@example.com', 3, 2, {vieja}, NULL, {vieja});
+            """));
+        var resultado = await ConServiciosAsync(s => new Retencion(
+                s.GetRequiredService<ITiieDb>(), s.GetRequiredService<RelojAgenda>(), Options.Create(new OpcionesAgenda { MesesRetencion = 24 }))
+            .EjecutarAsync(CancellationToken.None));
+
+        resultado.ShouldBe($"0 solicitantes anonimizados; {Retencion.LoteBorrado + 1} notificaciones borradas.");
+        var quedan = await ConDbAsync(db => db.Notificaciones.AsNoTracking().Select(n => n.Estado).ToListAsync());
+        quedan.Order().ShouldBe([EstadoNotificacion.Pendiente, EstadoNotificacion.Enviada, EstadoNotificacion.Fallida]);
     }
 
     [Fact]

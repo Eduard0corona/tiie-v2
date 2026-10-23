@@ -103,22 +103,39 @@ public sealed class CitasPersonalManejador(
             .Where(c => filtro.Hasta == null || c.Cupo.Fecha <= filtro.Hasta)
             .Where(c => filtro.ModuloId == null || c.Cupo.Oferta.ModuloId == filtro.ModuloId)
             .Where(c => filtro.TipoTramiteId == null || c.Cupo.Oferta.TipoTramiteId == filtro.TipoTramiteId)
-            .Where(c => filtro.Estado == null || c.Estado == filtro.Estado)
-            .Where(c => busqueda == null || c.Folio == busqueda || c.FolioAnterior == busqueda || c.Solicitante.Curp == busqueda)
+            .Where(c => filtro.Estado == null || c.Estado == filtro.Estado);
+        if (busqueda is not null)
+        {
+            // Un OR entre columnas de Cita y Solicitante obliga a recorrer todas las citas. Tres búsquedas exactas
+            // unidas usan cada una su índice: UX_Cita_Folio, IX_Cita_FolioAnterior y UX_Solicitante_Curp. Son pocas
+            // citas, así que se leen antes: con las llaves ya conocidas, el filtro por módulo no recorre sus cupos.
+            var coincidencias = await db.Citas.Where(c => c.Folio == busqueda).Select(c => c.CitaId)
+                .Union(db.Citas.Where(c => c.FolioAnterior == busqueda).Select(c => c.CitaId))
+                .Union(db.Citas.Where(c => c.Solicitante.Curp == busqueda).Select(c => c.CitaId))
+                .ToListAsync(ct);
+            consulta = consulta.Where(c => coincidencias.Contains(c.CitaId));
+        }
+
+        var listado = consulta
             .OrderByDescending(c => c.Cupo.Fecha).ThenBy(c => c.Cupo.Hora).ThenBy(c => c.CitaId)
             .Select(c => new CitaListado(
                 c.CitaId, c.Folio, c.FolioAnterior, c.Cupo.Fecha, c.Cupo.Hora, c.Cupo.Oferta.ModuloId, c.Cupo.Oferta.Modulo.Nombre,
                 c.Cupo.Oferta.TipoTramite.Nombre,
                 c.Solicitante.Nombre + " " + c.Solicitante.ApellidoPaterno + (c.Solicitante.ApellidoMaterno != null ? " " + c.Solicitante.ApellidoMaterno : ""),
                 c.Solicitante.Curp, c.Estado, c.Origen));
-        return await Paginado.De(filtro.Pagina, filtro.Tamano).AplicarAsync(consulta, ct);
+        return await Paginado.De(filtro.Pagina, filtro.Tamano).AplicarAsync(listado, ct);
     }
 
     public async Task<DetalleCitaPersonal> DetalleAsync(int citaId, CancellationToken ct)
     {
         var c = await ExigirCitaAsync(citaId, ct);
+        var origen = await db.Citas.AsNoTracking()
+            .Where(x => x.CitaId == citaId)
+            .Select(x => new { x.CreadaPor, x.CitaOrigenId })
+            .SingleAsync(ct);
+        // La cita de la que viene y las que salieron de ella, con valores ya conocidos para que cada lado use su índice.
         var relacionadas = await db.Citas.AsNoTracking()
-            .Where(x => x.CitaOrigenId == citaId || x.CitaId == db.Citas.Where(o => o.CitaId == citaId).Select(o => o.CitaOrigenId).FirstOrDefault())
+            .Where(x => x.CitaOrigenId == citaId || x.CitaId == origen.CitaOrigenId)
             .Select(x => new CitaRelacionada(x.CitaId, x.Folio, x.Estado, x.Cupo.Fecha, x.Cupo.Hora))
             .ToListAsync(ct);
         var notificaciones = await db.Notificaciones.AsNoTracking()
@@ -132,7 +149,7 @@ public sealed class CitasPersonalManejador(
             .OrderBy(a => a.Fecha)
             .Select(a => new { a.Fecha, a.Accion, a.UsuarioId })
             .ToListAsync(ct);
-        var creadaPor = await db.Citas.Where(x => x.CitaId == citaId).Select(x => x.CreadaPor).SingleAsync(ct);
+        var creadaPor = origen.CreadaPor;
         var nombres = await usuarios.NombresAsync(movimientos.Select(m => m.UsuarioId).Append(creadaPor).OfType<int>(), ct);
 
         return new DetalleCitaPersonal(

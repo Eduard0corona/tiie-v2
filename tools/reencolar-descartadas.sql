@@ -8,6 +8,10 @@
 --
 -- Con Aplicar=0 solo cuenta; con Aplicar=1 hace el cambio.
 
+-- Notificacion tiene índices filtrados: modificarla exige QUOTED_IDENTIFIER y ANSI_NULLS activos (error 1934),
+-- y sqlcmd deja QUOTED_IDENTIFIER apagado si no se le pasa -I.
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
 SET XACT_ABORT ON;
 SET NOCOUNT ON;
 
