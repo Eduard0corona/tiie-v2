@@ -1,6 +1,10 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
 import viteConfig from './vite.config.ts';
 
+// Las pruebas corren en UTC, como CI y como cualquier navegador fuera de Sinaloa: el código debe usar
+// src/lib/fechas.ts y no la zona de la máquina. Se fija aquí para que los procesos de Vitest la hereden.
+process.env.TZ = 'UTC';
+
 export default mergeConfig(
   viteConfig,
   defineConfig({

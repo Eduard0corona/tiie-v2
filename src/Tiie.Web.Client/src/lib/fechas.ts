@@ -7,9 +7,30 @@ export const ZONA = 'America/Mazatlan';
 
 const FECHA_ISO = /^(\d{4})-(\d{2})-(\d{2})$/;
 
+// «Ahora» se lee con Intl y la zona explícita, sin TZDate: con el reloj simulado de las pruebas, TZDate.tz llegó
+// a devolver la hora de la máquina en lugar de la de Sinaloa.
+const RELOJ_SINALOA = new Intl.DateTimeFormat('en-CA', {
+  timeZone: ZONA,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+});
+
+function ahoraEnSinaloa(): { fecha: string; hora: string } {
+  const partes = new Map(RELOJ_SINALOA.formatToParts(Date.now()).map((p) => [p.type, p.value]));
+  const parte = (tipo: Intl.DateTimeFormatPartTypes) => partes.get(tipo) ?? '';
+  return {
+    fecha: `${parte('year')}-${parte('month')}-${parte('day')}`,
+    hora: `${parte('hour')}:${parte('minute')}`,
+  };
+}
+
 /** Hoy en Sinaloa, como 'yyyy-MM-dd'. */
 export function hoyLocal(): string {
-  return format(TZDate.tz(ZONA), 'yyyy-MM-dd');
+  return ahoraEnSinaloa().fecha;
 }
 
 /** Interpreta 'yyyy-MM-dd' como un día de Sinaloa, sin pasar por medianoche UTC. */
@@ -72,7 +93,7 @@ export function sumarDias(fechaIso: string, dias: number): string {
 
 /** Hora actual en Sinaloa, como 'HH:mm'. */
 export function horaLocal(): string {
-  return format(TZDate.tz(ZONA), 'HH:mm');
+  return ahoraEnSinaloa().hora;
 }
 
 /** Instante UTC de la API → '12/11/2026 10:04' en hora de Sinaloa. */
