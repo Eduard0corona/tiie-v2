@@ -2,6 +2,7 @@ import { useId, useState } from 'react';
 import { ErrorApi, mensajeDeError } from '@/api/errores';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
+import { estiloEntrada } from '@/components/ui/Campo';
 import { Dialogo } from '@/components/ui/Dialogo';
 import { useCancelarMiCita } from './useMiCita';
 
@@ -24,7 +25,7 @@ export function DialogoCancelar({ alCerrar, alCancelar }: { alCerrar: () => void
         Liberaremos tu lugar y te enviaremos un correo de confirmación. No se puede deshacer.
       </p>
       <div className="flex flex-col gap-1">
-        <label htmlFor={idMotivo} className="font-medium text-slate-800">
+        <label htmlFor={idMotivo} className="font-semibold text-slate-800">
           Motivo (opcional)
         </label>
         <textarea
@@ -33,7 +34,7 @@ export function DialogoCancelar({ alCerrar, alCancelar }: { alCerrar: () => void
           maxLength={MAXIMO_MOTIVO}
           rows={3}
           onChange={(e) => setMotivo(e.target.value)}
-          className="rounded-md border border-slate-400 bg-white px-3 py-2 text-base"
+          className={estiloEntrada(false)}
         />
       </div>
       <RegionAnuncios>
@@ -43,11 +44,17 @@ export function DialogoCancelar({ alCerrar, alCancelar }: { alCerrar: () => void
           </Alerta>
         )}
       </RegionAnuncios>
-      <div className="flex flex-wrap gap-3">
-        <Boton ocupado={cancelar.isPending} textoOcupado="Cancelando…" onClick={confirmar}>
+      <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
+        <Boton
+          variante="destructivo"
+          bloque
+          ocupado={cancelar.isPending}
+          textoOcupado="Cancelando…"
+          onClick={confirmar}
+        >
           Sí, cancelar mi cita
         </Boton>
-        <Boton variante="secundario" onClick={alCerrar}>
+        <Boton variante="secundario" bloque onClick={alCerrar}>
           No, conservarla
         </Boton>
       </div>

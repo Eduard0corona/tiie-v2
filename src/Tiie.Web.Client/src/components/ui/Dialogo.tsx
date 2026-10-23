@@ -30,14 +30,14 @@ export function Dialogo({ titulo, alCerrar, children }: DialogoProps) {
   }, [alCerrar]);
 
   return (
-    <div className="fixed inset-0 z-20 flex items-end justify-center bg-slate-900/50 p-4 sm:items-center">
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-slate-950/50 p-4 backdrop-blur-sm sm:items-center">
       <div
         ref={panel}
         role="dialog"
         aria-modal="true"
         aria-labelledby={idTitulo}
         tabIndex={-1}
-        className="flex max-h-[90dvh] w-full max-w-md flex-col gap-4 overflow-y-auto rounded-lg bg-white p-5 shadow-xl"
+        className="flex max-h-[90dvh] w-full max-w-md flex-col gap-4 overflow-y-auto rounded-2xl bg-white p-6 shadow-xl"
       >
         <h2 id={idTitulo} className="text-xl font-bold">
           {titulo}

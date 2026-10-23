@@ -1,5 +1,5 @@
 import { TZDate } from '@date-fns/tz';
-import { addDays, format } from 'date-fns';
+import { addDays, differenceInCalendarDays, format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 /** Zona de negocio (ADR 0006). Las fechas de la API ya vienen en esta zona. */
@@ -84,6 +84,17 @@ export function isoDeCalendario(fecha: Date): string {
 /** '2026-11-12' → 'jueves 12 de noviembre'. */
 export function formatearDiaSemana(fechaIso: string): string {
   return format(diaLocal(fechaIso), "EEEE d 'de' MMMM", { locale: es });
+}
+
+/** '2026-11-12' → ['jue', '12', 'nov'], para tarjetas de día compactas. */
+export function formatearDiaCorto(fechaIso: string): [semana: string, dia: string, mes: string] {
+  const dia = diaLocal(fechaIso);
+  return [format(dia, 'EEE', { locale: es }), format(dia, 'd'), format(dia, 'MMM', { locale: es })];
+}
+
+/** Días de calendario de `desde` a `hasta` ('yyyy-MM-dd'); negativo si `hasta` es anterior. */
+export function diasEntre(desde: string, hasta: string): number {
+  return differenceInCalendarDays(diaLocal(hasta), diaLocal(desde));
 }
 
 /** Suma días a una fecha 'yyyy-MM-dd' sin pasar por UTC; acepta negativos. */

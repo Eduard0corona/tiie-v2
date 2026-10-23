@@ -91,6 +91,8 @@ Cada pregunta tiene un valor predeterminado para no detener el desarrollo. Se ca
 | ¿Qué licencia de QuestPDF corresponde? La Community solo aplica si la organización cumple sus términos | Community en desarrollo y QA; producción sin valor predeterminado: el sitio no arranca hasta decidirlo | `Documentos:LicenciaQuestPdf` y `licenciaQuestPdf` en `infra/prod.bicepparam` |
 | ¿Dónde deben residir los datos del servicio de correo? | `United States`; confirmar si Communication Services ofrece una ubicación aceptable más cercana | Parámetro `ubicacionDatosCorreo` de `infra/main.bicep` |
 | ¿Cómo se leen los correos en las pruebas E2E de QA? | Se omiten los flujos que necesitan el buzón; localmente se leen de la carpeta del proveedor `Archivo` | Ayudante de correo de `tests/e2e` |
+| ¿Cuáles son los lineamientos de identidad gráfica del Gobierno de Sinaloa (logotipo, tipografía, imagen de la TIIE)? | Guinda `#7b1e3a`, tipografía del sistema e ilustración estilizada de una tarjeta ([16](16-experiencia-de-usuario.md#preguntas-abiertas-de-diseño)) | Tokens de `src/styles/index.css` y `components/Marca.tsx` |
+| ¿Cuánto dura la atención en el módulo? | 30 minutos, solo para el evento de calendario de Mi cita | `DURACION_MINUTOS` en `features/publico/mi-cita/calendario.ts` |
 
 ## Glosario
 

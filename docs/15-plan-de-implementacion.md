@@ -51,10 +51,11 @@ Objetivo: reducir el riesgo del sistema de 2016 mientras se construye la versió
 | E10 Notificaciones | H-2.10 Bandeja de salida con reintentos y plantillas · H-2.11 Recordatorios | RF-04, RF-07, RN-14 |
 | E11 Privacidad | H-2.12 Aviso de privacidad versionado | RF-08 |
 | E12 Calidad | H-2.13 Pruebas de concurrencia y de reloj · H-2.14 E2E y accesibilidad · H-2.15 Prueba de carga | [12](12-pruebas.md) |
+| E22 Experiencia del ciudadano | H-2.16 Portada orientada a la tarea · H-2.17 Agendar desde una sede · H-2.18 Requisitos antes del horario · H-2.19 Calendario legible y «Lo más pronto» · H-2.20 Horas por turno · H-2.21 Navegación del asistente · H-2.22 Datos con retroalimentación · H-2.23 Comprobante que no se olvida · H-2.24 Mi cita sin sesión · H-2.25 Embudo anónimo · H-2.26 Pruebas con usuarios · H-2.27 Identidad institucional · H-2.28 Sede más cercana · H-2.29 Modo oscuro | [16](16-experiencia-de-usuario.md#backlog-de-producto), RF-01 a RF-06 |
 
 **Puerta:** en QA, la prueba de carga de apertura de temporada termina con cero sobreventa y dentro de los tiempos de RNF-06; E2E y axe en verde.
 
-**Estado (2026-10-23):** H-2.1 a H-2.13 implementadas en backend y SPA, con pruebas de dominio, integración (concurrencia, reloj, idempotencia, privacidad) y de componentes. H-2.14: las 9 pruebas E2E con axe de `tests/e2e` pasan en local con Edge, en celular y escritorio (21 de 21 el 2026-10-23); en QA, los flujos 4 y 9 se omiten mientras no haya buzón de prueba. H-2.15: los escenarios de k6 de `tests/carga` están escritos y solo revisados de sintaxis. La puerta se cumple al correr ambos en QA.
+**Estado (2026-10-23):** H-2.1 a H-2.13 implementadas en backend y SPA, con pruebas de dominio, integración (concurrencia, reloj, idempotencia, privacidad) y de componentes. H-2.14: las 9 pruebas E2E con axe de `tests/e2e` pasan en local con Edge, en celular y escritorio (21 de 21 el 2026-10-23); en QA, los flujos 4 y 9 se omiten mientras no haya buzón de prueba. H-2.15: los escenarios de k6 de `tests/carga` están escritos y solo revisados de sintaxis. La puerta se cumple al correr ambos en QA. E22: H-2.16 a H-2.24 implementadas en la SPA con pruebas de componentes; H-2.25 a H-2.29 pendientes, y H-2.26 y H-2.27 son condición para abrir la agenda al público.
 
 ## Fase 3 · Panel del personal
 

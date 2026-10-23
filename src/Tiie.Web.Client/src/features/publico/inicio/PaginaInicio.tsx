@@ -1,104 +1,120 @@
-import { Link } from 'react-router';
-import { mensajeDeError } from '@/api/errores';
-import type { components } from '@/api/esquema';
-import { ComoLlegar } from '@/components/ComoLlegar';
-import { Requisitos } from '@/components/Requisitos';
-import { Alerta } from '@/components/ui/Alerta';
-import { Cargando } from '@/components/ui/Encabezado';
-import { formatearCosto } from '../comun/formatos';
-import { useModulos, useTiposTramite } from '../comun/usePublico';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router';
+import { estiloBoton } from '@/components/ui/Boton';
+import { Contenedor } from '@/components/ui/Contenedor';
+import { Icono, type NombreIcono } from '@/components/ui/Icono';
+import { EncabezadoSeccion } from './EncabezadoSeccion';
+import { Portada } from './Portada';
+import { PreguntasFrecuentes } from './PreguntasFrecuentes';
+import { SeccionSedes } from './SeccionSedes';
+import { SeccionTramites } from './SeccionTramites';
 
-type ModuloPublico = components['schemas']['ModuloPublico'];
-
-const enlaceBoton =
-  'inline-flex min-h-11 items-center justify-center rounded-md bg-guinda-700 px-5 py-2 font-medium text-white hover:bg-guinda-800';
-
-/** Trámites, requisitos por nivel escolar y sedes (RF-01). */
+/**
+ * Portada del sitio (RF-01): qué se hace aquí, cómo, qué llevar, dónde y las dudas comunes. Cada sección
+ * termina en la misma acción: agendar.
+ */
 export function PaginaInicio() {
+  const { hash } = useLocation();
+  // React Router no desplaza a los anclas al navegar dentro de la SPA (por ejemplo, «Sedes» del encabezado).
+  useEffect(() => {
+    if (hash) document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView?.();
+  }, [hash]);
+
   return (
-    <div className="flex flex-col gap-10">
-      <section aria-labelledby="titulo-inicio" className="flex flex-col gap-4">
-        <h1 id="titulo-inicio" className="text-2xl font-bold sm:text-3xl">
-          Agenda tu cita para la Tarjeta Inteligente de Identidad Estudiantil
-        </h1>
-        <p className="text-lg text-slate-700">
-          Elige la sede, el día y la hora desde tu celular. Recibirás un correo con tu comprobante y un enlace
-          para consultar, cambiar o cancelar tu cita.
-        </p>
-        <div className="flex flex-wrap items-center gap-4">
-          <Link to="/agendar" className={enlaceBoton}>
-            Agendar cita
-          </Link>
-          <Link
-            to="/recuperar"
-            className="inline-flex min-h-11 items-center text-guinda-700 underline underline-offset-4"
-          >
-            ¿Ya tienes cita? Recupera tu enlace
-          </Link>
-        </div>
-      </section>
+    <>
+      <Portada />
+      <ComoFunciona />
       <SeccionTramites />
       <SeccionSedes />
-    </div>
+      <PreguntasFrecuentes />
+      <LlamadaFinal />
+    </>
   );
 }
 
-function SeccionTramites() {
-  const tipos = useTiposTramite();
+const pasos: readonly { icono: NombreIcono; titulo: string; texto: string }[] = [
+  {
+    icono: 'sede',
+    titulo: 'Elige sede y trámite',
+    texto: 'Busca el módulo que te quede más cerca y el trámite que necesitas.',
+  },
+  {
+    icono: 'calendario',
+    titulo: 'Escoge día y hora',
+    texto: 'El calendario te muestra qué días tienen lugares y cuántos quedan en cada hora.',
+  },
+  {
+    icono: 'usuario',
+    titulo: 'Escribe tus datos',
+    texto: 'Solo la CURP, el nombre, un celular y un correo. Nada de documentos en línea.',
+  },
+  {
+    icono: 'documento',
+    titulo: 'Acude con tus requisitos',
+    texto: 'Recibes el comprobante por correo. Llega a tu hora con lo que pide tu trámite.',
+  },
+];
+
+function ComoFunciona() {
   return (
-    <section aria-labelledby="titulo-tramites" className="flex flex-col gap-4">
-      <h2 id="titulo-tramites" className="text-xl font-bold">
-        Trámites y requisitos
-      </h2>
-      {tipos.isPending && <Cargando texto="Cargando trámites…" />}
-      {tipos.isError && <Alerta tono="error">{mensajeDeError(tipos.error)}</Alerta>}
-      {tipos.data?.length === 0 && <p className="text-slate-700">Por ahora no hay trámites disponibles.</p>}
-      {tipos.data?.map((tipo) => (
-        <article
-          key={tipo.tipoTramiteId}
-          className="flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-4"
-        >
-          <header className="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 className="text-lg font-semibold">{tipo.nombre}</h3>
-            <p className="text-slate-700">{formatearCosto(tipo.costo)}</p>
-          </header>
-          {tipo.descripcion && <p className="text-slate-700">{tipo.descripcion}</p>}
-          <Requisitos requisitos={tipo.requisitos} />
-        </article>
-      ))}
+    <section id="como-funciona" aria-labelledby="titulo-como-funciona" className="py-16 sm:py-20">
+      <Contenedor ancho="amplio" className="flex flex-col gap-10">
+        <EncabezadoSeccion
+          id="titulo-como-funciona"
+          antetitulo="Así de fácil"
+          titulo="Agenda en cuatro pasos"
+          descripcion="Te toma unos minutos y no necesitas imprimir nada para agendar."
+        />
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {pasos.map((paso, i) => (
+            <li
+              key={paso.titulo}
+              // El número grande es decorativo (la lista ya está numerada): va en CSS para que no sea texto.
+              data-numero={i + 1}
+              className="relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-tarjeta before:absolute before:top-3 before:right-5 before:text-6xl before:font-black before:text-slate-100 before:content-[attr(data-numero)]"
+            >
+              <span className="relative grid size-12 place-items-center rounded-xl bg-guinda-700 text-white shadow-sm">
+                <Icono nombre={paso.icono} className="size-6" />
+              </span>
+              <h3 className="relative text-lg font-bold text-slate-950">{paso.titulo}</h3>
+              <p className="relative text-slate-600">{paso.texto}</p>
+            </li>
+          ))}
+        </ol>
+        <div>
+          <Link to="/agendar" className={estiloBoton({ variante: 'secundario' })}>
+            Empezar ahora
+            <Icono nombre="flecha" />
+          </Link>
+        </div>
+      </Contenedor>
     </section>
   );
 }
 
-function SeccionSedes() {
-  const modulos = useModulos();
-  const porMunicipio = new Map<string, ModuloPublico[]>();
-  for (const modulo of modulos.data ?? []) {
-    porMunicipio.set(modulo.municipio, [...(porMunicipio.get(modulo.municipio) ?? []), modulo]);
-  }
-
+function LlamadaFinal() {
   return (
-    <section aria-labelledby="titulo-sedes" className="flex flex-col gap-4">
-      <h2 id="titulo-sedes" className="text-xl font-bold">
-        Sedes
-      </h2>
-      {modulos.isPending && <Cargando texto="Cargando sedes…" />}
-      {modulos.isError && <Alerta tono="error">{mensajeDeError(modulos.error)}</Alerta>}
-      {[...porMunicipio.entries()].map(([municipio, sedes]) => (
-        <div key={municipio} className="flex flex-col gap-2">
-          <h3 className="font-semibold text-slate-800">{municipio}</h3>
-          <ul className="flex flex-col gap-2">
-            {sedes.map((sede) => (
-              <li key={sede.moduloId} className="rounded-lg border border-slate-200 bg-white p-4">
-                <p className="font-medium">{sede.nombre}</p>
-                <p className="text-slate-700">{sede.direccion}</p>
-                {sede.horarioAtencion && <p className="text-sm text-slate-600">{sede.horarioAtencion}</p>}
-                <ComoLlegar latitud={sede.latitud} longitud={sede.longitud} sede={sede.nombre} />
-              </li>
-            ))}
-          </ul>
+    <section aria-labelledby="titulo-llamada-final" className="pb-16 sm:pb-20">
+      <Contenedor ancho="amplio">
+        <div className="relative overflow-hidden rounded-3xl bg-guinda-800 px-6 py-12 text-center text-white sm:px-12 sm:py-16">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+            <div className="absolute -top-24 -left-16 size-72 rounded-full bg-guinda-600/50 blur-2xl" />
+            <div className="absolute -right-20 -bottom-28 size-80 rounded-full bg-dorado-400/25 blur-2xl" />
+          </div>
+          <div className="relative mx-auto flex max-w-2xl flex-col items-center gap-4">
+            <h2 id="titulo-llamada-final" className="text-3xl font-bold tracking-tight sm:text-4xl">
+              ¿Listo para tu trámite?
+            </h2>
+            <p className="text-lg text-guinda-100">
+              Agenda en unos minutos y recibe tu comprobante por correo.
+            </p>
+            <Link to="/agendar" className={`${estiloBoton({ variante: 'claro', tamano: 'grande' })} mt-4`}>
+              Agendar mi cita
+              <Icono nombre="flecha" />
+            </Link>
+          </div>
         </div>
-      ))}
+      </Contenedor>
     </section>
   );
 }

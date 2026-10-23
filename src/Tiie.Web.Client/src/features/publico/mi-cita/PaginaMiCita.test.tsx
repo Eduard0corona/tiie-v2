@@ -110,10 +110,52 @@ describe('Mi cita', () => {
     expect(screen.getByRole('link', { name: 'Recuperar mi enlace' })).toHaveAttribute('href', '/recuperar');
   });
 
-  it('sin cookie (401) muestra lo mismo que un enlace inválido', async () => {
+  it('sin cookie (401) explica cómo entrar con el enlace del correo, sin pedir la CURP', async () => {
     servidor.use(publico.miCita(() => problema(401, 'NoAutenticado')));
     renderizarRuta('/mi-cita');
 
-    expect(await screen.findByRole('heading', { name: 'Este enlace ya no es válido' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Consulta tu cita' })).toHaveFocus();
+    expect(screen.getByRole('link', { name: 'Enviarme el enlace de nuevo' })).toHaveAttribute(
+      'href',
+      '/recuperar',
+    );
+    expect(screen.queryByLabelText('CURP')).not.toBeInTheDocument();
+  });
+
+  it('cuenta los días que faltan y ofrece agregar la cita al calendario', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(Date.UTC(2026, 10, 9, 17, 0, 0)); // 9 de noviembre, 10:00 en Sinaloa
+    try {
+      servidor.use(publico.miCita(() => detalleMiCita()));
+      renderizarRuta('/mi-cita');
+
+      expect(await screen.findByText('Faltan 3 días')).toBeInTheDocument();
+      const google = screen.getByRole('link', { name: /Google Calendar/ });
+      expect(google.getAttribute('href')).toMatch(/^https:\/\/calendar\.google\.com\/calendar\/render\?/);
+      expect(google.getAttribute('href')).toContain('dates=20261112T103000%2F20261112T110000');
+      expect(screen.getByRole('button', { name: 'Apple u Outlook (.ics)' })).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('copia el folio y lo confirma con texto', async () => {
+    servidor.use(publico.miCita(() => detalleMiCita()));
+    const { usuario } = renderizarRuta('/mi-cita');
+
+    await usuario.click(await screen.findByRole('button', { name: 'Copiar folio' }));
+
+    expect(await screen.findByRole('button', { name: 'Copiado' })).toBeInTheDocument();
+    expect(await navigator.clipboard.readText()).toBe('261103-1000042');
+  });
+
+  it('una cita cancelada lo explica, ofrece agendar otra y no ofrece calendario ni cambios', async () => {
+    servidor.use(publico.miCita(() => detalleMiCita({ estado: 'Cancelada', puedeModificar: false })));
+    renderizarRuta('/mi-cita');
+
+    expect(await screen.findByText('Esta cita está cancelada.')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Agendar una cita nueva' })).toHaveAttribute('href', '/agendar');
+    expect(screen.queryByRole('link', { name: /Google Calendar/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '¿Cambio de planes?' })).not.toBeInTheDocument();
   });
 });

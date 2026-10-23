@@ -1,30 +1,188 @@
 @import 'tailwindcss';
 
+/*
+ * Tokens del sistema de diseño (docs/16-experiencia-de-usuario.md#sistema-de-diseño). Guinda es el color de la
+ * marca y de las acciones; dorado solo decora (no se usa para texto sobre blanco salvo dorado-700 o más oscuro).
+ */
 @theme {
   --color-guinda-50: #fbf2f4;
   --color-guinda-100: #f5e1e6;
+  --color-guinda-200: #ecc5cf;
+  --color-guinda-300: #dd9caf;
+  --color-guinda-400: #c86a86;
+  --color-guinda-500: #b04466;
   --color-guinda-600: #93294a;
   --color-guinda-700: #7b1e3a;
   --color-guinda-800: #63172f;
   --color-guinda-900: #4a1123;
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --color-guinda-950: #2e0915;
+
+  --color-dorado-50: #faf6ef;
+  --color-dorado-100: #f3eadb;
+  --color-dorado-200: #e6d3b3;
+  --color-dorado-300: #d5b685;
+  --color-dorado-400: #bc955c;
+  --color-dorado-500: #a57f48;
+  --color-dorado-700: #6e522c;
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif;
+
+  --shadow-tarjeta: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px -4px rgb(15 23 42 / 0.08);
+  --shadow-elevada: 0 2px 4px rgb(15 23 42 / 0.04), 0 16px 40px -12px rgb(74 17 35 / 0.25);
 }
 
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    /* El encabezado es fijo: los anclas y el foco no deben quedar debajo de él. */
+    scroll-padding-top: 5.5rem;
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-slate-50 text-slate-900 antialiased;
   }
 
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
   :focus-visible {
     @apply outline-3 outline-offset-2 outline-guinda-700;
   }
+
+  summary {
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/*
+ * Calendario de disponibilidad (components/CalendarioDisponibilidad.tsx). Va fuera de @layer a propósito: la hoja
+ * de react-day-picker no tiene capa y ganaría a cualquier regla en capa sin importar su especificidad.
+ */
+.calendario .rdp-root {
+  --rdp-accent-color: var(--color-guinda-700);
+  --rdp-accent-background-color: var(--color-guinda-50);
+  --rdp-nav-height: 2.75rem;
+  --rdp-nav_button-height: 2.75rem;
+  --rdp-nav_button-width: 2.75rem;
+  --rdp-disabled-opacity: 1;
+  --rdp-weekday-opacity: 1;
+  --rdp-selected-border: 0;
+  width: 100%;
+}
+
+.calendario .rdp-months,
+.calendario .rdp-month {
+  max-width: none;
+  width: 100%;
+}
+
+.calendario .rdp-month_caption {
+  @apply px-1 text-lg font-bold capitalize text-slate-900;
+}
+
+.calendario .rdp-nav {
+  @apply gap-2;
+}
+
+.calendario .rdp-button_previous,
+.calendario .rdp-button_next {
+  @apply rounded-lg border border-slate-200 bg-white transition-colors hover:bg-slate-50;
+}
+
+.calendario .rdp-chevron {
+  fill: var(--color-slate-700);
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.calendario .rdp-month_grid {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0 0.25rem;
+}
+
+.calendario .rdp-weekday {
+  @apply pb-1 text-xs font-semibold uppercase tracking-wide text-slate-500;
+}
+
+.calendario .rdp-day {
+  width: auto;
+  height: 3.25rem;
+  padding: 0 0.125rem;
+}
+
+.calendario .rdp-day_button {
+  @apply mx-auto flex h-12 w-full max-w-13 flex-col gap-1 rounded-xl text-base font-semibold text-slate-300 transition-colors;
+  border: 0;
+}
+
+.calendario .dia-alta .rdp-day_button {
+  @apply bg-emerald-50 text-slate-900 ring-1 ring-emerald-200 ring-inset hover:bg-emerald-100;
+}
+
+.calendario .dia-poca .rdp-day_button {
+  @apply bg-amber-50 text-slate-900 ring-1 ring-amber-200 ring-inset hover:bg-amber-100;
+}
+
+.calendario .dia-sin-lugar .rdp-day_button {
+  @apply text-slate-400 line-through decoration-slate-400;
+}
+
+.calendario .rdp-selected .rdp-day_button {
+  @apply bg-guinda-700 text-white ring-0 hover:bg-guinda-800;
+}
+
+.calendario .rdp-today:not(.rdp-selected) .rdp-day_button {
+  @apply text-guinda-700 underline decoration-2 underline-offset-4;
+}
+
+.calendario .rdp-selected {
+  font-size: inherit;
+}
+
+/* Punto bajo el número: lleno = hay lugares; aro = quedan pocos. Acompaña al color, no lo reemplaza. */
+.punto-disponibilidad {
+  @apply block size-2 rounded-full;
+}
+
+.punto-alta {
+  @apply bg-emerald-600;
+}
+
+.punto-poca {
+  @apply border-2 border-amber-600 bg-white;
+}
+
+.rdp-selected .punto-alta {
+  @apply bg-white;
+}
+
+.rdp-selected .punto-poca {
+  @apply border-white bg-transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {

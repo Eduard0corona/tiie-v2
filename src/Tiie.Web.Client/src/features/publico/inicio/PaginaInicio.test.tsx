@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
-import { publico } from '@/test/publico';
+import { http, HttpResponse } from 'msw';
+import { modulos, publico } from '@/test/publico';
 import { renderizarRuta } from '@/test/renderizar';
 import { servidor } from '@/test/servidor';
 
@@ -22,14 +23,60 @@ describe('Inicio', () => {
     expect(within(sustitucion).getByText('$150.00')).toBeInTheDocument();
   });
 
-  it('agrupa las sedes por municipio con un enlace al mapa en una pestaña nueva', async () => {
+  it('cada sede lleva al asistente con la sede ya elegida y a su mapa en una pestaña nueva', async () => {
     servidor.use(...publico.catalogo());
     renderizarRuta('/');
 
-    expect(await screen.findByRole('heading', { name: 'Culiacán' })).toBeInTheDocument();
-    const enlace = screen.getByRole('link', { name: /Cómo llegar a Módulo Culiacán Centro/ });
+    const agendarAqui = await screen.findByRole('link', { name: 'Agendar aquí en Módulo Culiacán Centro' });
+    expect(agendarAqui).toHaveAttribute('href', '/agendar?municipio=6&modulo=3');
+    const sede = agendarAqui.closest('li') as HTMLElement;
+    expect(within(sede).getByText('Culiacán')).toBeInTheDocument();
+    const enlace = within(sede).getByRole('link', { name: /Cómo llegar a Módulo Culiacán Centro/ });
     expect(enlace).toHaveAttribute('target', '_blank');
     expect(enlace).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('la portada ofrece agendar y consultar una cita existente', async () => {
+    servidor.use(...publico.catalogo());
+    renderizarRuta('/');
+
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Agenda tu cita para la Tarjeta Inteligente de Identidad Estudiantil',
+      }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Agendar cita' })).toHaveAttribute('href', '/agendar');
+    expect(screen.getByRole('link', { name: 'Ya tengo una cita' })).toHaveAttribute('href', '/mi-cita');
+    expect(screen.getByRole('heading', { name: 'Preguntas frecuentes' })).toBeInTheDocument();
+  });
+
+  it('con sedes en varios municipios filtra por municipio', async () => {
+    // MSW usa el primer manejador que coincide: el de varios municipios va antes que el catálogo.
+    servidor.use(
+      http.get('/api/publico/modulos', () =>
+        HttpResponse.json([
+          ...modulos,
+          ...modulos.map((m) => ({
+            ...m,
+            moduloId: 7,
+            nombre: 'Módulo Mazatlán',
+            municipioId: 12,
+            municipio: 'Mazatlán',
+          })),
+        ]),
+      ),
+      ...publico.catalogo(),
+    );
+    const { usuario } = renderizarRuta('/');
+
+    const filtros = await screen.findByRole('group', { name: 'Filtrar sedes por municipio' });
+    expect(within(filtros).getByRole('button', { name: 'Todas' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('heading', { name: 'Módulo Culiacán Centro' })).toBeInTheDocument();
+
+    await usuario.click(within(filtros).getByRole('button', { name: 'Mazatlán' }));
+    expect(within(filtros).getByRole('button', { name: 'Mazatlán' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('heading', { name: 'Módulo Mazatlán' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Módulo Culiacán Centro' })).not.toBeInTheDocument();
   });
 });

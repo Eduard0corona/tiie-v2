@@ -12,8 +12,8 @@ Una sola aplicación React con TypeScript, compilada por Vite en `src/Tiie.Web/w
 | Cliente HTTP tipado | `openapi-fetch`, con tipos de `openapi-typescript` |
 | Formularios | `react-hook-form`, `zod` y `@hookform/resolvers` |
 | Estilos | `tailwindcss` 4 con `@tailwindcss/vite` |
-| Componentes base | Propios en `components/ui` (alerta, botón, campo, diálogo, encabezado, grupo de opciones y selector), sin kit de componentes ni íconos |
-| Calendario | `react-day-picker` 9 |
+| Componentes base | Propios en `components/ui` (alerta, botón, campo, contenedor, diálogo, encabezado, grupo de opciones, ícono, insignia y selector), sin kit de componentes ni librería de íconos: los íconos son SVG propios en `Icono.tsx`. Tokens, componentes y pantallas del sitio público en [16](16-experiencia-de-usuario.md) |
+| Calendario | `react-day-picker` 9, con un botón de día propio (número y punto de disponibilidad). Su hoja de estilos no tiene capa, así que los estilos del calendario en `styles/index.css` van fuera de `@layer` |
 | Fechas | `date-fns` 4 y `@date-fns/tz` |
 | Tablas del panel | HTML semántico con `caption` y encabezados de columna; sin librería |
 | Gráficas del tablero | Barras con CSS dentro de tablas accesibles; sin librería |
@@ -23,7 +23,7 @@ Una sola aplicación React con TypeScript, compilada por Vite en `src/Tiie.Web/w
 | Pruebas | `vitest` 5 con `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom` y `msw` 3 |
 | Calidad | `eslint` 10 con `typescript-eslint`, `eslint-plugin-react-hooks` y `eslint-plugin-jsx-a11y`; `prettier` |
 
-Las versiones exactas están en `package.json`, sin `^`. `eslint-plugin-jsx-a11y` aún declara compatibilidad solo hasta ESLint 9; un `overrides` en `package.json` lo instala con ESLint 10, con el que funciona. Las tablas y el tablero no necesitaron librería: con HTML semántico son accesibles y el JavaScript inicial queda en unos 116 KB comprimidos. Si una pantalla llega a necesitar ordenar o paginar en el cliente, se evalúa `@tanstack/react-table` en su PR.
+Las versiones exactas están en `package.json`, sin `^`. `eslint-plugin-jsx-a11y` aún declara compatibilidad solo hasta ESLint 9; un `overrides` en `package.json` lo instala con ESLint 10, con el que funciona. Las tablas y el tablero no necesitaron librería: con HTML semántico son accesibles y el JavaScript inicial queda en unos 124 KB comprimidos. Si una pantalla llega a necesitar ordenar o paginar en el cliente, se evalúa `@tanstack/react-table` en su PR.
 
 Una dependencia nueva se justifica en el PR. No se agregan jQuery, Moment.js, librerías de estado global ni kits de componentes completos.
 
@@ -65,11 +65,12 @@ src/Tiie.Web.Client/
    │     ├─ tablero/
    │     └─ auditoria/
    ├─ components/
-   │  ├─ ui/                     componentes base de shadcn/ui
-   │  └─ …                       compartidos: CalendarioDisponibilidad, EstadoCita, Paginacion
+   │  ├─ ui/                     componentes base propios (docs/16#componentes)
+   │  └─ …                       compartidos: CalendarioDisponibilidad, SelectorHora, Requisitos, ComoLlegar, Marca
    ├─ lib/
    │  ├─ fechas.ts               zona America/Mazatlan y formatos
    │  ├─ curp.ts                 validación de CURP, misma regla que el backend
+   │  ├─ correo.ts               sugerencia para dominios de correo mal escritos
    │  └─ enmascarar.ts
    └─ styles/index.css
 ```
@@ -82,7 +83,7 @@ Cada carpeta de característica tiene sus páginas (`PaginaAgenda.tsx`), sus hoo
 | --- | --- | --- |
 | `/` | Inicio: trámites, requisitos y sedes | Público |
 | `/agendar` | Asistente de reserva; el paso va en `?paso=sede\|fecha\|hora\|datos` | Público |
-| `/mi-cita` | Detalle, comprobante, cancelar, reprogramar; `?nueva=1` muestra «Tu cita quedó agendada» | Cookie de cita |
+| `/mi-cita` | Detalle, comprobante, cancelar, reprogramar; `?nueva=1` muestra «Tu cita quedó agendada»; sin cookie, «Consulta tu cita» explica cómo entrar con el enlace del correo | Cookie de cita |
 | `/recuperar` | Recuperar el enlace por correo | Público |
 | `/aviso-de-privacidad` | Aviso integral | Público |
 | `/admin/entrar` | Usuario, contraseña y código MFA | Anónimo |
@@ -155,6 +156,10 @@ Toda mutación invalida las claves que afecta: reservar invalida disponibilidad 
 - El formulario valida con Zod: CURP con `lib/curp.ts`, celular de 10 dígitos, correo, aceptación del aviso. Es solo para retroalimentación; la API valida de nuevo.
 - Cada envío lleva una `Idempotency-Key` generada al abrir el paso de datos con `crypto.randomUUID()`. Un reintento por red lenta reutiliza la misma.
 - Al crear la cita, navega a `/mi-cita?nueva=1`. La cookie de cita ya viene en la respuesta.
+- La portada abre el asistente con la sede elegida: `/agendar?municipio=6&modulo=3`.
+- Los pasos ya hechos del indicador de progreso son botones que cambian `paso` sin borrar lo elegido.
+- El paso Fecha ofrece los tres primeros días con lugar («Lo más pronto») además del calendario; el paso Hora agrupa por Mañana y Tarde.
+- Al salir del campo de correo, `lib/correo.ts` sugiere el dominio común más parecido («gmial.com» → «gmail.com»). Solo sugiere: la persona decide.
 
 | `codigo` | Mensaje | Acción |
 | --- | --- | --- |
@@ -202,6 +207,7 @@ Meta: WCAG 2.1 AA (RNF-08).
 - Contraste de 4.5:1 en texto; objetivos táctiles de 44 × 44 px o más.
 - Se respeta `prefers-reduced-motion`.
 - Playwright corre axe en cada pantalla pública; un hallazgo grave o crítico falla el CI ([12](12-pruebas.md)).
+- Las decisiones de accesibilidad del diseño público (radios visibles, foco en las horas, etiqueta visible dentro del nombre accesible) están en [16](16-experiencia-de-usuario.md#accesibilidad).
 
 ## Rendimiento
 

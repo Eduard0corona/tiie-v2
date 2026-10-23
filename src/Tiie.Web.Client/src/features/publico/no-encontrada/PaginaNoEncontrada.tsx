@@ -1,20 +1,24 @@
 import { Link } from 'react-router';
+import { estiloBoton } from '@/components/ui/Boton';
+import { EstadoVacio } from '../comun/EstadoVacio';
 
 export function PaginaNoEncontrada() {
   return (
-    <section aria-labelledby="titulo-no-encontrada" className="flex flex-col gap-4">
-      <h1 id="titulo-no-encontrada" className="text-2xl font-bold">
-        Página no encontrada
-      </h1>
-      <p className="text-slate-700">La dirección que abriste no existe o cambió.</p>
-      <p>
-        <Link
-          to="/"
-          className="inline-flex min-h-11 items-center text-guinda-700 underline underline-offset-4"
-        >
-          Ir al inicio
-        </Link>
-      </p>
-    </section>
+    <EstadoVacio
+      icono="ubicacion"
+      titulo="Página no encontrada"
+      acciones={
+        <>
+          <Link to="/" className={estiloBoton({ tamano: 'grande' })}>
+            Ir al inicio
+          </Link>
+          <Link to="/agendar" className={estiloBoton({ variante: 'secundario', tamano: 'grande' })}>
+            Agendar una cita
+          </Link>
+        </>
+      }
+    >
+      <p>La dirección que abriste no existe o cambió.</p>
+    </EstadoVacio>
   );
 }

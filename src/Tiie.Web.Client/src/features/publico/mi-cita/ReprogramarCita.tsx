@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ErrorApi, mensajeDeError } from '@/api/errores';
 import { CalendarioDisponibilidad } from '@/components/CalendarioDisponibilidad';
 import { SelectorHora } from '@/components/SelectorHora';
@@ -25,6 +25,9 @@ export function ReprogramarCita({ ofertaId, alTerminar, alCancelar }: Reprograma
   const cupos = useCupos(ofertaId, fecha);
   const reprogramar = useReprogramarMiCita();
   const cliente = useQueryClient();
+  const titulo = useRef<HTMLHeadingElement>(null);
+  // El panel aparece debajo de los botones: el foco (y la vista) van a su título.
+  useEffect(() => titulo.current?.focus(), []);
 
   const confirmar = () => {
     if (cupo === null) return;
@@ -60,11 +63,19 @@ export function ReprogramarCita({ ofertaId, alTerminar, alCancelar }: Reprograma
   return (
     <section
       aria-labelledby="titulo-reprogramar"
-      className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4"
+      className="flex flex-col gap-6 rounded-2xl border border-guinda-200 bg-white p-5 shadow-tarjeta sm:p-6"
     >
-      <h2 id="titulo-reprogramar" className="text-lg font-semibold">
-        Elige la nueva fecha y hora
-      </h2>
+      <div className="flex flex-col gap-1">
+        <h2
+          ref={titulo}
+          id="titulo-reprogramar"
+          tabIndex={-1}
+          className="text-xl font-bold text-slate-950 focus:outline-none"
+        >
+          Elige la nueva fecha y hora
+        </h2>
+        <p className="text-slate-600">Tu cita actual se conserva hasta que confirmes el cambio.</p>
+      </div>
       {disponibilidad.isPending && <Cargando texto="Cargando días disponibles…" />}
       {disponibilidad.isError && <Alerta tono="error">{mensajeDeError(disponibilidad.error)}</Alerta>}
       {disponibilidad.data && (
@@ -73,6 +84,7 @@ export function ReprogramarCita({ ofertaId, alTerminar, alCancelar }: Reprograma
           desde={disponibilidad.data.desde}
           hasta={disponibilidad.data.hasta}
           seleccion={fecha}
+          nivelTitulos={3}
           alElegir={(nueva) => {
             setFecha(nueva);
             setCupo(null);
@@ -81,7 +93,9 @@ export function ReprogramarCita({ ofertaId, alTerminar, alCancelar }: Reprograma
       )}
       {fecha && cupos.isPending && <Cargando texto="Cargando horas…" />}
       {fecha && cupos.data?.length === 0 && (
-        <Alerta>Ya no quedan horas con lugar el {formatearFechaLarga(fecha)}. Elige otro día.</Alerta>
+        <Alerta tono="aviso">
+          Ya no quedan horas con lugar el {formatearFechaLarga(fecha)}. Elige otro día.
+        </Alerta>
       )}
       {fecha && cupos.data && cupos.data.length > 0 && (
         <SelectorHora
@@ -98,8 +112,9 @@ export function ReprogramarCita({ ofertaId, alTerminar, alCancelar }: Reprograma
           </Alerta>
         )}
       </RegionAnuncios>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
         <Boton
+          bloque
           disabled={cupo === null}
           ocupado={reprogramar.isPending}
           textoOcupado="Cambiando…"
@@ -107,7 +122,7 @@ export function ReprogramarCita({ ofertaId, alTerminar, alCancelar }: Reprograma
         >
           Confirmar el cambio
         </Boton>
-        <Boton variante="secundario" onClick={alCancelar}>
+        <Boton variante="secundario" bloque onClick={alCancelar}>
           Conservar mi cita
         </Boton>
       </div>
