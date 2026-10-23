@@ -18,7 +18,7 @@ public sealed class SesionTests(FabricaTiie fabrica) : PruebaIntegracion(fabrica
 {
     private const string Yo = "/api/admin/auth/yo";
 
-    private string Codigo(UsuarioPrueba usuario) => Totp.Generar(usuario.ClaveMfa!, Fabrica.Tiempo.GetUtcNow());
+    private string Codigo(UsuarioPrueba usuario) => Totp.Generar(usuario.ClaveMfa!, DateTimeOffset.UtcNow);
 
     [Fact]
     public async Task Sin_MFA_configurada_entrar_pide_configurarla()
@@ -46,7 +46,7 @@ public sealed class SesionTests(FabricaTiie fabrica) : PruebaIntegracion(fabrica
         incorrecto.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
         (await incorrecto.ProblemaAsync()).GetProperty("errors").GetProperty("codigo").GetArrayLength().ShouldBe(1);
 
-        var codigo = Totp.Generar(clave.ClaveCompartida, Fabrica.Tiempo.GetUtcNow());
+        var codigo = Totp.Generar(clave.ClaveCompartida, DateTimeOffset.UtcNow);
         var activada = await (await cliente.PostAsync("/api/admin/auth/mfa", new { codigo = $"{codigo[..3]} {codigo[3..]}" }))
             .LeerAsync<RespuestaMfaActivada>();
 

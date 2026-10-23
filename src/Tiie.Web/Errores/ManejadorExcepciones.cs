@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Tiie.Aplicacion.Puertos;
 using Tiie.Dominio.Errores;
 
 namespace Tiie.Web.Errores;
@@ -30,6 +31,7 @@ public sealed class ManejadorExcepciones(IProblemDetailsService problemas, ILogg
             ValidationException validacion => ErroresApi.ProblemaValidacion(ErroresPorCampo(validacion)),
             ReglaNegocioException regla => Problema(regla.Codigo, regla.Message == regla.Codigo.ToString() ? null : regla.Message),
             NoEncontradoException => Problema(CodigoError.NoEncontrado),
+            CaptchaInvalidoException => Problema(CodigoError.CaptchaInvalido),
             DbUpdateConcurrencyException => Problema(CodigoError.Conflicto),
             BadHttpRequestException solicitud => Problema(CodigoError.SolicitudInvalida, DetalleSolicitud(solicitud), solicitud.StatusCode),
             _ => null,

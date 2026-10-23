@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react';
+import { admin } from '@/test/admin';
 import { api, problema, sesionPersonal } from '@/test/api';
 import { renderizarRuta } from '@/test/renderizar';
 import { servidor } from '@/test/servidor';
@@ -16,6 +17,7 @@ describe('Configurar la verificación en dos pasos', () => {
     servidor.use(
       api.yo(() => sesionPersonal({ mfaActivo })),
       api.claveMfa(clave),
+      admin.agenda(() => []),
       api.activarMfa((cuerpo) => {
         enviado = cuerpo;
         mfaActivo = true;
@@ -62,7 +64,10 @@ describe('Configurar la verificación en dos pasos', () => {
   });
 
   it('con MFA ya activa lleva a la agenda', async () => {
-    servidor.use(api.yo(() => sesionPersonal()));
+    servidor.use(
+      api.yo(() => sesionPersonal()),
+      admin.agenda(() => []),
+    );
     const { router } = renderizarRuta('/admin/configurar-mfa');
 
     expect(await screen.findByRole('heading', { name: 'Agenda del día' })).toBeInTheDocument();

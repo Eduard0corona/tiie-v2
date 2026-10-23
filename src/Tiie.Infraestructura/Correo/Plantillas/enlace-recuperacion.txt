@@ -1,0 +1,18 @@
+Hola, {{Nombre}}.
+
+Pediste el enlace para consultar tu cita. Si no lo pediste, ignora este correo: nadie más lo recibió.
+
+Folio: {{Folio}}
+Fecha: {{Fecha}}
+Hora: {{Hora}}
+Sede: {{Modulo}}, {{Direccion}}
+Trámite: {{Tramite}}
+
+Ver tu cita:
+{{Enlace}}
+
+No compartas este enlace: da acceso a tu cita.
+
+--
+Aviso de privacidad simplificado: tus datos se usan solo para agendar y atender tu cita del trámite de la TIIE y para avisarte sobre ella. Consulta el aviso integral en {{AvisoPrivacidad}}
+Este correo se envió automáticamente; no respondas a esta dirección.

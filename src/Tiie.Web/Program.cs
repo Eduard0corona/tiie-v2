@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.HttpOverrides;
 using Tiie.Aplicacion;
+using Tiie.Aplicacion.Procesos;
 using Tiie.Infraestructura;
 using Tiie.Infraestructura.Datos;
 using Tiie.Infraestructura.Datos.Semilla;
@@ -35,6 +36,8 @@ builder.Services.AgregarDocumentoOpenApi();
 builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ProblemasApi.Completar);
 builder.Services.AddExceptionHandler<ManejadorExcepciones>();
 builder.Services.AddHealthChecks().AddDbContextCheck<TiieDbContext>();
+if (!generandoOpenApi)
+    builder.Services.AddHostedService<PlanificadorProcesos>();   // correos, cupos, recordatorios, cierre diario
 builder.Services.ConfigureHttpJsonOptions(o =>
 {
     // Números como números: así OpenAPI los declara integer y no integer | string.
@@ -71,6 +74,7 @@ app.UseRateLimiter();
 
 app.MapStaticAssets();
 app.MapEndpointsPublicos();         // /api/publico
+app.MapEndpointsMiCita();           // /mi-cita/{token} y /api/mi-cita
 app.MapEndpointsAdmin();            // /api/admin
 app.MapHealthChecks("/salud");
 if (app.Environment.IsDevelopment())

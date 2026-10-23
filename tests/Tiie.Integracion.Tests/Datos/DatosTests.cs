@@ -14,18 +14,6 @@ namespace Tiie.Integracion.Tests.Datos;
 /// <summary>Esquema, restricciones, secuencia del folio, interceptores y semilla (docs/05).</summary>
 public sealed class DatosTests(FabricaTiie fabrica) : PruebaIntegracion(fabrica)
 {
-    private async Task<T> ConDbAsync<T>(Func<TiieDbContext, Task<T>> accion)
-    {
-        await using var alcance = Fabrica.Services.CreateAsyncScope();
-        return await accion(alcance.ServiceProvider.GetRequiredService<TiieDbContext>());
-    }
-
-    private async Task ConDbAsync(Func<TiieDbContext, Task> accion)
-    {
-        await using var alcance = Fabrica.Services.CreateAsyncScope();
-        await accion(alcance.ServiceProvider.GetRequiredService<TiieDbContext>());
-    }
-
     /// <summary>Oferta con un cupo de capacidad 1 en el módulo de prueba.</summary>
     private async Task<(int OfertaId, int CupoId)> CupoAsync()
     {

@@ -1,5 +1,5 @@
 import { TZDate } from '@date-fns/tz';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 /** Zona de negocio (ADR 0006). Las fechas de la API ya vienen en esta zona. */
@@ -33,4 +33,54 @@ export function formatearFechaCorta(fechaIso: string): string {
 /** Instante UTC de la API ('2026-11-03T17:04:11Z') → hora de Sinaloa, por ejemplo '10:04'. */
 export function formatearHoraDeInstante(instanteIso: string): string {
   return format(new TZDate(Date.parse(instanteIso), ZONA), 'HH:mm');
+}
+
+/** Indica si el texto es una fecha 'yyyy-MM-dd' que existe en el calendario. */
+export function esFechaIso(valor: string | null | undefined): valor is string {
+  const partes = valor ? FECHA_ISO.exec(valor) : null;
+  if (!partes) return false;
+  const [, anio, mes, dia] = partes.map(Number) as [number, number, number, number];
+  const fecha = new Date(anio, mes - 1, dia);
+  return fecha.getFullYear() === anio && fecha.getMonth() === mes - 1 && fecha.getDate() === dia;
+}
+
+/**
+ * Día del calendario como Date a medianoche del navegador, para componentes que trabajan con Date
+ * (react-day-picker). Se construye por partes: nunca pasa por UTC. Vuelve a texto con `isoDeCalendario`.
+ */
+export function fechaCalendario(fechaIso: string): Date {
+  const partes = FECHA_ISO.exec(fechaIso);
+  if (!partes) throw new Error(`Fecha con formato inválido: ${fechaIso}`);
+  const [, anio, mes, dia] = partes.map(Number) as [number, number, number, number];
+  return new Date(anio, mes - 1, dia);
+}
+
+/** Date de un componente de calendario → 'yyyy-MM-dd', con el día que se ve en pantalla. */
+export function isoDeCalendario(fecha: Date): string {
+  return format(fecha, 'yyyy-MM-dd');
+}
+
+/** '2026-11-12' → 'jueves 12 de noviembre'. */
+export function formatearDiaSemana(fechaIso: string): string {
+  return format(diaLocal(fechaIso), "EEEE d 'de' MMMM", { locale: es });
+}
+
+/** Suma días a una fecha 'yyyy-MM-dd' sin pasar por UTC; acepta negativos. */
+export function sumarDias(fechaIso: string, dias: number): string {
+  return format(addDays(diaLocal(fechaIso), dias), 'yyyy-MM-dd');
+}
+
+/** Hora actual en Sinaloa, como 'HH:mm'. */
+export function horaLocal(): string {
+  return format(TZDate.tz(ZONA), 'HH:mm');
+}
+
+/** Instante UTC de la API → '12/11/2026 10:04' en hora de Sinaloa. */
+export function formatearInstante(instanteIso: string): string {
+  return format(new TZDate(Date.parse(instanteIso), ZONA), 'dd/MM/yyyy HH:mm');
+}
+
+/** Primer día del mes de una fecha 'yyyy-MM-dd'. */
+export function inicioDeMes(fechaIso: string): string {
+  return `${fechaIso.slice(0, 7)}-01`;
 }

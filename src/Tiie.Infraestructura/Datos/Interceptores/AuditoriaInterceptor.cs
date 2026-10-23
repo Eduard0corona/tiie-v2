@@ -199,11 +199,14 @@ public sealed class AuditoriaInterceptor(IUsuarioActual usuarioActual, TimeProvi
 /// <summary>Qué se audita y cómo se protegen los datos personales en la bitácora.</summary>
 internal static class PoliticaAuditoria
 {
-    /// <summary>Tablas cuyos cambios hechos por el personal se registran.</summary>
+    /// <summary>
+    /// Tablas cuyos cambios hechos por el personal se registran. Plantillas y cupos se registran con un resumen
+    /// explícito (<c>Plantilla.Guardar</c>, <c>Cupo.Ajustar</c>) en lugar de una fila por hora.
+    /// </summary>
     public static readonly IReadOnlySet<string> TablasAuditadas = new HashSet<string>(StringComparer.Ordinal)
     {
-        "Entidad", "Municipio", "Modulo", "TipoTramite", "Requisito", "Oferta", "PlantillaHorario",
-        "Bloqueo", "Cupo", "Cita", "Solicitante", "Usuario", "UsuarioRol", "UsuarioModulo",
+        "Entidad", "Municipio", "Modulo", "TipoTramite", "Requisito", "Oferta", "Bloqueo", "Cita", "Solicitante",
+        "Usuario", "UsuarioRol", "UsuarioModulo",
     };
 
     /// <summary>Secretos, valores técnicos y marcas de tiempo que la bitácora ya tiene.</summary>

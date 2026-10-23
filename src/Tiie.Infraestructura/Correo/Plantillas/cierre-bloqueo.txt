@@ -1,0 +1,17 @@
+Hola, {{Nombre}}.
+
+El módulo no atenderá en la fecha de tu cita, así que tuvimos que cancelarla. Lamentamos las molestias.
+
+Folio: {{Folio}}
+Fecha: {{Fecha}}
+Hora: {{Hora}}
+Sede: {{Modulo}}, {{Direccion}}
+Trámite: {{Tramite}}
+{{Motivo}}
+
+Agenda una cita nueva en otra fecha o en otra sede:
+{{Enlace}}
+
+--
+Aviso de privacidad simplificado: tus datos se usan solo para agendar y atender tu cita del trámite de la TIIE y para avisarte sobre ella. Consulta el aviso integral en {{AvisoPrivacidad}}
+Este correo se envió automáticamente; no respondas a esta dirección.

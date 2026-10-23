@@ -82,6 +82,12 @@ public static class DocumentoOpenApi
                     Type = JsonSchemaType.String | JsonSchemaType.Null,
                     Format = "date-time",
                 },
+                ["usuarioId"] = new OpenApiSchema
+                {
+                    Description = "Solo en CorreoNoDisponible al crear un usuario: la cuenta quedó creada con este id.",
+                    Type = JsonSchemaType.Integer | JsonSchemaType.Null,
+                    Format = "int32",
+                },
             },
         };
 

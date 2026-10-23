@@ -1,0 +1,17 @@
+Hola, {{Nombre}}.
+
+Cancelamos esta cita y liberamos el lugar:
+
+Folio: {{Folio}}
+Fecha: {{Fecha}}
+Hora: {{Hora}}
+Sede: {{Modulo}}, {{Direccion}}
+Trámite: {{Tramite}}
+{{Motivo}}
+
+Si todavía necesitas hacer el trámite, agenda una cita nueva:
+{{Enlace}}
+
+--
+Aviso de privacidad simplificado: tus datos se usan solo para agendar y atender tu cita del trámite de la TIIE y para avisarte sobre ella. Consulta el aviso integral en {{AvisoPrivacidad}}
+Este correo se envió automáticamente; no respondas a esta dirección.

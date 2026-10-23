@@ -35,6 +35,529 @@
         }
       }
     },
+    "/api/publico/tipos-tramite": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TipoTramitePublico"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publico/municipios": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MunicipioPublico"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publico/modulos": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModuloPublico"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publico/municipios/{municipioId}/modulos": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "parameters": [
+          {
+            "name": "municipioId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModuloPublico"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publico/modulos/{moduloId}/ofertas": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "parameters": [
+          {
+            "name": "moduloId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OfertaPublica"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publico/ofertas/{ofertaId}/disponibilidad": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "parameters": [
+          {
+            "name": "ofertaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DisponibilidadOferta"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publico/ofertas/{ofertaId}/cupos": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "parameters": [
+          {
+            "name": "ofertaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "fecha",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CupoDisponible"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publico/citas": {
+      "post": {
+        "tags": [
+          "Público"
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudCita"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CitaReservada"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publico/citas/recuperacion": {
+      "post": {
+        "tags": [
+          "Público"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudRecuperacion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mi-cita": {
+      "get": {
+        "tags": [
+          "Mi cita"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetalleMiCita"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mi-cita/comprobante.pdf": {
+      "get": {
+        "tags": [
+          "Mi cita"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mi-cita/cancelacion": {
+      "post": {
+        "tags": [
+          "Mi cita"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudCancelacionMiCita"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetalleMiCita"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mi-cita/reprogramacion": {
+      "post": {
+        "tags": [
+          "Mi cita"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudReprogramacionMiCita"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetalleMiCita"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mi-cita/salida": {
+      "post": {
+        "tags": [
+          "Mi cita"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/auth/entrar": {
       "post": {
         "tags": [
@@ -412,6 +935,1931 @@
         }
       }
     },
+    "/api/admin/tablero": {
+      "get": {
+        "tags": [
+          "Administración · Reportes"
+        ],
+        "parameters": [
+          {
+            "name": "moduloId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tablero"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/agenda": {
+      "get": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "moduloId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "fecha",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CitaAgenda"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/citas": {
+      "get": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "desde",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "moduloId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "tipoTramiteId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/EstadoCita"
+            }
+          },
+          {
+            "name": "busqueda",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "tamano",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaPaginadaOfCitaListado"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CitaVentanilla"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CitaRegistrada"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/citas/{citaId}": {
+      "get": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "citaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetalleCitaPersonal"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/citas/{citaId}/asistencia": {
+      "post": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "citaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudAsistencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstadoResultante"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/citas/{citaId}/cancelacion": {
+      "post": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "citaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudMotivo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstadoResultante"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/citas/{citaId}/reprogramacion": {
+      "post": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "citaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudReprogramacionPersonal"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CitaRegistrada"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/citas/{citaId}/reenvio": {
+      "post": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "citaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/citas/{citaId}/comprobante.pdf": {
+      "get": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "citaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/ofertas/{ofertaId}/cupos": {
+      "get": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "ofertaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CupoAdmin"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/modulos": {
+      "get": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "activo",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModuloResumen"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatosModulo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuloDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/modulos/{moduloId}": {
+      "get": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "moduloId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuloDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "moduloId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatosModulo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuloDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/tipos-tramite": {
+      "get": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TipoTramiteResumen"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatosTipoTramite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TipoTramiteDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/tipos-tramite/{tipoTramiteId}": {
+      "get": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "tipoTramiteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TipoTramiteDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "tipoTramiteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatosTipoTramite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TipoTramiteDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/ofertas": {
+      "get": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "moduloId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OfertaAdmin"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearOferta"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfertaAdmin"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/ofertas/{ofertaId}": {
+      "get": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "ofertaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfertaAdmin"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "ofertaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActualizarOferta"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfertaAdmin"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/ofertas/{ofertaId}/plantilla": {
+      "get": {
+        "tags": [
+          "Administración · Horarios"
+        ],
+        "parameters": [
+          {
+            "name": "ofertaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlantillaSemanal"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Administración · Horarios"
+        ],
+        "parameters": [
+          {
+            "name": "ofertaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlantillaSemanal"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResumenGeneracion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/bloqueos": {
+      "get": {
+        "tags": [
+          "Administración · Horarios"
+        ],
+        "parameters": [
+          {
+            "name": "desde",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "moduloId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BloqueoResumen"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Administración · Horarios"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearBloqueo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BloqueoCreado"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/citas/{citaId}/correccion-asistencia": {
+      "post": {
+        "tags": [
+          "Administración · Citas"
+        ],
+        "parameters": [
+          {
+            "name": "citaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudCorreccionAsistencia"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstadoResultante"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/reportes/citas": {
+      "get": {
+        "tags": [
+          "Administración · Reportes"
+        ],
+        "parameters": [
+          {
+            "name": "desde",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "moduloId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "tipoTramiteId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/EstadoCita"
+            }
+          },
+          {
+            "name": "formato",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReporteCitas"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/cupos/{cupoId}": {
+      "patch": {
+        "tags": [
+          "Administración · Horarios"
+        ],
+        "parameters": [
+          {
+            "name": "cupoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AjusteCupo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CupoAdmin"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/bloqueos/{bloqueoId}/cancelacion-citas": {
+      "post": {
+        "tags": [
+          "Administración · Horarios"
+        ],
+        "parameters": [
+          {
+            "name": "bloqueoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudMotivo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CitasCanceladasPorBloqueo"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/bloqueos/{bloqueoId}": {
+      "delete": {
+        "tags": [
+          "Administración · Horarios"
+        ],
+        "parameters": [
+          {
+            "name": "bloqueoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/modulos/{moduloId}/activacion": {
+      "post": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "parameters": [
+          {
+            "name": "moduloId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudActivo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoActivacionModulo"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios": {
+      "get": {
+        "tags": [
+          "Administración · Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "busqueda",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rol",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "activo",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "tamano",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaPaginadaOfUsuarioResumen"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Administración · Usuarios"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearUsuario"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/{usuarioId}": {
+      "get": {
+        "tags": [
+          "Administración · Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Administración · Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActualizarUsuario"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/{usuarioId}/activacion": {
+      "post": {
+        "tags": [
+          "Administración · Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudActivo"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioDetalle"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/{usuarioId}/invitacion": {
+      "post": {
+        "tags": [
+          "Administración · Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios/{usuarioId}/mfa/restablecimiento": {
+      "post": {
+        "tags": [
+          "Administración · Usuarios"
+        ],
+        "parameters": [
+          {
+            "name": "usuarioId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auditoria": {
+      "get": {
+        "tags": [
+          "Administración · Auditoría"
+        ],
+        "parameters": [
+          {
+            "name": "desde",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "usuarioId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "accion",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "entidad",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "tamano",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaPaginadaOfRegistroBitacora"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/procesos": {
       "get": {
         "tags": [
@@ -447,6 +2895,207 @@
   },
   "components": {
     "schemas": {
+      "ActualizarOferta": {
+        "required": [
+          "diasVentana",
+          "notasSede",
+          "activo",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "diasVentana": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "notasSede": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "ActualizarUsuario": {
+        "required": [
+          "correo",
+          "nombre",
+          "apellidoPaterno",
+          "apellidoMaterno",
+          "rol",
+          "moduloIds",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "correo": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "apellidoPaterno": {
+            "type": "string"
+          },
+          "apellidoMaterno": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rol": {
+            "type": "string"
+          },
+          "moduloIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "version": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "AjusteCupo": {
+        "required": [
+          "capacidad",
+          "cerrado",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "capacidad": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int16"
+          },
+          "cerrado": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "version": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "AlcanceBloqueo": {
+        "enum": [
+          "General",
+          "Modulo",
+          "Oferta"
+        ],
+        "type": "string"
+      },
+      "BloqueoCreado": {
+        "required": [
+          "bloqueoId",
+          "cuposCerrados",
+          "citasAfectadas"
+        ],
+        "type": "object",
+        "properties": {
+          "bloqueoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cuposCerrados": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "citasAfectadas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CitaAfectada"
+            }
+          }
+        }
+      },
+      "BloqueoResumen": {
+        "required": [
+          "bloqueoId",
+          "desde",
+          "hasta",
+          "alcance",
+          "moduloId",
+          "modulo",
+          "ofertaId",
+          "oferta",
+          "motivo",
+          "creadoEn"
+        ],
+        "type": "object",
+        "properties": {
+          "bloqueoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "desde": {
+            "type": "string",
+            "format": "date"
+          },
+          "hasta": {
+            "type": "string",
+            "format": "date"
+          },
+          "alcance": {
+            "$ref": "#/components/schemas/AlcanceBloqueo"
+          },
+          "moduloId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "modulo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "ofertaId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "oferta": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "creadoEn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "CatalogosAdmin": {
         "required": [
           "municipios",
@@ -472,6 +3121,281 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "CitaAfectada": {
+        "required": [
+          "citaId",
+          "folio",
+          "fecha",
+          "hora"
+        ],
+        "type": "object",
+        "properties": {
+          "citaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "folio": {
+            "type": "string"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          }
+        }
+      },
+      "CitaAgenda": {
+        "required": [
+          "citaId",
+          "folio",
+          "hora",
+          "tramite",
+          "nombreCompleto",
+          "curp",
+          "estado",
+          "origen"
+        ],
+        "type": "object",
+        "properties": {
+          "citaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "folio": {
+            "type": "string"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "tramite": {
+            "type": "string"
+          },
+          "nombreCompleto": {
+            "type": "string"
+          },
+          "curp": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          },
+          "origen": {
+            "$ref": "#/components/schemas/OrigenCita"
+          }
+        }
+      },
+      "CitaListado": {
+        "required": [
+          "citaId",
+          "folio",
+          "folioAnterior",
+          "fecha",
+          "hora",
+          "moduloId",
+          "modulo",
+          "tramite",
+          "nombreCompleto",
+          "curp",
+          "estado",
+          "origen"
+        ],
+        "type": "object",
+        "properties": {
+          "citaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "folio": {
+            "type": "string"
+          },
+          "folioAnterior": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modulo": {
+            "type": "string"
+          },
+          "tramite": {
+            "type": "string"
+          },
+          "nombreCompleto": {
+            "type": "string"
+          },
+          "curp": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          },
+          "origen": {
+            "$ref": "#/components/schemas/OrigenCita"
+          }
+        }
+      },
+      "CitaRegistrada": {
+        "required": [
+          "citaId",
+          "folio"
+        ],
+        "type": "object",
+        "properties": {
+          "citaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "folio": {
+            "type": "string"
+          }
+        }
+      },
+      "CitaRelacionada": {
+        "required": [
+          "citaId",
+          "folio",
+          "estado",
+          "fecha",
+          "hora"
+        ],
+        "type": "object",
+        "properties": {
+          "citaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "folio": {
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          }
+        }
+      },
+      "CitaReservada": {
+        "required": [
+          "folio",
+          "estado",
+          "fecha",
+          "hora",
+          "modulo",
+          "tramite"
+        ],
+        "type": "object",
+        "properties": {
+          "folio": {
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "modulo": {
+            "$ref": "#/components/schemas/ModuloCita"
+          },
+          "tramite": {
+            "$ref": "#/components/schemas/TramiteCita"
+          }
+        }
+      },
+      "CitasCanceladasPorBloqueo": {
+        "required": [
+          "citasCanceladas"
+        ],
+        "type": "object",
+        "properties": {
+          "citasCanceladas": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CitaVentanilla": {
+        "required": [
+          "cupoId",
+          "curp",
+          "nombre",
+          "apellidoPaterno",
+          "apellidoMaterno",
+          "celular",
+          "correo",
+          "avisoLeido"
+        ],
+        "type": "object",
+        "properties": {
+          "cupoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "curp": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "apellidoPaterno": {
+            "type": "string"
+          },
+          "apellidoMaterno": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "celular": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "correo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "avisoLeido": {
+            "type": "boolean"
           }
         }
       },
@@ -536,6 +3460,639 @@
           }
         }
       },
+      "CrearBloqueo": {
+        "required": [
+          "desde",
+          "hasta",
+          "moduloId",
+          "ofertaId",
+          "motivo"
+        ],
+        "type": "object",
+        "properties": {
+          "desde": {
+            "type": "string",
+            "format": "date"
+          },
+          "hasta": {
+            "type": "string",
+            "format": "date"
+          },
+          "moduloId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "ofertaId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "CrearOferta": {
+        "required": [
+          "moduloId",
+          "tipoTramiteId",
+          "diasVentana",
+          "notasSede"
+        ],
+        "type": "object",
+        "properties": {
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoTramiteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "diasVentana": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int16"
+          },
+          "notasSede": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "CrearUsuario": {
+        "required": [
+          "usuario",
+          "correo",
+          "nombre",
+          "apellidoPaterno",
+          "apellidoMaterno",
+          "rol",
+          "moduloIds"
+        ],
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "string"
+          },
+          "correo": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "apellidoPaterno": {
+            "type": "string"
+          },
+          "apellidoMaterno": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rol": {
+            "type": "string"
+          },
+          "moduloIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "CupoAdmin": {
+        "required": [
+          "cupoId",
+          "fecha",
+          "hora",
+          "capacidad",
+          "ocupados",
+          "cerrado",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "cupoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "capacidad": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "ocupados": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "cerrado": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "CupoDisponible": {
+        "required": [
+          "cupoId",
+          "hora",
+          "libres"
+        ],
+        "type": "object",
+        "properties": {
+          "cupoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "libres": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DatosModulo": {
+        "required": [
+          "municipioId",
+          "nombre",
+          "calle",
+          "numeroExterior",
+          "numeroInterior",
+          "colonia",
+          "codigoPostal",
+          "localidad",
+          "telefono",
+          "correo",
+          "horarioAtencion",
+          "latitud",
+          "longitud"
+        ],
+        "type": "object",
+        "properties": {
+          "municipioId": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "calle": {
+            "type": "string"
+          },
+          "numeroExterior": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "numeroInterior": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "colonia": {
+            "type": "string"
+          },
+          "codigoPostal": {
+            "type": "string"
+          },
+          "localidad": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "telefono": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "correo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "horarioAtencion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "latitud": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "longitud": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "version": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "DatosTipoTramite": {
+        "required": [
+          "nombre",
+          "descripcion",
+          "costo",
+          "notas",
+          "requisitos"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "costo": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "notas": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "requisitos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequisitoEntrada"
+            }
+          },
+          "activo": {
+            "type": "boolean",
+            "default": true
+          },
+          "version": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "DetalleCitaPersonal": {
+        "required": [
+          "citaId",
+          "folio",
+          "folioAnterior",
+          "estado",
+          "origen",
+          "fecha",
+          "hora",
+          "ofertaId",
+          "moduloId",
+          "modulo",
+          "tramite",
+          "nombreCompleto",
+          "curp",
+          "correo",
+          "celular",
+          "motivoCambio",
+          "creadaEn",
+          "creadaPor",
+          "relacionadas",
+          "notificaciones",
+          "movimientos",
+          "puedeModificar"
+        ],
+        "type": "object",
+        "properties": {
+          "citaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "folio": {
+            "type": "string"
+          },
+          "folioAnterior": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          },
+          "origen": {
+            "$ref": "#/components/schemas/OrigenCita"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "ofertaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modulo": {
+            "type": "string"
+          },
+          "tramite": {
+            "type": "string"
+          },
+          "nombreCompleto": {
+            "type": "string"
+          },
+          "curp": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "correo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "celular": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "motivoCambio": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "creadaEn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creadaPor": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "relacionadas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CitaRelacionada"
+            }
+          },
+          "notificaciones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificacionCita"
+            }
+          },
+          "movimientos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MovimientoCita"
+            }
+          },
+          "puedeModificar": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DetalleMiCita": {
+        "required": [
+          "folio",
+          "folioAnterior",
+          "estado",
+          "fecha",
+          "hora",
+          "ofertaId",
+          "modulo",
+          "tramite",
+          "solicitante",
+          "puedeModificar",
+          "modificableHasta"
+        ],
+        "type": "object",
+        "properties": {
+          "folio": {
+            "type": "string"
+          },
+          "folioAnterior": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "ofertaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modulo": {
+            "$ref": "#/components/schemas/ModuloMiCita"
+          },
+          "tramite": {
+            "$ref": "#/components/schemas/TramiteMiCita"
+          },
+          "solicitante": {
+            "$ref": "#/components/schemas/SolicitanteMiCita"
+          },
+          "puedeModificar": {
+            "type": "boolean"
+          },
+          "modificableHasta": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "DiaDisponible": {
+        "required": [
+          "fecha",
+          "estado",
+          "libres",
+          "capacidad",
+          "motivo"
+        ],
+        "type": "object",
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoDia"
+          },
+          "libres": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "capacidad": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "motivo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "DiaOcupacion": {
+        "required": [
+          "fecha",
+          "capacidad",
+          "ocupados"
+        ],
+        "type": "object",
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "capacidad": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ocupados": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DiaPlantilla": {
+        "required": [
+          "diaSemana",
+          "horas"
+        ],
+        "type": "object",
+        "properties": {
+          "diaSemana": {
+            "type": "integer",
+            "format": "uint8"
+          },
+          "horas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HoraPlantilla"
+            }
+          }
+        }
+      },
+      "DisponibilidadOferta": {
+        "required": [
+          "ofertaId",
+          "desde",
+          "hasta",
+          "dias"
+        ],
+        "type": "object",
+        "properties": {
+          "ofertaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "desde": {
+            "type": "string",
+            "format": "date"
+          },
+          "hasta": {
+            "type": "string",
+            "format": "date"
+          },
+          "dias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiaDisponible"
+            }
+          }
+        }
+      },
+      "EstadoCita": {
+        "enum": [
+          "Agendada",
+          "Atendida",
+          "NoAsistio",
+          "Cancelada",
+          "Reprogramada"
+        ],
+        "type": "string"
+      },
+      "EstadoDia": {
+        "enum": [
+          "Alta",
+          "Poca",
+          "Llena",
+          "Cerrado",
+          "SinServicio"
+        ],
+        "type": "string"
+      },
+      "EstadoNotificacion": {
+        "enum": [
+          "Pendiente",
+          "Enviada",
+          "Fallida",
+          "Descartada"
+        ],
+        "type": "string"
+      },
       "EstadoProceso": {
         "required": [
           "nombre",
@@ -577,6 +4134,233 @@
           }
         }
       },
+      "EstadoResultante": {
+        "required": [
+          "estado"
+        ],
+        "type": "object",
+        "properties": {
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          }
+        }
+      },
+      "FilaReporte": {
+        "required": [
+          "folio",
+          "fecha",
+          "hora",
+          "modulo",
+          "tramite",
+          "estado",
+          "origen"
+        ],
+        "type": "object",
+        "properties": {
+          "folio": {
+            "type": "string"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date"
+          },
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "modulo": {
+            "type": "string"
+          },
+          "tramite": {
+            "type": "string"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          },
+          "origen": {
+            "$ref": "#/components/schemas/OrigenCita"
+          }
+        }
+      },
+      "FiltroReporte": {
+        "required": [
+          "desde",
+          "hasta",
+          "moduloId",
+          "tipoTramiteId",
+          "estado"
+        ],
+        "type": "object",
+        "properties": {
+          "desde": {
+            "type": "string",
+            "format": "date"
+          },
+          "hasta": {
+            "type": "string",
+            "format": "date"
+          },
+          "moduloId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "tipoTramiteId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "estado": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/EstadoCita"
+              }
+            ]
+          }
+        }
+      },
+      "HoraPlantilla": {
+        "required": [
+          "hora",
+          "turnos"
+        ],
+        "type": "object",
+        "properties": {
+          "hora": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "type": "string"
+          },
+          "turnos": {
+            "type": "integer",
+            "format": "uint8"
+          }
+        }
+      },
+      "InasistenciaModulo": {
+        "required": [
+          "moduloId",
+          "modulo",
+          "citas",
+          "inasistencias",
+          "porcentaje"
+        ],
+        "type": "object",
+        "properties": {
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modulo": {
+            "type": "string"
+          },
+          "citas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inasistencias": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "porcentaje": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "ListaPaginadaOfCitaListado": {
+        "required": [
+          "elementos",
+          "total",
+          "pagina",
+          "tamano"
+        ],
+        "type": "object",
+        "properties": {
+          "elementos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CitaListado"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pagina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tamano": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ListaPaginadaOfRegistroBitacora": {
+        "required": [
+          "elementos",
+          "total",
+          "pagina",
+          "tamano"
+        ],
+        "type": "object",
+        "properties": {
+          "elementos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegistroBitacora"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pagina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tamano": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ListaPaginadaOfUsuarioResumen": {
+        "required": [
+          "elementos",
+          "total",
+          "pagina",
+          "tamano"
+        ],
+        "type": "object",
+        "properties": {
+          "elementos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UsuarioResumen"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pagina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tamano": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "ModuloAsignado": {
         "required": [
           "moduloId",
@@ -587,6 +4371,284 @@
           "moduloId": {
             "type": "integer",
             "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          }
+        }
+      },
+      "ModuloCita": {
+        "required": [
+          "moduloId",
+          "nombre",
+          "direccion"
+        ],
+        "type": "object",
+        "properties": {
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "direccion": {
+            "type": "string"
+          }
+        }
+      },
+      "ModuloDetalle": {
+        "required": [
+          "moduloId",
+          "municipioId",
+          "nombre",
+          "calle",
+          "numeroExterior",
+          "numeroInterior",
+          "colonia",
+          "codigoPostal",
+          "localidad",
+          "telefono",
+          "correo",
+          "horarioAtencion",
+          "latitud",
+          "longitud",
+          "activo",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "municipioId": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "calle": {
+            "type": "string"
+          },
+          "numeroExterior": {
+            "type": "string"
+          },
+          "numeroInterior": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "colonia": {
+            "type": "string"
+          },
+          "codigoPostal": {
+            "type": "string"
+          },
+          "localidad": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "telefono": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "correo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "horarioAtencion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "latitud": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "longitud": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "ModuloMiCita": {
+        "required": [
+          "nombre",
+          "direccion",
+          "municipio",
+          "horarioAtencion",
+          "latitud",
+          "longitud"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "direccion": {
+            "type": "string"
+          },
+          "municipio": {
+            "type": "string"
+          },
+          "horarioAtencion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "latitud": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "longitud": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          }
+        }
+      },
+      "ModuloPublico": {
+        "required": [
+          "moduloId",
+          "nombre",
+          "municipioId",
+          "municipio",
+          "direccion",
+          "horarioAtencion",
+          "latitud",
+          "longitud"
+        ],
+        "type": "object",
+        "properties": {
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "municipioId": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "municipio": {
+            "type": "string"
+          },
+          "direccion": {
+            "type": "string"
+          },
+          "horarioAtencion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "latitud": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "longitud": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          }
+        }
+      },
+      "ModuloResumen": {
+        "required": [
+          "moduloId",
+          "nombre",
+          "municipioId",
+          "municipio",
+          "activo"
+        ],
+        "type": "object",
+        "properties": {
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "municipioId": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "municipio": {
+            "type": "string"
+          },
+          "activo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "MovimientoCita": {
+        "required": [
+          "fecha",
+          "accion",
+          "usuario"
+        ],
+        "type": "object",
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accion": {
+            "type": "string"
+          },
+          "usuario": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "MunicipioPublico": {
+        "required": [
+          "municipioId",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "municipioId": {
+            "type": "integer",
+            "format": "int16"
           },
           "nombre": {
             "type": "string"
@@ -625,6 +4687,149 @@
           }
         }
       },
+      "NotificacionCita": {
+        "required": [
+          "notificacionId",
+          "tipo",
+          "estado",
+          "destinatario",
+          "intentos",
+          "creadaEn",
+          "enviadaEn",
+          "ultimoError"
+        ],
+        "type": "object",
+        "properties": {
+          "notificacionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoNotificacion"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoNotificacion"
+          },
+          "destinatario": {
+            "type": "string"
+          },
+          "intentos": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creadaEn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "enviadaEn": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "ultimoError": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "OfertaAdmin": {
+        "required": [
+          "ofertaId",
+          "moduloId",
+          "modulo",
+          "tipoTramiteId",
+          "tramite",
+          "diasVentana",
+          "notasSede",
+          "activo",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "ofertaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modulo": {
+            "type": "string"
+          },
+          "tipoTramiteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tramite": {
+            "type": "string"
+          },
+          "diasVentana": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "notasSede": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "OfertaPublica": {
+        "required": [
+          "ofertaId",
+          "tipoTramiteId",
+          "nombre",
+          "costo",
+          "notasSede"
+        ],
+        "type": "object",
+        "properties": {
+          "ofertaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoTramiteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "costo": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "notasSede": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "OrigenCita": {
+        "enum": [
+          "Web",
+          "Ventanilla",
+          "Migracion"
+        ],
+        "type": "string"
+      },
       "PasoSiguiente": {
         "enum": [
           "Listo",
@@ -632,6 +4837,20 @@
           "ConfigurarMfa"
         ],
         "type": "string"
+      },
+      "PlantillaSemanal": {
+        "required": [
+          "dias"
+        ],
+        "type": "object",
+        "properties": {
+          "dias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiaPlantilla"
+            }
+          }
+        }
       },
       "ProblemaApi": {
         "required": [
@@ -678,9 +4897,173 @@
             ],
             "description": "Solo en CuentaBloqueada: instante UTC en que se desbloquea.",
             "format": "date-time"
+          },
+          "usuarioId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "description": "Solo en CorreoNoDisponible al crear un usuario: la cuenta quedó creada con este id.",
+            "format": "int32"
           }
         },
         "description": "Problem Details (RFC 9457) con la extensión codigo."
+      },
+      "RegistroBitacora": {
+        "required": [
+          "auditoriaId",
+          "fecha",
+          "usuarioId",
+          "usuario",
+          "accion",
+          "entidad",
+          "entidadId",
+          "cambios",
+          "ip"
+        ],
+        "type": "object",
+        "properties": {
+          "auditoriaId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usuarioId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "usuario": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "accion": {
+            "type": "string"
+          },
+          "entidad": {
+            "type": "string"
+          },
+          "entidadId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "cambios": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "ip": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "ReporteCitas": {
+        "required": [
+          "filtro",
+          "filas",
+          "totales",
+          "truncado"
+        ],
+        "type": "object",
+        "properties": {
+          "filtro": {
+            "$ref": "#/components/schemas/FiltroReporte"
+          },
+          "filas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilaReporte"
+            }
+          },
+          "totales": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TotalEstado"
+            }
+          },
+          "truncado": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RequisitoDetalle": {
+        "required": [
+          "requisitoId",
+          "nivelEscolarId",
+          "texto",
+          "orden"
+        ],
+        "type": "object",
+        "properties": {
+          "requisitoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nivelEscolarId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "uint8"
+          },
+          "texto": {
+            "type": "string"
+          },
+          "orden": {
+            "type": "integer",
+            "format": "int16"
+          }
+        }
+      },
+      "RequisitoEntrada": {
+        "required": [
+          "nivelEscolarId",
+          "texto"
+        ],
+        "type": "object",
+        "properties": {
+          "nivelEscolarId": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "uint8"
+          },
+          "texto": {
+            "type": "string"
+          }
+        }
+      },
+      "RequisitoTexto": {
+        "required": [
+          "nivelEscolar",
+          "texto"
+        ],
+        "type": "object",
+        "properties": {
+          "nivelEscolar": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "texto": {
+            "type": "string"
+          }
+        }
       },
       "RespuestaEntrar": {
         "required": [
@@ -704,6 +5087,49 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "ResultadoActivacionModulo": {
+        "required": [
+          "activo",
+          "citasFuturas"
+        ],
+        "type": "object",
+        "properties": {
+          "activo": {
+            "type": "boolean"
+          },
+          "citasFuturas": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResumenGeneracion": {
+        "required": [
+          "cuposCreados",
+          "cuposActualizados",
+          "cuposEliminados",
+          "cuposConCitasSinCambio"
+        ],
+        "type": "object",
+        "properties": {
+          "cuposCreados": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cuposActualizados": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cuposEliminados": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cuposConCitasSinCambio": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -745,6 +5171,25 @@
           }
         }
       },
+      "SolicitanteMiCita": {
+        "required": [
+          "nombreCompleto",
+          "curp",
+          "correo"
+        ],
+        "type": "object",
+        "properties": {
+          "nombreCompleto": {
+            "type": "string"
+          },
+          "curp": {
+            "type": "string"
+          },
+          "correo": {
+            "type": "string"
+          }
+        }
+      },
       "SolicitudActivarMfa": {
         "required": [
           "codigo"
@@ -753,6 +5198,28 @@
         "properties": {
           "codigo": {
             "type": "string"
+          }
+        }
+      },
+      "SolicitudActivo": {
+        "required": [
+          "activo"
+        ],
+        "type": "object",
+        "properties": {
+          "activo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SolicitudAsistencia": {
+        "required": [
+          "asistio"
+        ],
+        "type": "object",
+        "properties": {
+          "asistio": {
+            "type": "boolean"
           }
         }
       },
@@ -768,6 +5235,76 @@
           },
           "nueva": {
             "type": "string"
+          }
+        }
+      },
+      "SolicitudCancelacionMiCita": {
+        "required": [
+          "motivo"
+        ],
+        "type": "object",
+        "properties": {
+          "motivo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "SolicitudCita": {
+        "required": [
+          "cupoId",
+          "curp",
+          "nombre",
+          "apellidoPaterno",
+          "apellidoMaterno",
+          "celular",
+          "correo",
+          "aceptaAvisoPrivacidad",
+          "tokenCaptcha"
+        ],
+        "type": "object",
+        "properties": {
+          "cupoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "curp": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "apellidoPaterno": {
+            "type": "string"
+          },
+          "apellidoMaterno": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "celular": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "correo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "aceptaAvisoPrivacidad": {
+            "type": "boolean"
+          },
+          "tokenCaptcha": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },
@@ -817,6 +5354,24 @@
           }
         }
       },
+      "SolicitudCorreccionAsistencia": {
+        "required": [
+          "asistio",
+          "motivo"
+        ],
+        "type": "object",
+        "properties": {
+          "asistio": {
+            "type": "boolean"
+          },
+          "motivo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "SolicitudEntrar": {
         "required": [
           "usuario",
@@ -832,6 +5387,20 @@
           }
         }
       },
+      "SolicitudMotivo": {
+        "required": [
+          "motivo"
+        ],
+        "type": "object",
+        "properties": {
+          "motivo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "SolicitudOlvideContrasena": {
         "required": [
           "correo"
@@ -842,6 +5411,425 @@
             "type": "string"
           }
         }
+      },
+      "SolicitudRecuperacion": {
+        "required": [
+          "curp",
+          "correo",
+          "tokenCaptcha"
+        ],
+        "type": "object",
+        "properties": {
+          "curp": {
+            "type": "string"
+          },
+          "correo": {
+            "type": "string"
+          },
+          "tokenCaptcha": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "SolicitudReprogramacionMiCita": {
+        "required": [
+          "cupoId"
+        ],
+        "type": "object",
+        "properties": {
+          "cupoId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SolicitudReprogramacionPersonal": {
+        "required": [
+          "cupoId",
+          "motivo"
+        ],
+        "type": "object",
+        "properties": {
+          "cupoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "motivo": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "Tablero": {
+        "required": [
+          "hoy",
+          "proximos7Dias",
+          "inasistencia30Dias"
+        ],
+        "type": "object",
+        "properties": {
+          "hoy": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TotalEstado"
+            }
+          },
+          "proximos7Dias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiaOcupacion"
+            }
+          },
+          "inasistencia30Dias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InasistenciaModulo"
+            }
+          }
+        }
+      },
+      "TipoNotificacion": {
+        "enum": [
+          "Confirmacion",
+          "Recordatorio",
+          "Cancelacion",
+          "Reprogramacion",
+          "EnlaceRecuperacion",
+          "CierrePorBloqueo",
+          "AvisoMigracion"
+        ],
+        "type": "string"
+      },
+      "TipoTramiteDetalle": {
+        "required": [
+          "tipoTramiteId",
+          "nombre",
+          "descripcion",
+          "costo",
+          "notas",
+          "activo",
+          "requisitos",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "tipoTramiteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "costo": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "notas": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "requisitos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequisitoDetalle"
+            }
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "TipoTramitePublico": {
+        "required": [
+          "tipoTramiteId",
+          "nombre",
+          "descripcion",
+          "costo",
+          "requisitos"
+        ],
+        "type": "object",
+        "properties": {
+          "tipoTramiteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "descripcion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "costo": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "requisitos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequisitoTexto"
+            }
+          }
+        }
+      },
+      "TipoTramiteResumen": {
+        "required": [
+          "tipoTramiteId",
+          "nombre",
+          "costo",
+          "activo",
+          "ofertas"
+        ],
+        "type": "object",
+        "properties": {
+          "tipoTramiteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "costo": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "ofertas": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TotalEstado": {
+        "required": [
+          "estado",
+          "citas"
+        ],
+        "type": "object",
+        "properties": {
+          "estado": {
+            "$ref": "#/components/schemas/EstadoCita"
+          },
+          "citas": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TramiteCita": {
+        "required": [
+          "tipoTramiteId",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "tipoTramiteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          }
+        }
+      },
+      "TramiteMiCita": {
+        "required": [
+          "nombre",
+          "costo",
+          "notas",
+          "notasSede",
+          "requisitos"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "costo": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
+          },
+          "notas": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "notasSede": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "requisitos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequisitoTexto"
+            }
+          }
+        }
+      },
+      "UsuarioDetalle": {
+        "required": [
+          "usuarioId",
+          "usuario",
+          "correo",
+          "nombre",
+          "apellidoPaterno",
+          "apellidoMaterno",
+          "rol",
+          "moduloIds",
+          "activo",
+          "mfaActivo",
+          "cuentaActivada",
+          "ultimoAccesoEn",
+          "creadoEn",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "usuarioId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usuario": {
+            "type": "string"
+          },
+          "correo": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "apellidoPaterno": {
+            "type": "string"
+          },
+          "apellidoMaterno": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rol": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "moduloIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "mfaActivo": {
+            "type": "boolean"
+          },
+          "cuentaActivada": {
+            "type": "boolean"
+          },
+          "ultimoAccesoEn": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "creadoEn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "UsuarioResumen": {
+        "required": [
+          "usuarioId",
+          "usuario",
+          "correo",
+          "nombreCompleto",
+          "rol",
+          "activo",
+          "mfaActivo",
+          "cuentaActivada",
+          "ultimoAccesoEn"
+        ],
+        "type": "object",
+        "properties": {
+          "usuarioId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usuario": {
+            "type": "string"
+          },
+          "correo": {
+            "type": "string"
+          },
+          "nombreCompleto": {
+            "type": "string"
+          },
+          "rol": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "activo": {
+            "type": "boolean"
+          },
+          "mfaActivo": {
+            "type": "boolean"
+          },
+          "cuentaActivada": {
+            "type": "boolean"
+          },
+          "ultimoAccesoEn": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
       }
     }
   },
@@ -850,10 +5838,25 @@
       "name": "Público"
     },
     {
+      "name": "Mi cita"
+    },
+    {
       "name": "Administración · Sesión"
     },
     {
       "name": "Administración · Catálogos"
+    },
+    {
+      "name": "Administración · Reportes"
+    },
+    {
+      "name": "Administración · Citas"
+    },
+    {
+      "name": "Administración · Horarios"
+    },
+    {
+      "name": "Administración · Usuarios"
     },
     {
       "name": "Administración · Auditoría"

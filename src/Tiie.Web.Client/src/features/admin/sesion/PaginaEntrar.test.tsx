@@ -1,4 +1,5 @@
 import { screen, waitFor } from '@testing-library/react';
+import { admin } from '@/test/admin';
 import { api, problema, sesionPersonal } from '@/test/api';
 import { renderizarRuta } from '@/test/renderizar';
 import { servidor } from '@/test/servidor';
@@ -14,6 +15,7 @@ describe('Entrar al panel', () => {
     let enviado: unknown = null;
     servidor.use(
       api.entrar(() => ({ siguientePaso: 'CodigoMfa' })),
+      admin.agenda(() => []),
       api.entrarMfa((cuerpo) => {
         enviado = cuerpo;
         return null;

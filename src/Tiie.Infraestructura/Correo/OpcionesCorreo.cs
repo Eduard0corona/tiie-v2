@@ -30,6 +30,9 @@ public sealed class OpcionesCorreo : IValidatableObject
     /// <summary>Carpeta de los .eml cuando el proveedor es <see cref="ProveedorCorreo.Archivo"/>.</summary>
     public string Carpeta { get; set; } = "artifacts/correos";
 
+    /// <summary>Solo en QA: si tiene elementos, los correos a otras direcciones no salen.</summary>
+    public IList<string> DestinatariosPermitidos { get; } = [];
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (Proveedor == ProveedorCorreo.Acs && !Uri.TryCreate(AcsEndpoint, UriKind.Absolute, out _))

@@ -14,7 +14,7 @@ namespace Tiie.Integracion.Tests.Infraestructura;
 public sealed record UsuarioPrueba(int Id, string Usuario, string Correo, string Contrasena, string? ClaveMfa);
 
 /// <summary>Base de las pruebas de integración: cada prueba empieza con la base limpia.</summary>
-public abstract class PruebaIntegracion(FabricaTiie fabrica) : IAsyncLifetime
+public abstract partial class PruebaIntegracion(FabricaTiie fabrica) : IAsyncLifetime
 {
     public const string Contrasena = "una-contrasena-de-pruebas";
 
@@ -82,7 +82,10 @@ public abstract class PruebaIntegracion(FabricaTiie fabrica) : IAsyncLifetime
         return modulo.ModuloId;
     }
 
-    /// <summary>Cliente con la sesión del usuario ya iniciada; si tiene MFA, también pasó el código.</summary>
+    /// <summary>
+    /// Cliente con la sesión del usuario ya iniciada; si tiene MFA, también pasó el código. Identity valida el código
+    /// del autenticador con el reloj real, no con <see cref="TimeProvider"/>: por eso se calcula con la hora real.
+    /// </summary>
     protected async Task<ClienteTiie> ClienteDeAsync(UsuarioPrueba usuario)
     {
         var cliente = fabrica.CrearCliente();
@@ -91,7 +94,7 @@ public abstract class PruebaIntegracion(FabricaTiie fabrica) : IAsyncLifetime
         if (usuario.ClaveMfa is not null)
         {
             var codigo = await cliente.PostAsync("/api/admin/auth/entrar/mfa",
-                new { codigo = Totp.Generar(usuario.ClaveMfa, fabrica.Tiempo.GetUtcNow()), recordarEsteEquipo = false });
+                new { codigo = Totp.Generar(usuario.ClaveMfa, DateTimeOffset.UtcNow), recordarEsteEquipo = false });
             codigo.StatusCode.ShouldBe(HttpStatusCode.NoContent);
         }
         return cliente;

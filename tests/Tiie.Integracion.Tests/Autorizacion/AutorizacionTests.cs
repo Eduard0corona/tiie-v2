@@ -41,23 +41,49 @@ public sealed class AutorizacionTests(FabricaTiie fabrica) : PruebaIntegracion(f
             politica.ShouldBe(MatrizPermisos.Endpoints[clave], clave);
     }
 
+    private static HttpRequestMessage Solicitud(string clave)
+    {
+        var (metodo, ruta) = (clave.Split(' ')[0], MatrizPermisos.RutaConcreta(clave.Split(' ')[1]));
+        var solicitud = new HttpRequestMessage(new HttpMethod(metodo), new Uri(ruta, UriKind.Relative));
+        if (metodo != "GET")
+            solicitud.Content = System.Net.Http.Json.JsonContent.Create(new { });
+        return solicitud;
+    }
+
     [Fact]
     public async Task Anonimo_recibe_401_NoAutenticado_en_cada_endpoint_protegido()
     {
         using var cliente = Fabrica.CrearCliente();
-        var protegidos = MatrizPermisos.Endpoints.Where(e => e.Value != MatrizPermisos.Anonimo).Select(e => e.Key);
 
-        foreach (var clave in protegidos)
+        foreach (var clave in MatrizPermisos.Endpoints.Where(e => e.Value != MatrizPermisos.Anonimo).Select(e => e.Key))
         {
-            var (metodo, ruta) = (clave.Split(' ')[0], clave.Split(' ')[1]);
-            using var solicitud = new HttpRequestMessage(new HttpMethod(metodo), new Uri(ruta, UriKind.Relative));
-            if (metodo != "GET")
-                solicitud.Content = System.Net.Http.Json.JsonContent.Create(new { });
-
+            using var solicitud = Solicitud(clave);
             var respuesta = await cliente.Http.SendAsync(solicitud);
 
             respuesta.StatusCode.ShouldBe(HttpStatusCode.Unauthorized, clave);
             (await respuesta.CodigoAsync()).ShouldBe(nameof(CodigoError.NoAutenticado), clave);
+        }
+    }
+
+    [Theory]
+    [InlineData(Roles.Capturista)]
+    [InlineData(Roles.Supervisor)]
+    public async Task Cada_rol_recibe_403_Prohibido_en_las_rutas_que_su_politica_no_admite(string rol)
+    {
+        using var cliente = await ClienteComoAsync(rol);
+        var prohibidas = MatrizPermisos.Endpoints
+            .Where(e => e.Value != MatrizPermisos.Anonimo && !MatrizPermisos.RolesPorPolitica[e.Value].Contains(rol))
+            .Select(e => e.Key)
+            .ToList();
+        prohibidas.ShouldNotBeEmpty();
+
+        foreach (var clave in prohibidas)
+        {
+            using var solicitud = Solicitud(clave);
+            var respuesta = await cliente.Http.SendAsync(solicitud);
+
+            respuesta.StatusCode.ShouldBe(HttpStatusCode.Forbidden, clave);
+            (await respuesta.CodigoAsync()).ShouldBe(nameof(CodigoError.Prohibido), clave);
         }
     }
 

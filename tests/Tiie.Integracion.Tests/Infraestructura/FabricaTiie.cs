@@ -91,9 +91,13 @@ public sealed class FabricaTiie : WebApplicationFactory<Program>, IAsyncLifetime
         builder.UseSetting("Captcha:ClaveSitio", "clave-sitio-pruebas");
         builder.UseSetting("Captcha:ClaveSecreta", "clave-secreta-pruebas");
         builder.UseSetting("Semilla:ContrasenaAdministrador", "semilla-de-pruebas-larga");
+        builder.UseSetting("Documentos:LicenciaQuestPdf", "Community");
+        // Las pruebas de procesos los ejecutan directamente.
+        builder.UseSetting("Procesos:Habilitados", "false");
         // Muchas pruebas entran desde la misma «IP»; el límite de entrar tiene su propia prueba.
         builder.UseSetting("Limites:Entrar:Permitidas", "10000");
-        builder.UseSetting("Limites:Admin:Permitidas", "10000");
+        foreach (var limite in new[] { "PublicoLectura", "Reserva", "Recuperacion", "EnlaceCita", "MiCita", "Admin" })
+            builder.UseSetting($"Limites:{limite}:Permitidas", "10000");
 
         // Todos los niveles, incluidos Debug de Identity y los comandos de EF, para revisar que no haya datos personales.
         builder.ConfigureLogging(l => l.AddProvider(Logs).AddFilter<LogsEnMemoria>(_ => true));
@@ -103,6 +107,8 @@ public sealed class FabricaTiie : WebApplicationFactory<Program>, IAsyncLifetime
             s.AddSingleton<TimeProvider>(Tiempo);
             s.RemoveAll<ICorreo>();
             s.AddSingleton<ICorreo>(Correos);
+            s.RemoveAll<ICaptcha>();
+            s.AddSingleton<ICaptcha, CaptchaPruebas>();
         });
     }
 
@@ -113,20 +119,38 @@ public sealed class FabricaTiie : WebApplicationFactory<Program>, IAsyncLifetime
     }
 }
 
-/// <summary>Guarda los correos en lugar de enviarlos.</summary>
+/// <summary>Guarda los correos en lugar de enviarlos; puede simular un proveedor caído.</summary>
 public sealed class CorreoEnMemoria : ICorreo
 {
     private readonly ConcurrentQueue<MensajeCorreo> _enviados = new();
 
     public IReadOnlyList<MensajeCorreo> Enviados => [.. _enviados];
 
+    /// <summary>Si es verdadero, cada envío falla como si el proveedor rechazara el mensaje.</summary>
+    public bool Fallar { get; set; }
+
     public Task EnviarAsync(MensajeCorreo mensaje, CancellationToken cancellationToken)
     {
+        if (Fallar)
+            throw new CorreoNoEnviadoException("Proveedor no disponible (simulado).");
         _enviados.Enqueue(mensaje);
         return Task.CompletedTask;
     }
 
-    public void Limpiar() => _enviados.Clear();
+    public void Limpiar()
+    {
+        _enviados.Clear();
+        Fallar = false;
+    }
+}
+
+/// <summary>Captcha de pruebas: solo acepta el token «valido».</summary>
+public sealed class CaptchaPruebas : ICaptcha
+{
+    public const string TokenValido = "valido";
+
+    public Task ExigirValidoAsync(string? token, System.Net.IPAddress? ip, CancellationToken cancellationToken) =>
+        token == TokenValido ? Task.CompletedTask : throw new CaptchaInvalidoException();
 }
 
 /// <summary>Captura los mensajes de log ya formateados, para revisar que no tengan datos personales.</summary>

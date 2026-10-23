@@ -40,4 +40,46 @@ public sealed class Cita
     public byte[] RowVersion { get; set; } = [];
 
     public ICollection<Notificacion> Notificaciones { get; } = [];
+
+    /// <summary>Cita nueva en estado Agendada. El token ya viene emitido: aquí solo se guardan su hash y su copia protegida.</summary>
+    public static Cita Agendar(
+        string folio,
+        int cupoId,
+        Solicitante solicitante,
+        OrigenCita origen,
+        TokenAcceso token,
+        DateTimeOffset ahora,
+        int? usuarioId = null,
+        Guid? claveIdempotencia = null,
+        string? versionAvisoPrivacidad = null,
+        int? citaOrigenId = null)
+    {
+        ArgumentNullException.ThrowIfNull(token);
+        return new Cita
+        {
+            Folio = folio,
+            CupoId = cupoId,
+            Solicitante = solicitante,
+            Estado = EstadoCita.Agendada,
+            Origen = origen,
+            TokenHash = token.Hash,
+            TokenProtegido = token.Protegido,
+            TokenVenceEn = token.VenceEn,
+            ClaveIdempotencia = claveIdempotencia,
+            VersionAvisoPrivacidad = versionAvisoPrivacidad,
+            AvisoAceptadoEn = versionAvisoPrivacidad is null ? null : ahora,
+            CitaOrigenId = citaOrigenId,
+            CreadaEn = ahora,
+            CreadaPor = usuarioId,
+        };
+    }
 }
+
+/// <summary>
+/// Token de acceso a una cita (RN-16): el valor en claro solo existe al emitirlo, para el correo o la cookie.
+/// </summary>
+/// <param name="Valor">Token en Base64 URL; nunca se guarda ni se registra.</param>
+/// <param name="Hash">SHA-256 del token, para buscar la cita.</param>
+/// <param name="Protegido">Token cifrado con Data Protection, para volver a armar el enlace.</param>
+/// <param name="VenceEn">23:59:59 locales del día siguiente a la cita, en UTC.</param>
+public sealed record TokenAcceso(string Valor, byte[] Hash, string Protegido, DateTimeOffset VenceEn);

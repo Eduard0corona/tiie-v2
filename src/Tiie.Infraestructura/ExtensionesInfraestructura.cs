@@ -7,10 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Tiie.Aplicacion.Puertos;
+using Tiie.Infraestructura.Captcha;
+using Tiie.Infraestructura.Citas;
 using Tiie.Infraestructura.Correo;
 using Tiie.Infraestructura.Datos;
 using Tiie.Infraestructura.Datos.Interceptores;
 using Tiie.Infraestructura.Datos.Semilla;
+using Tiie.Infraestructura.Documentos;
+using Tiie.Infraestructura.Identidad;
 
 namespace Tiie.Infraestructura;
 
@@ -58,10 +62,26 @@ public static class ExtensionesInfraestructura
             new Uri(sp.GetRequiredService<IOptions<OpcionesCorreo>>().Value.AcsEndpoint!),
             sp.GetRequiredService<TokenCredential>()));
         services.AddScoped<ICorreo>(sp =>
-            sp.GetRequiredService<IOptions<OpcionesCorreo>>().Value.Proveedor == ProveedorCorreo.Acs
+        {
+            ICorreo proveedor = sp.GetRequiredService<IOptions<OpcionesCorreo>>().Value.Proveedor == ProveedorCorreo.Acs
                 ? ActivatorUtilities.CreateInstance<CorreoAcs>(sp)
-                : ActivatorUtilities.CreateInstance<CorreoArchivo>(sp));
+                : ActivatorUtilities.CreateInstance<CorreoArchivo>(sp);
+            return ActivatorUtilities.CreateInstance<CorreoConListaPermitida>(sp, proveedor);
+        });
         services.AddSingleton<IPlantillasCorreo, PlantillasCorreo>();
+
+        services.AddSingleton<ITokensCita, TokensCita>();
+        services.AddHttpClient<ICaptcha, CaptchaTurnstile>();
+
+        services.AddOptions<OpcionesDocumentos>()
+            .Bind(configuration.GetSection(OpcionesDocumentos.Seccion))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        services.AddSingleton<IGeneradorPdf, GeneradorPdf>();
+        services.AddSingleton<IGeneradorExcel, GeneradorExcel>();
+
+        services.AddScoped<IUsuariosLectura, UsuariosLectura>();
+        services.AddScoped<AdministracionUsuarios>();
 
         services.AddOptions<OpcionesSemilla>().Bind(configuration.GetSection(OpcionesSemilla.Seccion));
         services.AddScoped<ISembradorDesarrollo, SembradorDesarrollo>();

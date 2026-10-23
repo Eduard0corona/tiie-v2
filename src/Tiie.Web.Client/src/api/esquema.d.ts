@@ -48,6 +48,647 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/publico/tipos-tramite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TipoTramitePublico"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publico/municipios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["MunicipioPublico"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publico/modulos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ModuloPublico"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publico/municipios/{municipioId}/modulos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    municipioId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ModuloPublico"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publico/modulos/{moduloId}/ofertas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    moduloId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OfertaPublica"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publico/ofertas/{ofertaId}/disponibilidad": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    desde?: string;
+                    hasta?: string;
+                };
+                header?: never;
+                path: {
+                    ofertaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DisponibilidadOferta"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publico/ofertas/{ofertaId}/cupos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query: {
+                    fecha: string;
+                };
+                header?: never;
+                path: {
+                    ofertaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CupoDisponible"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publico/citas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    "Idempotency-Key": string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudCita"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CitaReservada"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publico/citas/recuperacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudRecuperacion"];
+                };
+            };
+            responses: {
+                /** @description Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mi-cita": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DetalleMiCita"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mi-cita/comprobante.pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mi-cita/cancelacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudCancelacionMiCita"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DetalleMiCita"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mi-cita/reprogramacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudReprogramacionMiCita"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DetalleMiCita"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mi-cita/salida": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description No Content */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/auth/entrar": {
         parameters: {
             query?: never;
@@ -578,6 +1219,1798 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/tablero": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    moduloId?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Tablero"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/agenda": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query: {
+                    moduloId: number;
+                    fecha?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CitaAgenda"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/citas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    desde?: string;
+                    hasta?: string;
+                    moduloId?: number;
+                    tipoTramiteId?: number;
+                    estado?: components["schemas"]["EstadoCita"];
+                    busqueda?: string;
+                    pagina?: number;
+                    tamano?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ListaPaginadaOfCitaListado"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    "Idempotency-Key": string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CitaVentanilla"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CitaRegistrada"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/citas/{citaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    citaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DetalleCitaPersonal"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/citas/{citaId}/asistencia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    citaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudAsistencia"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["EstadoResultante"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/citas/{citaId}/cancelacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    citaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudMotivo"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["EstadoResultante"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/citas/{citaId}/reprogramacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    citaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudReprogramacionPersonal"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CitaRegistrada"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/citas/{citaId}/reenvio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    citaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/citas/{citaId}/comprobante.pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    citaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/ofertas/{ofertaId}/cupos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    desde?: string;
+                    hasta?: string;
+                };
+                header?: never;
+                path: {
+                    ofertaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CupoAdmin"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/modulos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    activo?: boolean;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ModuloResumen"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DatosModulo"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ModuloDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/modulos/{moduloId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    moduloId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ModuloDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    moduloId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DatosModulo"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ModuloDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/tipos-tramite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TipoTramiteResumen"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DatosTipoTramite"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TipoTramiteDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/tipos-tramite/{tipoTramiteId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tipoTramiteId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TipoTramiteDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tipoTramiteId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DatosTipoTramite"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TipoTramiteDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/ofertas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    moduloId?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OfertaAdmin"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CrearOferta"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OfertaAdmin"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/ofertas/{ofertaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    ofertaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OfertaAdmin"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    ofertaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ActualizarOferta"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OfertaAdmin"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/ofertas/{ofertaId}/plantilla": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    ofertaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PlantillaSemanal"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    ofertaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PlantillaSemanal"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResumenGeneracion"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/bloqueos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    desde?: string;
+                    hasta?: string;
+                    moduloId?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BloqueoResumen"][];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CrearBloqueo"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BloqueoCreado"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/citas/{citaId}/correccion-asistencia": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    citaId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudCorreccionAsistencia"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["EstadoResultante"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/reportes/citas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query: {
+                    desde: string;
+                    hasta: string;
+                    moduloId?: number;
+                    tipoTramiteId?: number;
+                    estado?: components["schemas"]["EstadoCita"];
+                    formato?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReporteCitas"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/cupos/{cupoId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    cupoId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AjusteCupo"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CupoAdmin"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/api/admin/bloqueos/{bloqueoId}/cancelacion-citas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    bloqueoId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudMotivo"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CitasCanceladasPorBloqueo"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/bloqueos/{bloqueoId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    bloqueoId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description No Content */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/modulos/{moduloId}/activacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    moduloId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudActivo"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResultadoActivacionModulo"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/usuarios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    busqueda?: string;
+                    rol?: string;
+                    activo?: boolean;
+                    pagina?: number;
+                    tamano?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ListaPaginadaOfUsuarioResumen"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["CrearUsuario"];
+                };
+            };
+            responses: {
+                /** @description Created */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UsuarioDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/usuarios/{usuarioId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    usuarioId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UsuarioDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    usuarioId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ActualizarUsuario"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UsuarioDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/usuarios/{usuarioId}/activacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    usuarioId: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["SolicitudActivo"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UsuarioDetalle"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/usuarios/{usuarioId}/invitacion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    usuarioId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Accepted */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/usuarios/{usuarioId}/mfa/restablecimiento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    usuarioId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description No Content */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/auditoria": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    desde?: string;
+                    hasta?: string;
+                    usuarioId?: number;
+                    accion?: string;
+                    entidad?: string;
+                    pagina?: number;
+                    tamano?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ListaPaginadaOfRegistroBitacora"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/procesos": {
         parameters: {
             query?: never;
@@ -626,10 +3059,133 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        ActualizarOferta: {
+            /** Format: int16 */
+            diasVentana: number;
+            notasSede: null | string;
+            activo: boolean;
+            version: null | string;
+        };
+        ActualizarUsuario: {
+            correo: string;
+            nombre: string;
+            apellidoPaterno: string;
+            apellidoMaterno: null | string;
+            rol: string;
+            moduloIds: number[];
+            version: null | string;
+        };
+        AjusteCupo: {
+            /** Format: int16 */
+            capacidad: null | number;
+            cerrado: null | boolean;
+            version: null | string;
+        };
+        /** @enum {string} */
+        AlcanceBloqueo: "General" | "Modulo" | "Oferta";
+        BloqueoCreado: {
+            /** Format: int32 */
+            bloqueoId: number;
+            /** Format: int32 */
+            cuposCerrados: number;
+            citasAfectadas: components["schemas"]["CitaAfectada"][];
+        };
+        BloqueoResumen: {
+            /** Format: int32 */
+            bloqueoId: number;
+            /** Format: date */
+            desde: string;
+            /** Format: date */
+            hasta: string;
+            alcance: components["schemas"]["AlcanceBloqueo"];
+            /** Format: int32 */
+            moduloId: null | number;
+            modulo: null | string;
+            /** Format: int32 */
+            ofertaId: null | number;
+            oferta: null | string;
+            motivo: string;
+            /** Format: date-time */
+            creadoEn: string;
+        };
         CatalogosAdmin: {
             municipios: components["schemas"]["MunicipioResumen"][];
             nivelesEscolares: components["schemas"]["NivelEscolarResumen"][];
             roles: string[];
+        };
+        CitaAfectada: {
+            /** Format: int32 */
+            citaId: number;
+            folio: string;
+            /** Format: date */
+            fecha: string;
+            hora: string;
+        };
+        CitaAgenda: {
+            /** Format: int32 */
+            citaId: number;
+            folio: string;
+            hora: string;
+            tramite: string;
+            nombreCompleto: string;
+            curp: null | string;
+            estado: components["schemas"]["EstadoCita"];
+            origen: components["schemas"]["OrigenCita"];
+        };
+        CitaListado: {
+            /** Format: int32 */
+            citaId: number;
+            folio: string;
+            folioAnterior: null | string;
+            /** Format: date */
+            fecha: string;
+            hora: string;
+            /** Format: int32 */
+            moduloId: number;
+            modulo: string;
+            tramite: string;
+            nombreCompleto: string;
+            curp: null | string;
+            estado: components["schemas"]["EstadoCita"];
+            origen: components["schemas"]["OrigenCita"];
+        };
+        CitaRegistrada: {
+            /** Format: int32 */
+            citaId: number;
+            folio: string;
+        };
+        CitaRelacionada: {
+            /** Format: int32 */
+            citaId: number;
+            folio: string;
+            estado: components["schemas"]["EstadoCita"];
+            /** Format: date */
+            fecha: string;
+            hora: string;
+        };
+        CitaReservada: {
+            folio: string;
+            estado: components["schemas"]["EstadoCita"];
+            /** Format: date */
+            fecha: string;
+            hora: string;
+            modulo: components["schemas"]["ModuloCita"];
+            tramite: components["schemas"]["TramiteCita"];
+        };
+        CitasCanceladasPorBloqueo: {
+            /** Format: int32 */
+            citasCanceladas: number;
+        };
+        CitaVentanilla: {
+            /** Format: int32 */
+            cupoId: number;
+            curp: string;
+            nombre: string;
+            apellidoPaterno: string;
+            apellidoMaterno: null | string;
+            celular: null | string;
+            correo: null | string;
+            avisoLeido: boolean;
         };
         ClaveAutenticador: {
             claveCompartida: string;
@@ -642,6 +3198,168 @@ export interface components {
             versionAvisoPrivacidad: string;
             zonaHoraria: string;
         };
+        CrearBloqueo: {
+            /** Format: date */
+            desde: string;
+            /** Format: date */
+            hasta: string;
+            /** Format: int32 */
+            moduloId: null | number;
+            /** Format: int32 */
+            ofertaId: null | number;
+            motivo: string;
+        };
+        CrearOferta: {
+            /** Format: int32 */
+            moduloId: number;
+            /** Format: int32 */
+            tipoTramiteId: number;
+            /** Format: int16 */
+            diasVentana: null | number;
+            notasSede: null | string;
+        };
+        CrearUsuario: {
+            usuario: string;
+            correo: string;
+            nombre: string;
+            apellidoPaterno: string;
+            apellidoMaterno: null | string;
+            rol: string;
+            moduloIds: number[];
+        };
+        CupoAdmin: {
+            /** Format: int32 */
+            cupoId: number;
+            /** Format: date */
+            fecha: string;
+            hora: string;
+            /** Format: int16 */
+            capacidad: number;
+            /** Format: int16 */
+            ocupados: number;
+            cerrado: boolean;
+            version: string;
+        };
+        CupoDisponible: {
+            /** Format: int32 */
+            cupoId: number;
+            hora: string;
+            /** Format: int32 */
+            libres: number;
+        };
+        DatosModulo: {
+            /** Format: int16 */
+            municipioId: number;
+            nombre: string;
+            calle: string;
+            numeroExterior: null | string;
+            numeroInterior: null | string;
+            colonia: string;
+            codigoPostal: string;
+            localidad: null | string;
+            telefono: null | string;
+            correo: null | string;
+            horarioAtencion: null | string;
+            /** Format: double */
+            latitud: null | number;
+            /** Format: double */
+            longitud: null | number;
+            version?: null | string;
+        };
+        DatosTipoTramite: {
+            nombre: string;
+            descripcion: null | string;
+            /** Format: double */
+            costo: null | number;
+            notas: null | string;
+            requisitos: components["schemas"]["RequisitoEntrada"][];
+            /** @default true */
+            activo: boolean;
+            version?: null | string;
+        };
+        DetalleCitaPersonal: {
+            /** Format: int32 */
+            citaId: number;
+            folio: string;
+            folioAnterior: null | string;
+            estado: components["schemas"]["EstadoCita"];
+            origen: components["schemas"]["OrigenCita"];
+            /** Format: date */
+            fecha: string;
+            hora: string;
+            /** Format: int32 */
+            ofertaId: number;
+            /** Format: int32 */
+            moduloId: number;
+            modulo: string;
+            tramite: string;
+            nombreCompleto: string;
+            curp: null | string;
+            correo: null | string;
+            celular: null | string;
+            motivoCambio: null | string;
+            /** Format: date-time */
+            creadaEn: string;
+            creadaPor: null | string;
+            relacionadas: components["schemas"]["CitaRelacionada"][];
+            notificaciones: components["schemas"]["NotificacionCita"][];
+            movimientos: components["schemas"]["MovimientoCita"][];
+            puedeModificar: boolean;
+        };
+        DetalleMiCita: {
+            folio: string;
+            folioAnterior: null | string;
+            estado: components["schemas"]["EstadoCita"];
+            /** Format: date */
+            fecha: string;
+            hora: string;
+            /** Format: int32 */
+            ofertaId: number;
+            modulo: components["schemas"]["ModuloMiCita"];
+            tramite: components["schemas"]["TramiteMiCita"];
+            solicitante: components["schemas"]["SolicitanteMiCita"];
+            puedeModificar: boolean;
+            /** Format: date */
+            modificableHasta: string;
+        };
+        DiaDisponible: {
+            /** Format: date */
+            fecha: string;
+            estado: components["schemas"]["EstadoDia"];
+            /** Format: int32 */
+            libres: number;
+            /** Format: int32 */
+            capacidad: number;
+            motivo: null | string;
+        };
+        DiaOcupacion: {
+            /** Format: date */
+            fecha: string;
+            /** Format: int32 */
+            capacidad: number;
+            /** Format: int32 */
+            ocupados: number;
+        };
+        DiaPlantilla: {
+            /** Format: uint8 */
+            diaSemana: number;
+            horas: components["schemas"]["HoraPlantilla"][];
+        };
+        DisponibilidadOferta: {
+            /** Format: int32 */
+            ofertaId: number;
+            /** Format: date */
+            desde: string;
+            /** Format: date */
+            hasta: string;
+            dias: components["schemas"]["DiaDisponible"][];
+        };
+        /** @enum {string} */
+        EstadoCita: "Agendada" | "Atendida" | "NoAsistio" | "Cancelada" | "Reprogramada";
+        /** @enum {string} */
+        EstadoDia: "Alta" | "Poca" | "Llena" | "Cerrado" | "SinServicio";
+        /** @enum {string} */
+        EstadoNotificacion: "Pendiente" | "Enviada" | "Fallida" | "Descartada";
         EstadoProceso: {
             nombre: string;
             /** Format: date-time */
@@ -651,9 +3369,148 @@ export interface components {
             ultimoResultado: null | string;
             detalle: null | string;
         };
+        EstadoResultante: {
+            estado: components["schemas"]["EstadoCita"];
+        };
+        FilaReporte: {
+            folio: string;
+            /** Format: date */
+            fecha: string;
+            hora: string;
+            modulo: string;
+            tramite: string;
+            estado: components["schemas"]["EstadoCita"];
+            origen: components["schemas"]["OrigenCita"];
+        };
+        FiltroReporte: {
+            /** Format: date */
+            desde: string;
+            /** Format: date */
+            hasta: string;
+            /** Format: int32 */
+            moduloId: null | number;
+            /** Format: int32 */
+            tipoTramiteId: null | number;
+            estado: null | components["schemas"]["EstadoCita"];
+        };
+        HoraPlantilla: {
+            hora: string;
+            /** Format: uint8 */
+            turnos: number;
+        };
+        InasistenciaModulo: {
+            /** Format: int32 */
+            moduloId: number;
+            modulo: string;
+            /** Format: int32 */
+            citas: number;
+            /** Format: int32 */
+            inasistencias: number;
+            /** Format: double */
+            porcentaje: number;
+        };
+        ListaPaginadaOfCitaListado: {
+            elementos: components["schemas"]["CitaListado"][];
+            /** Format: int32 */
+            total: number;
+            /** Format: int32 */
+            pagina: number;
+            /** Format: int32 */
+            tamano: number;
+        };
+        ListaPaginadaOfRegistroBitacora: {
+            elementos: components["schemas"]["RegistroBitacora"][];
+            /** Format: int32 */
+            total: number;
+            /** Format: int32 */
+            pagina: number;
+            /** Format: int32 */
+            tamano: number;
+        };
+        ListaPaginadaOfUsuarioResumen: {
+            elementos: components["schemas"]["UsuarioResumen"][];
+            /** Format: int32 */
+            total: number;
+            /** Format: int32 */
+            pagina: number;
+            /** Format: int32 */
+            tamano: number;
+        };
         ModuloAsignado: {
             /** Format: int32 */
             moduloId: number;
+            nombre: string;
+        };
+        ModuloCita: {
+            /** Format: int32 */
+            moduloId: number;
+            nombre: string;
+            direccion: string;
+        };
+        ModuloDetalle: {
+            /** Format: int32 */
+            moduloId: number;
+            /** Format: int16 */
+            municipioId: number;
+            nombre: string;
+            calle: string;
+            numeroExterior: string;
+            numeroInterior: null | string;
+            colonia: string;
+            codigoPostal: string;
+            localidad: null | string;
+            telefono: null | string;
+            correo: null | string;
+            horarioAtencion: null | string;
+            /** Format: double */
+            latitud: null | number;
+            /** Format: double */
+            longitud: null | number;
+            activo: boolean;
+            version: string;
+        };
+        ModuloMiCita: {
+            nombre: string;
+            direccion: string;
+            municipio: string;
+            horarioAtencion: null | string;
+            /** Format: double */
+            latitud: null | number;
+            /** Format: double */
+            longitud: null | number;
+        };
+        ModuloPublico: {
+            /** Format: int32 */
+            moduloId: number;
+            nombre: string;
+            /** Format: int16 */
+            municipioId: number;
+            municipio: string;
+            direccion: string;
+            horarioAtencion: null | string;
+            /** Format: double */
+            latitud: null | number;
+            /** Format: double */
+            longitud: null | number;
+        };
+        ModuloResumen: {
+            /** Format: int32 */
+            moduloId: number;
+            nombre: string;
+            /** Format: int16 */
+            municipioId: number;
+            municipio: string;
+            activo: boolean;
+        };
+        MovimientoCita: {
+            /** Format: date-time */
+            fecha: string;
+            accion: string;
+            usuario: null | string;
+        };
+        MunicipioPublico: {
+            /** Format: int16 */
+            municipioId: number;
             nombre: string;
         };
         MunicipioResumen: {
@@ -666,8 +3523,52 @@ export interface components {
             nivelEscolarId: number;
             nombre: string;
         };
+        NotificacionCita: {
+            /** Format: int64 */
+            notificacionId: number;
+            tipo: components["schemas"]["TipoNotificacion"];
+            estado: components["schemas"]["EstadoNotificacion"];
+            destinatario: string;
+            /** Format: int32 */
+            intentos: number;
+            /** Format: date-time */
+            creadaEn: string;
+            /** Format: date-time */
+            enviadaEn: null | string;
+            ultimoError: null | string;
+        };
+        OfertaAdmin: {
+            /** Format: int32 */
+            ofertaId: number;
+            /** Format: int32 */
+            moduloId: number;
+            modulo: string;
+            /** Format: int32 */
+            tipoTramiteId: number;
+            tramite: string;
+            /** Format: int16 */
+            diasVentana: number;
+            notasSede: null | string;
+            activo: boolean;
+            version: string;
+        };
+        OfertaPublica: {
+            /** Format: int32 */
+            ofertaId: number;
+            /** Format: int32 */
+            tipoTramiteId: number;
+            nombre: string;
+            /** Format: double */
+            costo: null | number;
+            notasSede: null | string;
+        };
+        /** @enum {string} */
+        OrigenCita: "Web" | "Ventanilla" | "Migracion";
         /** @enum {string} */
         PasoSiguiente: "Listo" | "CodigoMfa" | "ConfigurarMfa";
+        PlantillaSemanal: {
+            dias: components["schemas"]["DiaPlantilla"][];
+        };
         /** @description Problem Details (RFC 9457) con la extensión codigo. */
         ProblemaApi: {
             type?: string;
@@ -686,12 +3587,70 @@ export interface components {
              * @description Solo en CuentaBloqueada: instante UTC en que se desbloquea.
              */
             desbloqueoEn?: null | string;
+            /**
+             * Format: int32
+             * @description Solo en CorreoNoDisponible al crear un usuario: la cuenta quedó creada con este id.
+             */
+            usuarioId?: null | number;
+        };
+        RegistroBitacora: {
+            /** Format: int64 */
+            auditoriaId: number;
+            /** Format: date-time */
+            fecha: string;
+            /** Format: int32 */
+            usuarioId: null | number;
+            usuario: null | string;
+            accion: string;
+            entidad: string;
+            entidadId: null | string;
+            cambios: null | string;
+            ip: null | string;
+        };
+        ReporteCitas: {
+            filtro: components["schemas"]["FiltroReporte"];
+            filas: components["schemas"]["FilaReporte"][];
+            totales: components["schemas"]["TotalEstado"][];
+            truncado: boolean;
+        };
+        RequisitoDetalle: {
+            /** Format: int32 */
+            requisitoId: number;
+            /** Format: uint8 */
+            nivelEscolarId: null | number;
+            texto: string;
+            /** Format: int16 */
+            orden: number;
+        };
+        RequisitoEntrada: {
+            /** Format: uint8 */
+            nivelEscolarId: null | number;
+            texto: string;
+        };
+        RequisitoTexto: {
+            nivelEscolar: null | string;
+            texto: string;
         };
         RespuestaEntrar: {
             siguientePaso: components["schemas"]["PasoSiguiente"];
         };
         RespuestaMfaActivada: {
             codigosRecuperacion: string[];
+        };
+        ResultadoActivacionModulo: {
+            activo: boolean;
+            /** Format: int32 */
+            citasFuturas: number;
+        };
+        ResumenGeneracion: {
+            /** Format: int32 */
+            cuposCreados: number;
+            /** Format: int32 */
+            cuposActualizados: number;
+            /** Format: int32 */
+            cuposEliminados: number;
+            /** Format: int32 */
+            cuposConCitasSinCambio: number;
         };
         SesionPersonal: {
             /** Format: int32 */
@@ -702,12 +3661,38 @@ export interface components {
             modulos: components["schemas"]["ModuloAsignado"][];
             mfaActivo: boolean;
         };
+        SolicitanteMiCita: {
+            nombreCompleto: string;
+            curp: string;
+            correo: string;
+        };
         SolicitudActivarMfa: {
             codigo: string;
+        };
+        SolicitudActivo: {
+            activo: boolean;
+        };
+        SolicitudAsistencia: {
+            asistio: boolean;
         };
         SolicitudCambioContrasena: {
             actual: string;
             nueva: string;
+        };
+        SolicitudCancelacionMiCita: {
+            motivo: null | string;
+        };
+        SolicitudCita: {
+            /** Format: int32 */
+            cupoId: number;
+            curp: string;
+            nombre: string;
+            apellidoPaterno: string;
+            apellidoMaterno: null | string;
+            celular: null | string;
+            correo: null | string;
+            aceptaAvisoPrivacidad: boolean;
+            tokenCaptcha: null | string;
         };
         SolicitudCodigoMfa: {
             codigo: string;
@@ -722,12 +3707,121 @@ export interface components {
             token: string;
             contrasena: string;
         };
+        SolicitudCorreccionAsistencia: {
+            asistio: boolean;
+            motivo: null | string;
+        };
         SolicitudEntrar: {
             usuario: string;
             contrasena: string;
         };
+        SolicitudMotivo: {
+            motivo: null | string;
+        };
         SolicitudOlvideContrasena: {
             correo: string;
+        };
+        SolicitudRecuperacion: {
+            curp: string;
+            correo: string;
+            tokenCaptcha: null | string;
+        };
+        SolicitudReprogramacionMiCita: {
+            /** Format: int32 */
+            cupoId: number;
+        };
+        SolicitudReprogramacionPersonal: {
+            /** Format: int32 */
+            cupoId: number;
+            motivo: null | string;
+        };
+        Tablero: {
+            hoy: components["schemas"]["TotalEstado"][];
+            proximos7Dias: components["schemas"]["DiaOcupacion"][];
+            inasistencia30Dias: components["schemas"]["InasistenciaModulo"][];
+        };
+        /** @enum {string} */
+        TipoNotificacion: "Confirmacion" | "Recordatorio" | "Cancelacion" | "Reprogramacion" | "EnlaceRecuperacion" | "CierrePorBloqueo" | "AvisoMigracion";
+        TipoTramiteDetalle: {
+            /** Format: int32 */
+            tipoTramiteId: number;
+            nombre: string;
+            descripcion: null | string;
+            /** Format: double */
+            costo: null | number;
+            notas: null | string;
+            activo: boolean;
+            requisitos: components["schemas"]["RequisitoDetalle"][];
+            version: string;
+        };
+        TipoTramitePublico: {
+            /** Format: int32 */
+            tipoTramiteId: number;
+            nombre: string;
+            descripcion: null | string;
+            /** Format: double */
+            costo: null | number;
+            requisitos: components["schemas"]["RequisitoTexto"][];
+        };
+        TipoTramiteResumen: {
+            /** Format: int32 */
+            tipoTramiteId: number;
+            nombre: string;
+            /** Format: double */
+            costo: null | number;
+            activo: boolean;
+            /** Format: int32 */
+            ofertas: number;
+        };
+        TotalEstado: {
+            estado: components["schemas"]["EstadoCita"];
+            /** Format: int32 */
+            citas: number;
+        };
+        TramiteCita: {
+            /** Format: int32 */
+            tipoTramiteId: number;
+            nombre: string;
+        };
+        TramiteMiCita: {
+            nombre: string;
+            /** Format: double */
+            costo: null | number;
+            notas: null | string;
+            notasSede: null | string;
+            requisitos: components["schemas"]["RequisitoTexto"][];
+        };
+        UsuarioDetalle: {
+            /** Format: int32 */
+            usuarioId: number;
+            usuario: string;
+            correo: string;
+            nombre: string;
+            apellidoPaterno: string;
+            apellidoMaterno: null | string;
+            rol: null | string;
+            moduloIds: number[];
+            activo: boolean;
+            mfaActivo: boolean;
+            cuentaActivada: boolean;
+            /** Format: date-time */
+            ultimoAccesoEn: null | string;
+            /** Format: date-time */
+            creadoEn: string;
+            version: string;
+        };
+        UsuarioResumen: {
+            /** Format: int32 */
+            usuarioId: number;
+            usuario: string;
+            correo: string;
+            nombreCompleto: string;
+            rol: null | string;
+            activo: boolean;
+            mfaActivo: boolean;
+            cuentaActivada: boolean;
+            /** Format: date-time */
+            ultimoAccesoEn: null | string;
         };
     };
     responses: never;

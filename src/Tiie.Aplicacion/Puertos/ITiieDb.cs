@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Tiie.Dominio.Agenda;
 using Tiie.Dominio.Bitacora;
@@ -30,6 +31,11 @@ public interface ITiieDb
     DbSet<EjecucionProceso> EjecucionesProceso { get; }
 
     DatabaseFacade Database { get; }
+
+    ChangeTracker ChangeTracker { get; }
+
+    /// <summary>Para fijar la versión original (<c>RowVersion</c>) de una entidad que edita el personal.</summary>
+    EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -1,0 +1,21 @@
+Hola, {{Nombre}}.
+
+Estrenamos un nuevo sistema de citas. Tu cita no cambió; solo tiene un folio nuevo y un enlace nuevo para consultarla.
+
+Folio: {{Folio}}
+Fecha: {{Fecha}}
+Hora: {{Hora}}
+Sede: {{Modulo}}, {{Direccion}}
+Trámite: {{Tramite}}
+
+Lleva estos requisitos:
+{{Requisitos}}
+
+Ver tu cita:
+{{Enlace}}
+
+El comprobante nuevo va adjunto en PDF. No compartas este enlace: da acceso a tu cita.
+
+--
+Aviso de privacidad simplificado: tus datos se usan solo para agendar y atender tu cita del trámite de la TIIE y para avisarte sobre ella. Consulta el aviso integral en {{AvisoPrivacidad}}
+Este correo se envió automáticamente; no respondas a esta dirección.

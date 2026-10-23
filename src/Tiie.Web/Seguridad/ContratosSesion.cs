@@ -1,7 +1,5 @@
-using System.Text;
 using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.WebUtilities;
 
 namespace Tiie.Web.Seguridad;
 
@@ -48,26 +46,6 @@ public sealed record SolicitudCambioContrasena(string Actual, string Nueva);
 public sealed record SolicitudContrasenaConToken(int UsuarioId, string Token, string Contrasena);
 
 public sealed record SolicitudOlvideContrasena(string Correo);
-
-/// <summary>Tokens de Identity en enlaces: Base64 URL para que sobrevivan en la cadena de consulta.</summary>
-public static class TokenEnlace
-{
-    public static string Codificar(string token) => WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-
-    public static string? Decodificar(string? token)
-    {
-        if (string.IsNullOrWhiteSpace(token))
-            return null;
-        try
-        {
-            return Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
-        }
-        catch (FormatException)
-        {
-            return null;
-        }
-    }
-}
 
 /// <summary>Validación de formato de las solicitudes de sesión; responde 422 <c>Validacion</c>.</summary>
 public static class Exigir

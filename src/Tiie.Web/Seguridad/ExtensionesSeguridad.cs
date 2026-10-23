@@ -1,28 +1,13 @@
-using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Tiie.Aplicacion.Puertos;
 using Tiie.Aplicacion.Seguridad;
 using Tiie.Infraestructura.Datos;
 using Tiie.Infraestructura.Identidad;
+using Tiie.Infraestructura.Llaves;
 
 namespace Tiie.Web.Seguridad;
-
-/// <summary>Sección <c>DataProtection</c>: llaves compartidas entre instancias y ranuras.</summary>
-public sealed class OpcionesDataProtection
-{
-    public const string Seccion = "DataProtection";
-
-    /// <summary>Blob donde se guardan las llaves, por ejemplo <c>https://sttiieprod.blob.core.windows.net/dataprotection/llaves.xml</c>.</summary>
-    public string? BlobUri { get; set; }
-
-    /// <summary>Llave de Key Vault que cifra las llaves.</summary>
-    public string? KeyUri { get; set; }
-
-    public bool Configurado => !string.IsNullOrWhiteSpace(BlobUri) && !string.IsNullOrWhiteSpace(KeyUri);
-}
 
 public static class ExtensionesSeguridad
 {
@@ -110,27 +95,15 @@ public static class ExtensionesSeguridad
 
     private static void AgregarDataProtection(IServiceCollection services, IConfiguration configuration)
     {
-        var seccion = configuration.GetSection(OpcionesDataProtection.Seccion);
         // Sin llaves compartidas, cada reinicio o instancia invalidaría sesiones y enlaces de los correos.
         // En desarrollo y en pruebas las llaves quedan en el perfil local.
         services.AddOptions<OpcionesDataProtection>()
-            .Bind(seccion)
+            .Bind(configuration.GetSection(OpcionesDataProtection.Seccion))
             .Validate<IHostEnvironment>(
                 (o, env) => o.Configurado || env.IsDevelopment() || env.IsEnvironment(Entornos.Pruebas),
                 "Faltan DataProtection:BlobUri y DataProtection:KeyUri.")
             .ValidateOnStart();
-
-        var dataProtection = services.AddDataProtection().SetApplicationName("Tiie");
-        var opciones = seccion.Get<OpcionesDataProtection>() ?? new();
-        if (opciones.Configurado)
-        {
-            // En Azure las llaves viven en Storage, cifradas con una llave de Key Vault (docs/07#data-protection).
-            // La identidad administrada del sitio da acceso a ambos.
-            var credencial = new DefaultAzureCredential();
-            dataProtection
-                .PersistKeysToAzureBlobStorage(new Uri(opciones.BlobUri!), credencial)
-                .ProtectKeysWithAzureKeyVault(new Uri(opciones.KeyUri!), credencial);
-        }
+        services.AgregarLlavesCompartidas(configuration);
     }
 
     private static void ConfigurarCookieComun(CookieAuthenticationOptions o)

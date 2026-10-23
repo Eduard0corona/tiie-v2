@@ -23,6 +23,16 @@ public sealed class RelojAgendaTests
     }
 
     [Fact]
+    public void RN03_a_las_18_horas_de_sinaloa_la_ventana_empieza_manana_local()
+    {
+        var reloj = Reloj("2026-11-03T01:00:00Z"); // 2 nov, 18:00 en Sinaloa
+
+        reloj.HoyLocal().ShouldBe(new DateOnly(2026, 11, 2));
+        Dominio.Agenda.ReglasAgenda.PrimerDiaReservable(reloj.HoyLocal(), Dominio.Citas.OrigenCita.Web)
+            .ShouldBe(new DateOnly(2026, 11, 3));
+    }
+
+    [Fact]
     public void RNF09_a_medianoche_local_cambia_el_dia_aunque_en_utc_sean_las_7()
     {
         Reloj("2026-11-03T06:59:59Z").HoyLocal().ShouldBe(new DateOnly(2026, 11, 2));
