@@ -78,7 +78,12 @@ jobs:
           git diff --exit-code -- openapi/Tiie.Web.json src/Tiie.Web.Client/src/api/esquema.d.ts \
             || { echo "::error::El OpenAPI o esquema.d.ts no coinciden con el backend: compila y ejecuta npm run api:tipos."; exit 1; }
       - name: Pruebas (dominio, aplicación e integración con SQL Server en contenedor)
-        run: dotnet test -c Release --no-build
+        run: >
+          dotnet test -c Release --no-build
+          --coverage --coverage-output-format cobertura
+          --coverage-settings tests/cobertura.config --results-directory artifacts/cobertura
+      - name: Cobertura (Tiie.Dominio 90 %, Tiie.Aplicacion 80 %)
+        run: node tests/verificar-cobertura.mjs artifacts/cobertura Tiie.Dominio=90 Tiie.Aplicacion=80
       - name: Paquetes con vulnerabilidades altas o críticas
         run: |
           dotnet list package --vulnerable --include-transitive | tee vulnerables.txt

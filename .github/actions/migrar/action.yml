@@ -1,0 +1,42 @@
+# Aplica las migraciones con efbundle (docs/13-despliegue-y-operacion.md#migraciones).
+# Azure SQL solo acepta Microsoft Entra: el bundle entra con la sesión de azure/login del pipeline.
+# El firewall se abre solo para la IP de este runner y se cierra aunque la migración falle.
+name: Migrar base de datos
+description: Aplica las migraciones de EF Core con efbundle y la identidad del pipeline.
+inputs:
+  grupo-recursos:
+    description: Grupo de recursos del entorno.
+    required: true
+  servidor-sql:
+    description: Nombre del servidor de Azure SQL, sin dominio.
+    required: true
+  base-datos:
+    description: Nombre de la base de datos.
+    default: sqldb-tiie
+  efbundle:
+    description: Ruta del ejecutable efbundle.
+    default: artifacts/efbundle/efbundle
+runs:
+  using: composite
+  steps:
+    - name: Abrir el firewall para este runner
+      shell: bash
+      run: |
+        ip=$(curl -fsS --retry 3 https://api.ipify.org)
+        az sql server firewall-rule create \
+          -g "${{ inputs.grupo-recursos }}" -s "${{ inputs.servidor-sql }}" \
+          -n "github-${{ github.run_id }}-${{ github.run_attempt }}" \
+          --start-ip-address "$ip" --end-ip-address "$ip" --output none
+    - name: Aplicar migraciones
+      shell: bash
+      run: |
+        chmod +x "${{ inputs.efbundle }}"
+        "${{ inputs.efbundle }}" --connection \
+          "Server=tcp:${{ inputs.servidor-sql }}.database.windows.net,1433;Database=${{ inputs.base-datos }};Authentication=Active Directory Default;Encrypt=True"
+    - name: Cerrar el firewall
+      if: always()
+      shell: bash
+      run: |
+        az sql server firewall-rule delete \
+          -g "${{ inputs.grupo-recursos }}" -s "${{ inputs.servidor-sql }}" \
+          -n "github-${{ github.run_id }}-${{ github.run_attempt }}" --output none || true

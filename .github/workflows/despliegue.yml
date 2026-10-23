@@ -1,0 +1,190 @@
+# Despliegue continuo (docs/13-despliegue-y-operacion.md#cicd): cada merge a main llega solo a QA;
+# producción espera la aprobación del entorno «produccion», se despliega a la ranura staging, pasa la
+# prueba de humo y se intercambia. Sin secretos de Azure: credencial federada OIDC.
+#
+# Configuración por entorno de GitHub (qa y produccion), como variables:
+#   AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, GRUPO_RECURSOS, SITIO, SERVIDOR_SQL, URL_SITIO
+#   y solo en produccion URL_RANURA.
+# Y como secretos (usuarios de pruebas del panel con MFA):
+#   HUMO_USUARIO, HUMO_CONTRASENA, HUMO_TOTP para la prueba de humo, y en qa
+#   E2E_USUARIO, E2E_CONTRASENA, E2E_TOTP de un Administrador de pruebas para E2E (tests/e2e/README.md).
+name: Despliegue
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+# Un despliegue a la vez; uno nuevo espera a que termine el anterior en lugar de cancelarlo a mitad.
+concurrency:
+  group: despliegue
+  cancel-in-progress: false
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "1"
+
+jobs:
+  construir:
+    name: Construir artefactos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: src/Tiie.Web.Client/package-lock.json
+      - name: SPA (deja el sitio en src/Tiie.Web/wwwroot)
+        working-directory: src/Tiie.Web.Client
+        run: |
+          npm ci
+          npm run build
+      - run: dotnet tool restore
+      - name: Sitio publicado
+        run: dotnet publish src/Tiie.Web -c Release -o artifacts/sitio
+      - name: Bundle de migraciones
+        run: >
+          dotnet ef migrations bundle
+          --project src/Tiie.Infraestructura --startup-project src/Tiie.Web
+          --configuration Release --self-contained -r linux-x64
+          -o artifacts/efbundle/efbundle --force
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sitio
+          path: artifacts/sitio
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: efbundle
+          path: artifacts/efbundle
+          retention-days: 30
+
+  qa:
+    name: QA
+    needs: construir
+    runs-on: ubuntu-latest
+    environment:
+      name: qa
+      url: ${{ vars.URL_SITIO }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      # Antes del código: las migraciones son compatibles con la versión anterior (expandir y contraer).
+      - uses: ./.github/actions/migrar
+        with:
+          grupo-recursos: ${{ vars.GRUPO_RECURSOS }}
+          servidor-sql: ${{ vars.SERVIDOR_SQL }}
+      - uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.SITIO }}
+          package: artifacts/sitio
+      - name: Esperar a que /salud responda
+        run: curl -fsS --retry 30 --retry-delay 10 --retry-all-errors "${{ vars.URL_SITIO }}/salud"
+      - name: Prueba de humo
+        env:
+          HUMO_USUARIO: ${{ secrets.HUMO_USUARIO }}
+          HUMO_CONTRASENA: ${{ secrets.HUMO_CONTRASENA }}
+          HUMO_TOTP: ${{ secrets.HUMO_TOTP }}
+        run: node tests/humo/humo.mjs "${{ vars.URL_SITIO }}"
+
+  e2e:
+    name: E2E y accesibilidad en QA
+    needs: qa
+    runs-on: ubuntu-latest
+    environment:
+      name: qa
+    defaults:
+      run:
+        working-directory: tests/e2e
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: tests/e2e/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Playwright (Pixel 7 y escritorio) con axe
+        env:
+          E2E_URL: ${{ vars.URL_SITIO }}
+          # Plantillas, bloqueos y usuarios necesitan un Administrador; sin estas variables esas pruebas se omiten.
+          E2E_USUARIO: ${{ secrets.E2E_USUARIO }}
+          E2E_CONTRASENA: ${{ secrets.E2E_CONTRASENA }}
+          E2E_TOTP: ${{ secrets.E2E_TOTP }}
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: reporte-e2e
+          path: tests/e2e/playwright-report
+          retention-days: 14
+
+  produccion:
+    name: Producción
+    needs: [construir, e2e]
+    runs-on: ubuntu-latest
+    # Las reglas del entorno «produccion» exigen la aprobación manual de un revisor.
+    environment:
+      name: produccion
+      url: ${{ vars.URL_SITIO }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - uses: ./.github/actions/migrar
+        with:
+          grupo-recursos: ${{ vars.GRUPO_RECURSOS }}
+          servidor-sql: ${{ vars.SERVIDOR_SQL }}
+      - name: Desplegar a la ranura staging
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.SITIO }}
+          slot-name: staging
+          package: artifacts/sitio
+      - name: Esperar a que staging responda /salud
+        run: curl -fsS --retry 30 --retry-delay 10 --retry-all-errors "${{ vars.URL_RANURA }}/salud"
+      - name: Prueba de humo en staging
+        env:
+          HUMO_USUARIO: ${{ secrets.HUMO_USUARIO }}
+          HUMO_CONTRASENA: ${{ secrets.HUMO_CONTRASENA }}
+          HUMO_TOTP: ${{ secrets.HUMO_TOTP }}
+        run: node tests/humo/humo.mjs "${{ vars.URL_RANURA }}"
+      # App Service espera a que /salud responda 200 en staging (WEBSITE_SWAP_WARMUP_PING_PATH) antes de intercambiar.
+      - name: Intercambiar ranuras
+        run: >
+          az webapp deployment slot swap
+          -g "${{ vars.GRUPO_RECURSOS }}" -n "${{ vars.SITIO }}"
+          --slot staging --target-slot production
+      - name: Prueba de humo en producción
+        env:
+          HUMO_USUARIO: ${{ secrets.HUMO_USUARIO }}
+          HUMO_CONTRASENA: ${{ secrets.HUMO_CONTRASENA }}
+          HUMO_TOTP: ${{ secrets.HUMO_TOTP }}
+        run: node tests/humo/humo.mjs "${{ vars.URL_SITIO }}"
+      - name: Cómo revertir
+        if: failure()
+        run: >
+          echo "::error::Si el intercambio ya ocurrió, revierte con:
+          az webapp deployment slot swap -g ${{ vars.GRUPO_RECURSOS }} -n ${{ vars.SITIO }} --slot staging --target-slot production"
