@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-guinda-50: #fbf2f4;
+  --color-guinda-100: #f5e1e6;
+  --color-guinda-600: #93294a;
+  --color-guinda-700: #7b1e3a;
+  --color-guinda-800: #63172f;
+  --color-guinda-900: #4a1123;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-3 outline-offset-2 outline-guinda-700;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

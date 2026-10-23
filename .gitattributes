@@ -1,0 +1,8 @@
+# Fin de línea LF en el repositorio para que CI (Linux) y Windows generen los mismos archivos.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary
+*.pfx binary

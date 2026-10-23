@@ -1,0 +1,123 @@
+[
+  {
+    "curp": "GOMA080515MSLRRNA5",
+    "valida": true,
+    "fechaNacimiento": "2008-05-15",
+    "sexo": "M",
+    "nota": "Ejemplo de la documentación; homoclave con letra: siglo 2000"
+  },
+  {
+    "curp": "PERJ950101HSLRRN04",
+    "valida": true,
+    "fechaNacimiento": "1995-01-01",
+    "sexo": "H",
+    "nota": "Homoclave con dígito: siglo 1900"
+  },
+  {
+    "curp": "LOXA001229XSLPXXB7",
+    "valida": true,
+    "fechaNacimiento": "2000-12-29",
+    "sexo": "X",
+    "nota": "Sexo X"
+  },
+  {
+    "curp": "MAGE000229MSLRRLA5",
+    "valida": true,
+    "fechaNacimiento": "2000-02-29",
+    "sexo": "M",
+    "nota": "29 de febrero en año bisiesto"
+  },
+  {
+    "curp": "RUIC121031HNERZRA1",
+    "valida": true,
+    "fechaNacimiento": "2012-10-31",
+    "sexo": "H",
+    "nota": "Nacido en el extranjero (NE)"
+  },
+  {
+    "curp": "VEGA060704MDFGRNA1",
+    "valida": true,
+    "fechaNacimiento": "2006-07-04",
+    "sexo": "M",
+    "nota": "Otra entidad (DF)"
+  },
+  {
+    "curp": "TOTM100311HSLRRRA8",
+    "valida": true,
+    "fechaNacimiento": "2010-03-11",
+    "sexo": "H",
+    "nota": "Ejemplo base para normalización"
+  },
+  {
+    "curp": "  totm10031 1hslrrra8 ",
+    "valida": true,
+    "fechaNacimiento": "2010-03-11",
+    "sexo": "H",
+    "nota": "Minúsculas y espacios: se normaliza"
+  },
+  {
+    "curp": "GOMA080515MSLRRNA6",
+    "valida": false,
+    "nota": "Dígito verificador incorrecto"
+  },
+  {
+    "curp": "MAGE000229MSLRRL05",
+    "valida": false,
+    "nota": "29 de febrero de 1900: no es bisiesto"
+  },
+  {
+    "curp": "GOMA080230MSLRRNA3",
+    "valida": false,
+    "nota": "30 de febrero"
+  },
+  {
+    "curp": "GOMA081315MSLRRNA5",
+    "valida": false,
+    "nota": "Mes 13"
+  },
+  {
+    "curp": "GOMA080500MSLRRNA0",
+    "valida": false,
+    "nota": "Día 00"
+  },
+  {
+    "curp": "GOMA080515MXXRRNA2",
+    "valida": false,
+    "nota": "Entidad inexistente"
+  },
+  {
+    "curp": "GBMA080515MSLRRNA3",
+    "valida": false,
+    "nota": "Segunda letra no es vocal ni X"
+  },
+  {
+    "curp": "GOMA080515ZSLRRNA3",
+    "valida": false,
+    "nota": "Sexo inválido"
+  },
+  {
+    "curp": "GOMA080515MSLARNA5",
+    "valida": false,
+    "nota": "Consonante interna es vocal"
+  },
+  {
+    "curp": "GOMA080515MSLRRNA",
+    "valida": false,
+    "nota": "17 caracteres"
+  },
+  {
+    "curp": "GOMA080515MSLRRNA51",
+    "valida": false,
+    "nota": "19 caracteres"
+  },
+  {
+    "curp": "",
+    "valida": false,
+    "nota": "Vacía"
+  },
+  {
+    "curp": "GOMA080515MSLRRÑA0",
+    "valida": false,
+    "nota": "Contiene Ñ"
+  }
+]

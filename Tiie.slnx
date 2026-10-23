@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Tiie.Aplicacion/Tiie.Aplicacion.csproj" />
+    <Project Path="src/Tiie.Dominio/Tiie.Dominio.csproj" />
+    <Project Path="src/Tiie.Infraestructura/Tiie.Infraestructura.csproj" />
+    <Project Path="src/Tiie.Web/Tiie.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Tiie.Aplicacion.Tests/Tiie.Aplicacion.Tests.csproj" />
+    <Project Path="tests/Tiie.Dominio.Tests/Tiie.Dominio.Tests.csproj" />
+    <Project Path="tests/Tiie.Integracion.Tests/Tiie.Integracion.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,36 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+*.trx
+coverage*.xml
+coverage*.json
+
+# Resultados de compilación y herramientas
+artifacts/
+src/Tiie.Web/wwwroot/
+
+# Node
+node_modules/
+src/Tiie.Web.Client/dist/
+src/Tiie.Web.Client/coverage/
+tests/e2e/test-results/
+tests/e2e/playwright-report/
+*.tsbuildinfo
+
+# Editores y sistema
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# Secretos locales: nunca en el repositorio
+.env
+.env.*
+!.env.example
+*.pfx
+appsettings.*.local.json

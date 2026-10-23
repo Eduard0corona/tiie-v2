@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tiie-web",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "src/Tiie.Web", "--launch-profile", "https", "--no-build"],
+      "port": 7180,
+      "url": "https://localhost:7180"
+    },
+    {
+      "name": "tiie-client",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "src/Tiie.Web.Client"],
+      "port": 5173
+    }
+  ]
+}

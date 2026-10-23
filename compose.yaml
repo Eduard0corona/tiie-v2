@@ -1,0 +1,22 @@
+# Solo para desarrollo local. La contraseña de sa no protege datos reales:
+# el contenedor escucha únicamente en 127.0.0.1 y se usa con datos de ejemplo.
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Tiie-Desarrollo-2026"
+      MSSQL_PID: Developer
+      TZ: Etc/UTC
+    ports:
+      - "127.0.0.1:1433:1433"
+    volumes:
+      - sql-datos:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  sql-datos:

@@ -1,0 +1,97 @@
+# Puertas de docs/12-pruebas.md#puertas-del-ci. Un PR no se integra si alguna falla.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "1"
+
+jobs:
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/Tiie.Web.Client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: src/Tiie.Web.Client/package-lock.json
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Formato
+        run: npm run format:check
+      - name: Tipos
+        run: npm run typecheck
+      - name: Pruebas
+        run: npm test
+      - name: Compilación
+        run: npm run build
+      - name: Tamaño del JavaScript inicial (RNF-14)
+        run: npm run tamano
+      - name: Dependencias vulnerables
+        run: npm audit --audit-level=high
+
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: src/Tiie.Web.Client/package-lock.json
+      - run: dotnet restore
+      - run: dotnet tool restore
+      - name: Formato
+        run: dotnet format --verify-no-changes --no-restore
+      - name: Compilación (genera openapi/Tiie.Web.json)
+        run: dotnet build -c Release --no-restore
+      - name: Migraciones al día con el modelo
+        run: >
+          dotnet ef migrations has-pending-model-changes
+          --project src/Tiie.Infraestructura --startup-project src/Tiie.Web
+          --configuration Release --no-build
+      - name: Contrato entre la API y la SPA
+        run: |
+          npm ci --prefix src/Tiie.Web.Client
+          npm run api:tipos --prefix src/Tiie.Web.Client
+          git diff --exit-code -- openapi/Tiie.Web.json src/Tiie.Web.Client/src/api/esquema.d.ts \
+            || { echo "::error::El OpenAPI o esquema.d.ts no coinciden con el backend: compila y ejecuta npm run api:tipos."; exit 1; }
+      - name: Pruebas (dominio, aplicación e integración con SQL Server en contenedor)
+        run: dotnet test -c Release --no-build
+      - name: Paquetes con vulnerabilidades altas o críticas
+        run: |
+          dotnet list package --vulnerable --include-transitive | tee vulnerables.txt
+          if grep -qE '\b(High|Critical|Alta|Crítica)\b' vulnerables.txt; then exit 1; fi
+
+  secretos:
+    name: Escaneo de secretos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        run: >
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.21.2
+          git /repo --config /repo/.gitleaks.toml --redact --verbose

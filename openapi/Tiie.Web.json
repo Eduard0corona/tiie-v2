@@ -1,0 +1,862 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "TIIE v2 · Agenda de citas",
+    "description": "API del sitio público, de Mi cita y del panel del personal. Ver docs/06-api.md.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/publico/configuracion": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfiguracionPublica"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/entrar": {
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudEntrar"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaEntrar"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/entrar/mfa": {
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudCodigoMfa"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/entrar/recuperacion": {
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudCodigoRecuperacion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/salir": {
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/yo": {
+      "get": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SesionPersonal"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/mfa": {
+      "get": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaveAutenticador"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudActivarMfa"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespuestaMfaActivada"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/contrasena": {
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudCambioContrasena"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/activacion": {
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudContrasenaConToken"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/olvide-contrasena": {
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudOlvideContrasena"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/auth/restablecimiento": {
+      "post": {
+        "tags": [
+          "Administración · Sesión"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudContrasenaConToken"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/catalogos": {
+      "get": {
+        "tags": [
+          "Administración · Catálogos"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogosAdmin"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/procesos": {
+      "get": {
+        "tags": [
+          "Administración · Auditoría"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EstadoProceso"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CatalogosAdmin": {
+        "required": [
+          "municipios",
+          "nivelesEscolares",
+          "roles"
+        ],
+        "type": "object",
+        "properties": {
+          "municipios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MunicipioResumen"
+            }
+          },
+          "nivelesEscolares": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NivelEscolarResumen"
+            }
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ClaveAutenticador": {
+        "required": [
+          "claveCompartida",
+          "uriAutenticador"
+        ],
+        "type": "object",
+        "properties": {
+          "claveCompartida": {
+            "type": "string"
+          },
+          "uriAutenticador": {
+            "type": "string"
+          }
+        }
+      },
+      "CodigoError": {
+        "enum": [
+          "SolicitudInvalida",
+          "NoAutenticado",
+          "CredencialesInvalidas",
+          "CodigoMfaInvalido",
+          "Prohibido",
+          "MfaRequerido",
+          "NoEncontrado",
+          "SinCupo",
+          "YaTieneCita",
+          "Conflicto",
+          "Validacion",
+          "CaptchaInvalido",
+          "FueraDeVentana",
+          "CupoCerrado",
+          "OfertaInactiva",
+          "CitaNoModificable",
+          "EnlaceInvalido",
+          "TokenInvalido",
+          "CuentaBloqueada",
+          "DemasiadasSolicitudes",
+          "ErrorInterno",
+          "CorreoNoDisponible"
+        ],
+        "type": "string"
+      },
+      "ConfiguracionPublica": {
+        "required": [
+          "claveSitioCaptcha",
+          "versionAvisoPrivacidad",
+          "zonaHoraria"
+        ],
+        "type": "object",
+        "properties": {
+          "claveSitioCaptcha": {
+            "type": "string"
+          },
+          "versionAvisoPrivacidad": {
+            "type": "string"
+          },
+          "zonaHoraria": {
+            "type": "string"
+          }
+        }
+      },
+      "EstadoProceso": {
+        "required": [
+          "nombre",
+          "ultimoInicio",
+          "ultimoFin",
+          "ultimoResultado",
+          "detalle"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string"
+          },
+          "ultimoInicio": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "ultimoFin": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "ultimoResultado": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "detalle": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "ModuloAsignado": {
+        "required": [
+          "moduloId",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "moduloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "type": "string"
+          }
+        }
+      },
+      "MunicipioResumen": {
+        "required": [
+          "municipioId",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "municipioId": {
+            "type": "integer",
+            "format": "int16"
+          },
+          "nombre": {
+            "type": "string"
+          }
+        }
+      },
+      "NivelEscolarResumen": {
+        "required": [
+          "nivelEscolarId",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "nivelEscolarId": {
+            "type": "integer",
+            "format": "uint8"
+          },
+          "nombre": {
+            "type": "string"
+          }
+        }
+      },
+      "PasoSiguiente": {
+        "enum": [
+          "Listo",
+          "CodigoMfa",
+          "ConfigurarMfa"
+        ],
+        "type": "string"
+      },
+      "ProblemaApi": {
+        "required": [
+          "title",
+          "status",
+          "codigo",
+          "traceId"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "codigo": {
+            "$ref": "#/components/schemas/CodigoError"
+          },
+          "traceId": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Solo en Validacion: mensajes por campo."
+          },
+          "desbloqueoEn": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Solo en CuentaBloqueada: instante UTC en que se desbloquea.",
+            "format": "date-time"
+          }
+        },
+        "description": "Problem Details (RFC 9457) con la extensión codigo."
+      },
+      "RespuestaEntrar": {
+        "required": [
+          "siguientePaso"
+        ],
+        "type": "object",
+        "properties": {
+          "siguientePaso": {
+            "$ref": "#/components/schemas/PasoSiguiente"
+          }
+        }
+      },
+      "RespuestaMfaActivada": {
+        "required": [
+          "codigosRecuperacion"
+        ],
+        "type": "object",
+        "properties": {
+          "codigosRecuperacion": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SesionPersonal": {
+        "required": [
+          "usuarioId",
+          "usuario",
+          "nombreCompleto",
+          "rol",
+          "modulos",
+          "mfaActivo"
+        ],
+        "type": "object",
+        "properties": {
+          "usuarioId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usuario": {
+            "type": "string"
+          },
+          "nombreCompleto": {
+            "type": "string"
+          },
+          "rol": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "modulos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModuloAsignado"
+            }
+          },
+          "mfaActivo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SolicitudActivarMfa": {
+        "required": [
+          "codigo"
+        ],
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string"
+          }
+        }
+      },
+      "SolicitudCambioContrasena": {
+        "required": [
+          "actual",
+          "nueva"
+        ],
+        "type": "object",
+        "properties": {
+          "actual": {
+            "type": "string"
+          },
+          "nueva": {
+            "type": "string"
+          }
+        }
+      },
+      "SolicitudCodigoMfa": {
+        "required": [
+          "codigo",
+          "recordarEsteEquipo"
+        ],
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "recordarEsteEquipo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SolicitudCodigoRecuperacion": {
+        "required": [
+          "codigoRecuperacion"
+        ],
+        "type": "object",
+        "properties": {
+          "codigoRecuperacion": {
+            "type": "string"
+          }
+        }
+      },
+      "SolicitudContrasenaConToken": {
+        "required": [
+          "usuarioId",
+          "token",
+          "contrasena"
+        ],
+        "type": "object",
+        "properties": {
+          "usuarioId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "token": {
+            "type": "string"
+          },
+          "contrasena": {
+            "type": "string"
+          }
+        }
+      },
+      "SolicitudEntrar": {
+        "required": [
+          "usuario",
+          "contrasena"
+        ],
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "string"
+          },
+          "contrasena": {
+            "type": "string"
+          }
+        }
+      },
+      "SolicitudOlvideContrasena": {
+        "required": [
+          "correo"
+        ],
+        "type": "object",
+        "properties": {
+          "correo": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Público"
+    },
+    {
+      "name": "Administración · Sesión"
+    },
+    {
+      "name": "Administración · Catálogos"
+    },
+    {
+      "name": "Administración · Auditoría"
+    }
+  ]
+}

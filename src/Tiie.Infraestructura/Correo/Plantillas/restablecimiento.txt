@@ -1,0 +1,11 @@
+Hola, {{Nombre}}.
+
+Recibimos una solicitud para restablecer la contraseña de tu cuenta del panel de citas de la TIIE. El enlace vence en 24 horas y solo funciona una vez:
+
+{{Enlace}}
+
+Si no lo pediste, ignora este correo: tu contraseña no cambia.
+
+--
+Tarjeta Inteligente de Identidad Estudiantil · Gobierno del Estado de Sinaloa.
+Este correo se envió automáticamente; no respondas a esta dirección.

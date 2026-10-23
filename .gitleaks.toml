@@ -1,0 +1,15 @@
+# Escaneo de secretos (docs/11-seguridad-y-privacidad.md#secretos). Si un secreto llega al repositorio:
+# primero se rota y después se limpia el historial.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Valores públicos o solo de desarrollo, documentados en el README"
+paths = [
+  # Contraseña de sa del contenedor local de SQL Server: solo escucha en 127.0.0.1 y no protege datos reales.
+  '''compose\.yaml''',
+  # Claves de prueba publicadas por Cloudflare Turnstile.
+  '''src/Tiie\.Web/appsettings\.Development\.json''',
+  # Archivos generados.
+  '''src/Tiie\.Web\.Client/package-lock\.json''',
+]

@@ -1,0 +1,13 @@
+Hola, {{Nombre}}.
+
+Se creó una cuenta para ti en el panel del personal de citas de la TIIE. Para activarla, define tu contraseña con este enlace. Vence en 24 horas y solo funciona una vez:
+
+{{Enlace}}
+
+Al entrar por primera vez te pediremos configurar una app autenticadora en tu celular.
+
+Si no esperabas este correo, ignóralo.
+
+--
+Tarjeta Inteligente de Identidad Estudiantil · Gobierno del Estado de Sinaloa.
+Este correo se envió automáticamente; no respondas a esta dirección.
