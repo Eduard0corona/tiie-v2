@@ -98,6 +98,7 @@ Las credenciales hacia Azure son federadas (OIDC): el pipeline no guarda secreto
 - Se aplican con `efbundle --connection "<cadena con Authentication=Active Directory Default>"` usando la identidad del pipeline, antes de desplegar el código. Azure SQL permite conexiones de servicios de Azure (el sitio no tiene red privada); el runner agrega una regla temporal para su IP.
 - Durante el intercambio de ranuras, el código anterior convive unos minutos con el esquema nuevo. Por eso toda migración es compatible hacia atrás: primero se agrega (columna nueva con valor por omisión, tabla nueva), el código empieza a usarla, y lo viejo se quita en un despliegue posterior.
 - Una migración que borra o renombra columnas requiere revisión de dos personas.
+- Crear o reconstruir un índice, o cambiar el tipo de una columna, en una tabla con datos la bloquea mientras dura: `OptimizacionConsultas` tarda unos 30 s con 2 millones de citas ([18](18-analisis-de-base-de-datos.md)). Con datos en producción, una migración así se programa en horario sin servicio o se crea el índice con `ONLINE = ON`.
 
 ## Ranuras y reversión
 

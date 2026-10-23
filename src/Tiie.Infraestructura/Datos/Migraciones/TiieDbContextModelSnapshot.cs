@@ -392,6 +392,9 @@ namespace Tiie.Infraestructura.Datos.Migraciones
                     b.HasIndex("Fecha")
                         .HasDatabaseName("IX_Auditoria_Fecha");
 
+                    b.HasIndex("Entidad", "EntidadId")
+                        .HasDatabaseName("IX_Auditoria_Entidad");
+
                     b.HasIndex("UsuarioId", "Fecha")
                         .HasDatabaseName("IX_Auditoria_Usuario");
 
@@ -748,7 +751,8 @@ namespace Tiie.Infraestructura.Datos.Migraciones
                     b.Property<string>("TokenProtegido")
                         .IsRequired()
                         .HasMaxLength(600)
-                        .HasColumnType("nvarchar(600)");
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(600)");
 
                     b.Property<DateTimeOffset>("TokenVenceEn")
                         .HasPrecision(0)
@@ -762,10 +766,12 @@ namespace Tiie.Infraestructura.Datos.Migraciones
                     b.HasKey("CitaId");
 
                     b.HasIndex("ActualizadaPor")
-                        .HasDatabaseName("IX_Cita_ActualizadaPor");
+                        .HasDatabaseName("IX_Cita_ActualizadaPor")
+                        .HasFilter("[ActualizadaPor] IS NOT NULL");
 
                     b.HasIndex("CitaOrigenId")
-                        .HasDatabaseName("IX_Cita_CitaOrigen");
+                        .HasDatabaseName("IX_Cita_CitaOrigen")
+                        .HasFilter("[CitaOrigenId] IS NOT NULL");
 
                     b.HasIndex("ClaveIdempotencia")
                         .IsUnique()
@@ -773,12 +779,13 @@ namespace Tiie.Infraestructura.Datos.Migraciones
                         .HasFilter("[ClaveIdempotencia] IS NOT NULL");
 
                     b.HasIndex("CreadaPor")
-                        .HasDatabaseName("IX_Cita_CreadaPor");
+                        .HasDatabaseName("IX_Cita_CreadaPor")
+                        .HasFilter("[CreadaPor] IS NOT NULL");
 
                     b.HasIndex("CupoId")
                         .HasDatabaseName("IX_Cita_Cupo");
 
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CupoId"), new[] { "Estado" });
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CupoId"), new[] { "Estado", "SolicitanteId", "Folio", "Origen" });
 
                     b.HasIndex("Folio")
                         .IsUnique()

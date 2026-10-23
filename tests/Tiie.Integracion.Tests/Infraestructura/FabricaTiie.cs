@@ -50,8 +50,13 @@ public sealed class FabricaTiie : WebApplicationFactory<Program>, IAsyncLifetime
         await using (var alcance = Services.CreateAsyncScope())
             await alcance.ServiceProvider.GetRequiredService<TiieDbContext>().Database.MigrateAsync();
 
+        // Mismo aislamiento que Azure SQL, que trae READ COMMITTED SNAPSHOT activo; SQL Server en contenedor no. El
+        // cambio exige que no haya otras conexiones a la base: se cierran las que dejó la migración.
+        SqlConnection.ClearAllPools();
         await using var conexion = new SqlConnection(CadenaConexion);
         await conexion.OpenAsync();
+        await using (var rcsi = new SqlCommand("ALTER DATABASE CURRENT SET READ_COMMITTED_SNAPSHOT ON WITH ROLLBACK IMMEDIATE", conexion))
+            await rcsi.ExecuteNonQueryAsync();
         _respawner = await Respawner.CreateAsync(conexion, new RespawnerOptions
         {
             DbAdapter = DbAdapter.SqlServer,

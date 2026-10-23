@@ -94,6 +94,9 @@ public sealed class Retencion(ITiieDb db, RelojAgenda reloj, IOptions<OpcionesAg
     public const string TextoAnonimizado = "ANONIMIZADO";
     public static readonly TimeSpan VidaNotificacionesEnviadas = TimeSpan.FromDays(180);
 
+    /// <summary>Filas por sentencia al borrar; por debajo de las 5 000 en que SQL Server escala a candado de tabla.</summary>
+    public const int LoteBorrado = 4000;
+
     public string Nombre => nameof(Retencion);
     public TimeOnly Hora => new(2, 0);
     public DayOfWeek? Dia => DayOfWeek.Sunday;
@@ -111,11 +114,37 @@ public sealed class Retencion(ITiieDb db, RelojAgenda reloj, IOptions<OpcionesAg
             .ToListAsync(ct);
         var anonimizados = await AnonimizarAsync(vencidos, ct);
 
-        var antes = reloj.AhoraUtc() - VidaNotificacionesEnviadas;
-        var borradas = await db.Notificaciones
-            .Where(n => n.Estado == EstadoNotificacion.Enviada && n.EnviadaEn < antes)
-            .ExecuteDeleteAsync(ct);
+        var borradas = await BorrarNotificacionesEnviadasAsync(reloj.AhoraUtc() - VidaNotificacionesEnviadas, ct);
         return string.Create(CultureInfo.InvariantCulture, $"{anonimizados} solicitantes anonimizados; {borradas} notificaciones borradas.");
+    }
+
+    /// <summary>
+    /// Borra por lotes, cada uno en su propia sentencia: un solo DELETE grande escalaría a un candado de toda la tabla
+    /// y detendría las reservas, que insertan su confirmación en <c>Notificacion</c> dentro de su transacción. Cada
+    /// lote sigue donde terminó el anterior por la llave primaria, para no recorrer otra vez las filas ya revisadas.
+    /// </summary>
+    private async Task<int> BorrarNotificacionesEnviadasAsync(DateTimeOffset antes, CancellationToken ct)
+    {
+        var total = 0;
+        var ultimo = 0L;
+        while (true)
+        {
+            var lote = await db.Notificaciones.AsNoTracking()
+                .Where(n => n.NotificacionId > ultimo && n.Estado == EstadoNotificacion.Enviada && n.EnviadaEn < antes)
+                .OrderBy(n => n.NotificacionId)
+                .Select(n => n.NotificacionId)
+                .Take(LoteBorrado)
+                .ToListAsync(ct);
+            if (lote.Count == 0)
+                return total;
+
+            var (primero, final) = (lote[0], lote[^1]);
+            total += await db.Notificaciones
+                .Where(n => n.NotificacionId >= primero && n.NotificacionId <= final
+                    && n.Estado == EstadoNotificacion.Enviada && n.EnviadaEn < antes)
+                .ExecuteDeleteAsync(ct);
+            ultimo = final;
+        }
     }
 
     /// <summary>

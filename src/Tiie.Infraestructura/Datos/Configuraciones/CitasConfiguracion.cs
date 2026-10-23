@@ -38,7 +38,8 @@ internal sealed class CitaConfiguracion : IEntityTypeConfiguration<Cita>
         b.HasIndex(c => c.Folio).IsUnique().HasDatabaseName("UX_Cita_Folio");
         b.Property(c => c.TokenHash).HasMaxLength(32).IsFixedLength();
         b.HasIndex(c => c.TokenHash).IsUnique().HasDatabaseName("UX_Cita_TokenHash");
-        b.Property(c => c.TokenProtegido).HasMaxLength(600);
+        // Data Protection produce Base64url: solo ASCII, la mitad de bytes que en nvarchar.
+        b.Property(c => c.TokenProtegido).HasMaxLength(600).IsUnicode(false);
         b.HasIndex(c => c.ClaveIdempotencia)
             .IsUnique()
             .HasFilter("[ClaveIdempotencia] IS NOT NULL")
@@ -57,10 +58,15 @@ internal sealed class CitaConfiguracion : IEntityTypeConfiguration<Cita>
             .HasFilter($"[Estado] = {(byte)EstadoCita.Agendada}")
             .HasDatabaseName("UX_Cita_SolicitanteActiva");
         b.HasIndex(c => new { c.SolicitanteId, c.Estado }).HasDatabaseName("IX_Cita_Solicitante");
-        b.HasIndex(c => c.CupoId).HasDatabaseName("IX_Cita_Cupo").IncludeProperties(c => c.Estado);
-        b.HasIndex(c => c.CitaOrigenId).HasDatabaseName("IX_Cita_CitaOrigen");
-        b.HasIndex(c => c.CreadaPor).HasDatabaseName("IX_Cita_CreadaPor");
-        b.HasIndex(c => c.ActualizadaPor).HasDatabaseName("IX_Cita_ActualizadaPor");
+        // Agenda, listados, tablero y reportes llegan a la cita por su cupo; las columnas incluidas evitan volver
+        // a la tabla por cada fila. Ninguna cambia después de crear la cita, salvo Estado.
+        b.HasIndex(c => c.CupoId)
+            .HasDatabaseName("IX_Cita_Cupo")
+            .IncludeProperties(c => new { c.Estado, c.SolicitanteId, c.Folio, c.Origen });
+        // Llaves foráneas casi siempre vacías: el filtro deja fuera los nulos y la búsqueda por valor sigue usando el índice.
+        b.HasIndex(c => c.CitaOrigenId).HasFilter("[CitaOrigenId] IS NOT NULL").HasDatabaseName("IX_Cita_CitaOrigen");
+        b.HasIndex(c => c.CreadaPor).HasFilter("[CreadaPor] IS NOT NULL").HasDatabaseName("IX_Cita_CreadaPor");
+        b.HasIndex(c => c.ActualizadaPor).HasFilter("[ActualizadaPor] IS NOT NULL").HasDatabaseName("IX_Cita_ActualizadaPor");
 
         b.HasOne(c => c.Cupo).WithMany().HasForeignKey(c => c.CupoId);
         b.HasOne(c => c.Solicitante).WithMany().HasForeignKey(c => c.SolicitanteId);
