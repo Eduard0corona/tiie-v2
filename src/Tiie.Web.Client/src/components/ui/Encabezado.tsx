@@ -22,7 +22,11 @@ export function EncabezadoPaso({ children, className = '' }: { children: ReactNo
 
 export function Cargando({ texto = 'Cargando…' }: { texto?: string }) {
   return (
-    <p role="status" className="p-6 text-slate-600">
+    <p role="status" className="flex items-center gap-3 p-6 text-slate-600">
+      <span
+        aria-hidden="true"
+        className="size-5 shrink-0 animate-spin rounded-full border-2 border-guinda-200 border-t-guinda-700"
+      />
       {texto}
     </p>
   );

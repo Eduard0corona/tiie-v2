@@ -166,4 +166,100 @@ describe('Asistente de reserva', () => {
     renderizarRuta('/agendar?paso=datos&fecha=2026-11-12');
     expect(await screen.findByRole('heading', { name: '¿Dónde quieres tu cita?' })).toBeInTheDocument();
   });
+
+  it('al elegir el trámite muestra sus requisitos antes de pedir el horario', async () => {
+    const { usuario } = renderizarRuta('/agendar');
+    await usuario.click(await screen.findByLabelText('Culiacán'));
+    await usuario.click(await screen.findByLabelText(/Módulo Culiacán Centro/));
+    expect(
+      screen.queryByRole('heading', { name: 'Lo que deberás llevar a tu cita' }),
+    ).not.toBeInTheDocument();
+
+    await usuario.click(await screen.findByLabelText(/Primera vez/));
+
+    const requisitos = (
+      await screen.findByRole('heading', { name: 'Lo que deberás llevar a tu cita' })
+    ).closest('section') as HTMLElement;
+    expect(within(requisitos).getByText('CURP impresa.')).toBeInTheDocument();
+    expect(within(requisitos).getByText('Medio superior y superior')).toBeInTheDocument();
+  });
+
+  it('desde una sede de la portada llega con municipio y sede ya elegidos', async () => {
+    renderizarRuta('/agendar?municipio=6&modulo=3');
+
+    expect(await screen.findByLabelText(/Módulo Culiacán Centro/)).toBeChecked();
+    expect(screen.getByLabelText('Culiacán')).toBeChecked();
+    expect(await screen.findByLabelText(/Primera vez/)).not.toBeChecked();
+    expect(screen.getByRole('button', { name: /Continuar/ })).toBeDisabled();
+    expect(screen.getByText('Elige municipio, sede y trámite para continuar.')).toBeInTheDocument();
+  });
+
+  it('ofrece los días más próximos con lugar como atajo', async () => {
+    const { router, usuario } = renderizarRuta('/agendar?municipio=6&modulo=3&oferta=12&paso=fecha');
+
+    const atajo = await screen.findByRole('button', {
+      name: 'miércoles 11 de noviembre (poca disponibilidad)',
+    });
+    expect(
+      screen.getByRole('button', { name: 'jueves 12 de noviembre (alta disponibilidad)' }),
+    ).toBeInTheDocument();
+    // El día lleno del 10 no se ofrece.
+    expect(screen.queryByRole('button', { name: /^martes 10 de noviembre \(/ })).not.toBeInTheDocument();
+    await usuario.click(atajo);
+
+    expect(await screen.findByRole('heading', { name: 'Elige la hora' })).toHaveFocus();
+    expect(router.state.location.search).toContain('fecha=2026-11-11');
+  });
+
+  it('separa las horas por turno y marca el último lugar', async () => {
+    servidor.use(
+      publico.cupos(() => [
+        { cupoId: 1, hora: '09:00', libres: 4 },
+        { cupoId: 2, hora: '13:30', libres: 1 },
+      ]),
+    );
+    renderizarRuta('/agendar?municipio=6&modulo=3&oferta=12&paso=hora&fecha=2026-11-12');
+
+    expect(await screen.findByText('Mañana')).toBeInTheDocument();
+    expect(screen.getByText('Tarde')).toBeInTheDocument();
+    expect(screen.getByLabelText(/13:30/)).toBeInTheDocument();
+    expect(screen.getByText('Último lugar')).toBeInTheDocument();
+    expect(screen.getByText('4 lugares')).toBeInTheDocument();
+  });
+
+  it('los pasos ya hechos permiten volver sin perder lo elegido', async () => {
+    const { router, usuario } = renderizarRuta(
+      '/agendar?municipio=6&modulo=3&oferta=12&paso=hora&fecha=2026-11-12',
+    );
+    const pasos = await screen.findByRole('navigation', { name: 'Pasos para agendar' });
+    expect(within(pasos).getByText('Hora', { exact: false }).closest('li')).toHaveAttribute(
+      'aria-current',
+      'step',
+    );
+
+    await usuario.click(within(pasos).getByRole('button', { name: 'Fecha, completado' }));
+
+    expect(await screen.findByRole('heading', { name: 'Elige el día' })).toHaveFocus();
+    expect(router.state.location.search).toContain('fecha=2026-11-12');
+    expect(within(pasos).queryByRole('button', { name: /Hora/ })).not.toBeInTheDocument();
+  });
+
+  it('confirma la CURP válida con lo que se deriva de ella y sugiere corregir un correo mal escrito', async () => {
+    const { usuario } = renderizarRuta(
+      '/agendar?municipio=6&modulo=3&oferta=12&paso=datos&fecha=2026-11-12&cupo=81234',
+    );
+
+    await usuario.type(await screen.findByLabelText('CURP'), 'goma080515mslrrna5');
+    expect(screen.getByText('CURP válida: nacimiento el 15/05/2008, sexo mujer.')).toBeInTheDocument();
+
+    const correo = screen.getByLabelText('Correo electrónico');
+    await usuario.type(correo, 'ana@gmial.com');
+    expect(screen.queryByText(/¿Quisiste decir/)).not.toBeInTheDocument();
+    await usuario.tab();
+    expect(await screen.findByText('ana@gmail.com')).toBeInTheDocument();
+
+    await usuario.click(screen.getByRole('button', { name: 'Sí, usar este correo' }));
+    expect(correo).toHaveValue('ana@gmail.com');
+    expect(screen.queryByText(/¿Quisiste decir/)).not.toBeInTheDocument();
+  });
 });
