@@ -9,5 +9,9 @@
     <Project Path="tests/Tiie.Aplicacion.Tests/Tiie.Aplicacion.Tests.csproj" />
     <Project Path="tests/Tiie.Dominio.Tests/Tiie.Dominio.Tests.csproj" />
     <Project Path="tests/Tiie.Integracion.Tests/Tiie.Integracion.Tests.csproj" />
+    <Project Path="tests/Tiie.Migracion.Tests/Tiie.Migracion.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Tiie.Migracion/Tiie.Migracion.csproj" />
   </Folder>
 </Solution>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Tiie.Migracion</RootNamespace>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Tiie.Infraestructura\Tiie.Infraestructura.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Documenta el esquema supuesto de 2016 y crea la base de origen de las pruebas de integración. -->
+    <None Include="Origen\esquema-supuesto.sql" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
