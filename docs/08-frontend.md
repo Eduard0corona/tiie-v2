@@ -12,11 +12,11 @@ Una sola aplicación React con TypeScript, compilada por Vite en `src/Tiie.Web/w
 | Cliente HTTP tipado | `openapi-fetch`, con tipos de `openapi-typescript` |
 | Formularios | `react-hook-form`, `zod` y `@hookform/resolvers` |
 | Estilos | `tailwindcss` 4 con `@tailwindcss/vite` |
-| Componentes base | Propios en `components/ui` (alerta, botón, campo, contenedor, diálogo, encabezado, grupo de opciones, ícono, insignia y selector), sin kit de componentes ni librería de íconos: los íconos son SVG propios en `Icono.tsx`. Tokens, componentes y pantallas del sitio público en [16](16-experiencia-de-usuario.md) |
+| Componentes base | Propios en `components/ui` (alerta, botón, campo, contenedor, diálogo, encabezado, grupo de opciones, ícono, insignia y selector), sin kit de componentes ni librería de íconos: los íconos son SVG propios en `Icono.tsx`. Tokens, componentes y pantallas del sitio público en [16](16-experiencia-de-usuario.md); los del panel (encabezado de página, paneles, tablas, estados) en [17](17-experiencia-del-panel.md#componentes-del-panel). Los colores de `Boton` no se sobrescriben con `className`: si hace falta otro aspecto, se agrega una variante |
 | Calendario | `react-day-picker` 9, con un botón de día propio (número y punto de disponibilidad). Su hoja de estilos no tiene capa, así que los estilos del calendario en `styles/index.css` van fuera de `@layer` |
 | Fechas | `date-fns` 4 y `@date-fns/tz` |
 | Tablas del panel | HTML semántico con `caption` y encabezados de columna; sin librería |
-| Gráficas del tablero | Barras con CSS dentro de tablas accesibles; sin librería |
+| Gráficas del tablero | Medidores con CSS dentro de tablas accesibles; sin librería ([17](17-experiencia-del-panel.md#tablero)) |
 | Captcha | Cloudflare Turnstile con un componente envoltorio (por ejemplo `@marsidev/react-turnstile`) |
 | QR para MFA | `qrcode.react` 4, que dibuja el QR en el navegador |
 | Compilación | `vite` 8 y `typescript` 5.9 (la versión que admiten `openapi-typescript` y `typescript-eslint`) |
@@ -106,7 +106,7 @@ Cada carpeta de característica tiene sus páginas (`PaginaAgenda.tsx`), sus hoo
 
 `/mi-cita/{token}` **no** es una ruta de React: la atiende el servidor ([07](07-autenticacion-y-autorizacion.md#acceso-del-ciudadano)). El router no debe declarar `/mi-cita/:token`.
 
-Ocultar un menú según el rol es solo comodidad; la API decide el acceso. La guarda de `/admin` consulta `GET /api/admin/auth/yo`: con 401 redirige a `/admin/entrar?volver=<ruta>`, y con `mfaActivo = false` a `/admin/configurar-mfa`.
+Ocultar un menú según el rol es solo comodidad; la API decide el acceso. La búsqueda global del panel lleva a `/admin/citas?busqueda=…`, el mismo filtro de la pantalla Citas. La guarda de `/admin` consulta `GET /api/admin/auth/yo`: con 401 redirige a `/admin/entrar?volver=<ruta>`, y con `mfaActivo = false` a `/admin/configurar-mfa`.
 
 ## Cliente de la API
 

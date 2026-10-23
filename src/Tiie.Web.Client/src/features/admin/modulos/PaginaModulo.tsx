@@ -9,9 +9,9 @@ import { copiarErroresAlFormulario } from '@/api/errores';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { Selector } from '@/components/ui/Selector';
-import { DialogoConfirmar, ErrorPanel } from '@/features/admin/comun/Componentes';
+import { DialogoConfirmar, EncabezadoPagina, ErrorPanel } from '@/features/admin/comun/Componentes';
 import { usePermisos } from '@/features/admin/comun/permisos';
 import { clavesAdmin, useCatalogosAdmin } from '@/features/admin/comun/useCatalogosAdmin';
 import { hoyLocal } from '@/lib/fechas';
@@ -45,10 +45,10 @@ export function PaginaModulo() {
 
   return (
     <section className="flex max-w-3xl flex-col gap-4">
-      <Link to="/admin/modulos" className="text-guinda-700 underline">
-        Volver a módulos
-      </Link>
-      <EncabezadoPaso>{nuevo ? 'Nuevo módulo' : (modulo.data?.nombre ?? 'Módulo')}</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo={nuevo ? 'Nuevo módulo' : (modulo.data?.nombre ?? 'Módulo')}
+        volver={{ a: '/admin/modulos', texto: 'Volver a módulos' }}
+      />
       {nuevo && !administrador && <Alerta tono="error">No tienes permiso para esta acción.</Alerta>}
       {nuevo && administrador && <FormularioModulo detalle={null} editable />}
       {!nuevo && modulo.isPending && <Cargando texto="Cargando el módulo…" />}

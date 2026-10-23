@@ -110,7 +110,7 @@ export function EditorPlantilla({ ofertaId, plantilla, editable }: EditorPlantil
           return (
             <fieldset
               key={valor}
-              className="flex flex-col gap-2 rounded-md border border-slate-200 bg-white p-3"
+              className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm"
             >
               <legend className="px-1 font-semibold">{nombre}</legend>
               {horas.length === 0 && <p className="text-sm text-slate-600">Sin servicio.</p>}

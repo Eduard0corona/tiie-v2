@@ -1,13 +1,14 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import { api, datos } from '@/api/cliente';
-import { Boton } from '@/components/ui/Boton';
+import { Boton, estiloBoton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { Selector } from '@/components/ui/Selector';
 import {
   celda,
   celdaEncabezado,
+  EncabezadoPagina,
   ErrorPanel,
   Paginacion,
   TablaDesplazable,
@@ -15,6 +16,7 @@ import {
 import { clavesAdmin, useCatalogosAdmin } from '@/features/admin/comun/useCatalogosAdmin';
 import { useFiltrosUrl } from '@/features/admin/comun/useFiltrosUrl';
 import { formatearInstante } from '@/lib/fechas';
+import { Icono } from '@/components/ui/Icono';
 
 const TAMANO = 20;
 const FILTROS = ['busqueda', 'rol', 'activo'] as const;
@@ -39,21 +41,22 @@ export function PaginaUsuarios() {
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <EncabezadoPaso>Usuarios</EncabezadoPaso>
-        <Link
-          to="/admin/usuarios/nuevo"
-          className="inline-flex min-h-11 items-center rounded-md bg-guinda-700 px-4 font-medium text-white hover:bg-guinda-800"
-        >
-          Nuevo usuario
-        </Link>
-      </div>
+      <EncabezadoPagina
+        titulo="Usuarios"
+        descripcion="Cuentas del personal, su rol y los módulos en los que trabaja."
+        acciones={
+          <Link to="/admin/usuarios/nuevo" className={estiloBoton()}>
+            <Icono nombre="mas" />
+            Nuevo usuario
+          </Link>
+        }
+      />
 
       <form
         key={`${firma}|${catalogos.isSuccess}`}
         role="search"
         aria-label="Filtros de usuarios"
-        className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 sm:grid-cols-2 lg:grid-cols-4"
         onSubmit={(e) => {
           e.preventDefault();
           aplicar(e.currentTarget);

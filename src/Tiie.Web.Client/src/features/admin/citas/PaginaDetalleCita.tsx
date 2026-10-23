@@ -3,12 +3,13 @@ import { useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { api, datos } from '@/api/cliente';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
-import { Boton } from '@/components/ui/Boton';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Boton, estiloBoton } from '@/components/ui/Boton';
+import { Cargando } from '@/components/ui/Encabezado';
 import {
   celda,
   celdaEncabezado,
   DialogoConfirmar,
+  EncabezadoPagina,
   ErrorPanel,
   EtiquetaEstado,
   TablaDesplazable,
@@ -121,21 +122,21 @@ export function PaginaDetalleCita() {
 
   return (
     <section className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <Link to="/admin/citas" className="text-guinda-700 underline">
-          Volver a la búsqueda
-        </Link>
-        <EncabezadoPaso>Cita {c.folio}</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo={`Cita ${c.folio}`}
+        volver={{ a: '/admin/citas', texto: 'Volver a la búsqueda' }}
+      >
         <div>
           <EtiquetaEstado estado={c.estado} />
         </div>
-      </div>
+      </EncabezadoPagina>
 
       <RegionAnuncios>{aviso && <Alerta tono="exito">{aviso}</Alerta>}</RegionAnuncios>
 
-      <dl className="grid gap-x-6 gap-y-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2">
+      <dl className="grid gap-x-6 gap-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 sm:grid-cols-2">
         <Dato termino="Fecha y hora">
-          <span className="first-letter:uppercase">{formatearFechaLarga(c.fecha)}</span> a las {c.hora}
+          <span className="inline-block first-letter:uppercase">{formatearFechaLarga(c.fecha)}</span> a las{' '}
+          {c.hora}
         </Dato>
         <Dato termino="Módulo">{c.modulo}</Dato>
         <Dato termino="Trámite">{c.tramite}</Dato>
@@ -157,7 +158,7 @@ export function PaginaDetalleCita() {
       <div className="flex flex-wrap gap-2">
         <a
           href={`/api/admin/citas/${c.citaId}/comprobante.pdf`}
-          className="inline-flex min-h-11 items-center rounded-md border border-slate-300 bg-white px-4 font-medium hover:bg-slate-100"
+          className={estiloBoton({ variante: 'secundario' })}
         >
           Descargar comprobante (PDF)
         </a>

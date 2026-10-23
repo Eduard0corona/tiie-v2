@@ -8,11 +8,11 @@ import type { components } from '@/api/esquema';
 import { ErrorApi, copiarErroresAlFormulario, mensajeDeError } from '@/api/errores';
 import { SelectorHora } from '@/components/SelectorHora';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
-import { Boton } from '@/components/ui/Boton';
+import { Boton, estiloBoton } from '@/components/ui/Boton';
 import { Campo, Casilla } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { Selector } from '@/components/ui/Selector';
-import { ErrorPanel } from '@/features/admin/comun/Componentes';
+import { EncabezadoPagina, ErrorPanel } from '@/features/admin/comun/Componentes';
 import { useModulosAdmin, useOfertasAdmin } from '@/features/admin/comun/useCatalogosAdmin';
 import { normalizarCurp } from '@/lib/curp';
 import { esFechaIso, formatearFechaLarga, hoyLocal } from '@/lib/fechas';
@@ -134,20 +134,17 @@ export function PaginaVentanilla() {
   if (registrada) {
     return (
       <section className="flex max-w-xl flex-col gap-4">
-        <EncabezadoPaso>Cita registrada</EncabezadoPaso>
+        <EncabezadoPagina titulo="Cita registrada" />
         <Alerta tono="exito" titulo={`Folio ${registrada.folio}`}>
           Entrega el comprobante a la persona. Si dio correo, también se lo enviamos.
         </Alerta>
         <div className="flex flex-wrap gap-2">
-          <Link
-            to={`/admin/citas/${registrada.citaId}`}
-            className="inline-flex min-h-11 items-center rounded-md border border-slate-300 bg-white px-4 font-medium hover:bg-slate-100"
-          >
+          <Link to={`/admin/citas/${registrada.citaId}`} className={estiloBoton({ variante: 'secundario' })}>
             Ver la cita
           </Link>
           <a
             href={`/api/admin/citas/${registrada.citaId}/comprobante.pdf`}
-            className="inline-flex min-h-11 items-center rounded-md border border-slate-300 bg-white px-4 font-medium hover:bg-slate-100"
+            className={estiloBoton({ variante: 'secundario' })}
           >
             Descargar comprobante (PDF)
           </a>
@@ -160,7 +157,10 @@ export function PaginaVentanilla() {
   const errores = formState.errors;
   return (
     <section className="flex max-w-2xl flex-col gap-6">
-      <EncabezadoPaso>Registrar cita en ventanilla</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo="Registrar cita en ventanilla"
+        descripcion="Para la persona que llega al módulo: usa cupos de hoy con hora futura y no pide captcha."
+      />
 
       <div className="grid gap-4 sm:grid-cols-2">
         {modulos.isPending ? (
@@ -259,7 +259,7 @@ export function PaginaVentanilla() {
         <form
           noValidate
           onSubmit={handleSubmit((valores) => crear.mutate(valores))}
-          className="flex flex-col gap-4 rounded-md border border-slate-200 bg-white p-4"
+          className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
         >
           <h2 className="text-lg font-semibold">Datos de la persona</h2>
           <Campo

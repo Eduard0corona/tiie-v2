@@ -6,7 +6,7 @@ import { Link, useSearchParams } from 'react-router';
 import { api } from '@/api/cliente';
 import { ErrorApi, copiarErroresAlFormulario, mensajeDeError } from '@/api/errores';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
-import { Boton } from '@/components/ui/Boton';
+import { Boton, estiloBoton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
 import { EncabezadoPaso } from '@/components/ui/Encabezado';
 import { esquemaContrasenaNueva, type ValoresContrasenaNueva } from './esquemas';
@@ -86,10 +86,7 @@ export function FormularioContrasenaConToken({ proposito }: { proposito: Proposi
       <div className="flex flex-col gap-4">
         <EncabezadoPaso>{texto.titulo}</EncabezadoPaso>
         <Alerta tono="exito">{texto.exito}</Alerta>
-        <Link
-          to="/admin/entrar"
-          className="inline-flex min-h-11 items-center justify-center rounded-md bg-guinda-700 px-4 py-2 font-medium text-white hover:bg-guinda-800"
-        >
+        <Link to="/admin/entrar" className={estiloBoton()}>
           Entrar al panel
         </Link>
       </div>

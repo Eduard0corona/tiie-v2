@@ -2,16 +2,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { api, datos } from '@/api/cliente';
 import type { components } from '@/api/esquema';
 import { copiarErroresAlFormulario } from '@/api/errores';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Campo, Casilla } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { AreaTexto } from '@/components/ui/Selector';
-import { ErrorPanel } from '@/features/admin/comun/Componentes';
+import { EncabezadoPagina, ErrorPanel } from '@/features/admin/comun/Componentes';
 import { usePermisos } from '@/features/admin/comun/permisos';
 import { clavesAdmin } from '@/features/admin/comun/useCatalogosAdmin';
 import { EditorPlantilla } from './EditorPlantilla';
@@ -45,14 +45,10 @@ export function PaginaOferta() {
 
   return (
     <section className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <Link to="/admin/ofertas" className="text-guinda-700 underline">
-          Volver a ofertas
-        </Link>
-        <EncabezadoPaso>
-          {oferta.data ? `${oferta.data.tramite} · ${oferta.data.modulo}` : 'Oferta'}
-        </EncabezadoPaso>
-      </div>
+      <EncabezadoPagina
+        titulo={oferta.data ? `${oferta.data.tramite} · ${oferta.data.modulo}` : 'Oferta'}
+        volver={{ a: '/admin/ofertas', texto: 'Volver a ofertas' }}
+      />
       {oferta.isPending && <Cargando texto="Cargando la oferta…" />}
       {oferta.isError && <ErrorPanel error={oferta.error} />}
       {oferta.data && (

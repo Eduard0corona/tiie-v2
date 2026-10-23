@@ -2,13 +2,14 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import { api, datos } from '@/api/cliente';
 import type { components } from '@/api/esquema';
-import { Boton } from '@/components/ui/Boton';
+import { Boton, estiloBoton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { Selector } from '@/components/ui/Selector';
 import {
   celda,
   celdaEncabezado,
+  EncabezadoPagina,
   ErrorPanel,
   EtiquetaEstado,
   Paginacion,
@@ -18,6 +19,7 @@ import { ESTADOS_CITA, TEXTO_ESTADO, TEXTO_ORIGEN } from '@/features/admin/comun
 import { clavesAdmin, useModulosAdmin, useTiposTramiteAdmin } from '@/features/admin/comun/useCatalogosAdmin';
 import { idOpcional, useFiltrosUrl } from '@/features/admin/comun/useFiltrosUrl';
 import { formatearFechaCorta } from '@/lib/fechas';
+import { Icono } from '@/components/ui/Icono';
 
 type EstadoCita = components['schemas']['EstadoCita'];
 
@@ -49,22 +51,23 @@ export function PaginaCitas() {
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <EncabezadoPaso>Citas</EncabezadoPaso>
-        <Link
-          to="/admin/citas/nueva"
-          className="inline-flex min-h-11 items-center rounded-md bg-guinda-700 px-4 font-medium text-white hover:bg-guinda-800"
-        >
-          Registrar en ventanilla
-        </Link>
-      </div>
+      <EncabezadoPagina
+        titulo="Citas"
+        descripcion="Busca por folio, folio anterior o CURP, y filtra por fechas, módulo, trámite y estado."
+        acciones={
+          <Link to="/admin/citas/nueva" className={estiloBoton()}>
+            <Icono nombre="ventanilla" />
+            Registrar en ventanilla
+          </Link>
+        }
+      />
 
       <form
         // Se vuelve a montar al cambiar la URL o al llegar las listas, para que los valores por omisión coincidan.
         key={`${firma}|${modulos.isSuccess}|${tipos.isSuccess}`}
         role="search"
         aria-label="Filtros de citas"
-        className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 sm:grid-cols-2 lg:grid-cols-3"
         onSubmit={(e) => {
           e.preventDefault();
           aplicar(e.currentTarget);

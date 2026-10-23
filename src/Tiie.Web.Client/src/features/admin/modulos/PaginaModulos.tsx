@@ -1,12 +1,17 @@
 import { Link, useSearchParams } from 'react-router';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { Selector } from '@/components/ui/Selector';
-import { celda, celdaEncabezado, ErrorPanel, TablaDesplazable } from '@/features/admin/comun/Componentes';
+import {
+  celda,
+  celdaEncabezado,
+  EncabezadoPagina,
+  ErrorPanel,
+  TablaDesplazable,
+} from '@/features/admin/comun/Componentes';
 import { usePermisos } from '@/features/admin/comun/permisos';
 import { useModulosAdmin } from '@/features/admin/comun/useCatalogosAdmin';
-
-const enlaceBoton =
-  'inline-flex min-h-11 items-center rounded-md bg-guinda-700 px-4 font-medium text-white hover:bg-guinda-800';
+import { Icono } from '@/components/ui/Icono';
+import { estiloBoton } from '@/components/ui/Boton';
 
 /** Módulos visibles para el usuario; el administrador da de alta y edita (RF-11). */
 export function PaginaModulos() {
@@ -18,14 +23,18 @@ export function PaginaModulos() {
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <EncabezadoPaso>Módulos</EncabezadoPaso>
-        {administrador && (
-          <Link to="/admin/modulos/nuevo" className={enlaceBoton}>
-            Nuevo módulo
-          </Link>
-        )}
-      </div>
+      <EncabezadoPagina
+        titulo="Módulos"
+        descripcion="Sedes de atención: la dirección, el horario y el contacto que ve el ciudadano."
+        acciones={
+          administrador && (
+            <Link to="/admin/modulos/nuevo" className={estiloBoton()}>
+              <Icono nombre="mas" />
+              Nuevo módulo
+            </Link>
+          )
+        }
+      />
       <Selector
         etiqueta="Mostrar"
         className="max-w-xs"

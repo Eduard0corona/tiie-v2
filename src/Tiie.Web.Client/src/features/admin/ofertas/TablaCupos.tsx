@@ -147,7 +147,7 @@ function FilaCupo({ cupo, editable, ocupado, descripcion, alGuardar }: FilaCupoP
               min={minimo}
               aria-label={`Capacidad del ${descripcion}`}
               aria-invalid={capacidadValida ? undefined : true}
-              className="min-h-11 w-24 rounded-md border border-slate-400 bg-white px-2"
+              className="min-h-11 w-24 rounded-lg border border-slate-400 bg-white px-2 shadow-sm"
               value={capacidad}
               onChange={(e) => setCapacidad(e.target.value)}
             />

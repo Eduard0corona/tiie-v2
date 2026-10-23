@@ -8,9 +8,15 @@ import { copiarErroresAlFormulario } from '@/api/errores';
 import { RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { AreaTexto, Selector } from '@/components/ui/Selector';
-import { celda, celdaEncabezado, ErrorPanel, TablaDesplazable } from '@/features/admin/comun/Componentes';
+import {
+  celda,
+  celdaEncabezado,
+  EncabezadoPagina,
+  ErrorPanel,
+  TablaDesplazable,
+} from '@/features/admin/comun/Componentes';
 import { usePermisos } from '@/features/admin/comun/permisos';
 import {
   useModulosAdmin,
@@ -30,7 +36,10 @@ export function PaginaOfertas() {
 
   return (
     <section className="flex flex-col gap-4">
-      <EncabezadoPaso>Ofertas y horarios</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo="Ofertas y horarios"
+        descripcion="Qué trámite se atiende en cada módulo, con su plantilla semanal y sus cupos."
+      />
       <Selector
         etiqueta="Módulo"
         className="max-w-md"
@@ -134,7 +143,7 @@ function FormularioNuevaOferta({ moduloId }: { moduloId: number | undefined }) {
     <form
       noValidate
       onSubmit={handleSubmit((v) => crear.mutate(v))}
-      className="flex flex-col gap-4 rounded-md border border-slate-200 bg-white p-4"
+      className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
       aria-labelledby="titulo-nueva-oferta"
     >
       <h2 id="titulo-nueva-oferta" className="text-lg font-semibold">

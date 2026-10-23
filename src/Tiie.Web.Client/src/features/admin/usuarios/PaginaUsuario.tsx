@@ -9,9 +9,9 @@ import { ErrorApi, copiarErroresAlFormulario } from '@/api/errores';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Campo, Casilla } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { Selector } from '@/components/ui/Selector';
-import { DialogoConfirmar, ErrorPanel } from '@/features/admin/comun/Componentes';
+import { DialogoConfirmar, EncabezadoPagina, ErrorPanel } from '@/features/admin/comun/Componentes';
 import { clavesAdmin, useCatalogosAdmin, useModulosAdmin } from '@/features/admin/comun/useCatalogosAdmin';
 import { formatearInstante } from '@/lib/fechas';
 import {
@@ -44,10 +44,10 @@ export function PaginaUsuario() {
 
   return (
     <section className="flex max-w-3xl flex-col gap-4">
-      <Link to="/admin/usuarios" className="text-guinda-700 underline">
-        Volver a usuarios
-      </Link>
-      <EncabezadoPaso>{nuevo ? 'Nuevo usuario' : (usuario.data?.usuario ?? 'Usuario')}</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo={nuevo ? 'Nuevo usuario' : (usuario.data?.usuario ?? 'Usuario')}
+        volver={{ a: '/admin/usuarios', texto: 'Volver a usuarios' }}
+      />
       <RegionAnuncios>{aviso && <Alerta tono="exito">{aviso}</Alerta>}</RegionAnuncios>
       {nuevo && <FormularioUsuario detalle={null} />}
       {!nuevo && usuario.isPending && <Cargando texto="Cargando el usuario…" />}
@@ -192,7 +192,7 @@ function FormularioUsuario({
           ))}
         </Selector>
       </div>
-      <fieldset className="flex flex-col rounded-md border border-slate-200 bg-white p-4">
+      <fieldset className="flex flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <legend className="px-1 font-semibold">Módulos asignados</legend>
         <p className="text-sm text-slate-600">El administrador ve todos los módulos aunque no se marquen.</p>
         {modulos.data?.map((m) => (
@@ -270,7 +270,7 @@ function EstadoCuenta({ detalle }: { detalle: UsuarioDetalle }) {
   };
 
   return (
-    <div className="flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4">
+    <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       <h2 className="text-lg font-semibold">Estado de la cuenta</h2>
       <dl className="grid gap-2 sm:grid-cols-2">
         <div>
