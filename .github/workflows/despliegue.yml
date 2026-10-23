@@ -70,6 +70,9 @@ jobs:
   qa:
     name: QA
     needs: construir
+    # Interruptor de repositorio: hasta crear los recursos y los entornos de GitHub (infra/README.md), cada
+    # push solo construye los artefactos. Las variables de entorno no se pueden leer en este if.
+    if: vars.DESPLIEGUE_HABILITADO == 'true'
     runs-on: ubuntu-latest
     environment:
       name: qa
