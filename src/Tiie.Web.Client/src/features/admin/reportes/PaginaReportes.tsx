@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { api, datos } from '@/api/cliente';
 import type { components } from '@/api/esquema';
 import { Alerta } from '@/components/ui/Alerta';
-import { Boton } from '@/components/ui/Boton';
+import { Boton, estiloBoton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { Selector } from '@/components/ui/Selector';
 import {
   celda,
   celdaEncabezado,
+  EncabezadoPagina,
   ErrorPanel,
   Paginacion,
   TablaDesplazable,
@@ -70,11 +71,14 @@ export function PaginaReportes() {
 
   return (
     <section className="flex flex-col gap-4">
-      <EncabezadoPaso>Reportes</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo="Reportes"
+        descripcion="Citas por rango de fechas, módulo, trámite y estado, con exportación a Excel y PDF."
+      />
       <form
         key={`${firma}|${modulos.isSuccess}|${tipos.isSuccess}`}
         aria-label="Filtros del reporte"
-        className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 sm:grid-cols-2 lg:grid-cols-3"
         onSubmit={(e) => {
           e.preventDefault();
           setPagina(1);
@@ -120,16 +124,10 @@ export function PaginaReportes() {
 
       {rangoValido && (
         <div className="flex flex-wrap gap-2">
-          <a
-            href={urlDescarga(consulta, 'xlsx')}
-            className="inline-flex min-h-11 items-center rounded-md border border-slate-300 bg-white px-4 font-medium hover:bg-slate-100"
-          >
+          <a href={urlDescarga(consulta, 'xlsx')} className={estiloBoton({ variante: 'secundario' })}>
             Descargar Excel
           </a>
-          <a
-            href={urlDescarga(consulta, 'pdf')}
-            className="inline-flex min-h-11 items-center rounded-md border border-slate-300 bg-white px-4 font-medium hover:bg-slate-100"
-          >
+          <a href={urlDescarga(consulta, 'pdf')} className={estiloBoton({ variante: 'secundario' })}>
             Descargar PDF
           </a>
         </div>
@@ -149,12 +147,15 @@ export function PaginaReportes() {
             <h2 className="text-lg font-semibold">Totales por estado</h2>
             <ul className="flex flex-wrap gap-3">
               {reporte.data.totales.map((t) => (
-                <li key={t.estado} className="rounded-md border border-slate-200 bg-white px-4 py-2">
+                <li
+                  key={t.estado}
+                  className="rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm"
+                >
                   <span className="block text-sm text-slate-600">{TEXTO_ESTADO[t.estado]}</span>
                   <span className="text-xl font-bold">{t.citas.toLocaleString('es-MX')}</span>
                 </li>
               ))}
-              <li className="rounded-md border border-slate-300 bg-slate-100 px-4 py-2">
+              <li className="rounded-xl border border-slate-300 bg-slate-100 px-4 py-2">
                 <span className="block text-sm text-slate-600">Total</span>
                 <span className="text-xl font-bold">{total.toLocaleString('es-MX')}</span>
               </li>

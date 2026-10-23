@@ -1,4 +1,5 @@
 import { forwardRef, useId, type ComponentProps, type ReactNode } from 'react';
+import { estiloEntrada } from './Campo';
 
 export interface SelectorProps extends Omit<ComponentProps<'select'>, 'id'> {
   etiqueta: string;
@@ -18,8 +19,8 @@ export const Selector = forwardRef<HTMLSelectElement, SelectorProps>(function Se
     [ayuda ? `${idCampo}-ayuda` : null, error ? `${idCampo}-error` : null].filter(Boolean).join(' ') ||
     undefined;
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
-      <label htmlFor={idCampo} className="font-medium text-slate-800">
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <label htmlFor={idCampo} className="font-semibold text-slate-800">
         {etiqueta}
       </label>
       {ayuda && (
@@ -32,9 +33,7 @@ export const Selector = forwardRef<HTMLSelectElement, SelectorProps>(function Se
         id={idCampo}
         aria-invalid={error ? true : undefined}
         aria-describedby={describe}
-        className={`min-h-11 rounded-md border bg-white px-3 py-2 text-base text-slate-900 ${
-          error ? 'border-red-700' : 'border-slate-400'
-        }`}
+        className={estiloEntrada(Boolean(error))}
         {...props}
       >
         {children}
@@ -66,8 +65,8 @@ export const AreaTexto = forwardRef<HTMLTextAreaElement, AreaTextoProps>(functio
     [ayuda ? `${idCampo}-ayuda` : null, error ? `${idCampo}-error` : null].filter(Boolean).join(' ') ||
     undefined;
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
-      <label htmlFor={idCampo} className="font-medium text-slate-800">
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <label htmlFor={idCampo} className="font-semibold text-slate-800">
         {etiqueta}
       </label>
       {ayuda && (
@@ -81,9 +80,7 @@ export const AreaTexto = forwardRef<HTMLTextAreaElement, AreaTextoProps>(functio
         rows={rows}
         aria-invalid={error ? true : undefined}
         aria-describedby={describe}
-        className={`rounded-md border bg-white px-3 py-2 text-base text-slate-900 ${
-          error ? 'border-red-700' : 'border-slate-400'
-        }`}
+        className={estiloEntrada(Boolean(error))}
         {...props}
       />
       {error && (

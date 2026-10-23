@@ -9,12 +9,13 @@ import { copiarErroresAlFormulario } from '@/api/errores';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { AreaTexto, Selector } from '@/components/ui/Selector';
 import {
   celda,
   celdaEncabezado,
   DialogoConfirmar,
+  EncabezadoPagina,
   ErrorPanel,
   TablaDesplazable,
 } from '@/features/admin/comun/Componentes';
@@ -63,13 +64,16 @@ export function PaginaBloqueos() {
 
   return (
     <section className="flex flex-col gap-6">
-      <EncabezadoPaso>Bloqueos y días inhábiles</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo="Bloqueos y días inhábiles"
+        descripcion="Cierra fechas de una oferta, de un módulo o de todos. Las citas afectadas se revisan antes de cancelarlas."
+      />
 
       <form
         key={`${firma}|${modulos.isSuccess}`}
         role="search"
         aria-label="Filtros de bloqueos"
-        className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 sm:grid-cols-2 lg:grid-cols-4"
         onSubmit={(e) => {
           e.preventDefault();
           aplicar(e.currentTarget);
@@ -223,7 +227,7 @@ function NuevoBloqueo() {
           setCreado(null);
           crear.mutate(v);
         })}
-        className="flex flex-col gap-4 rounded-md border border-slate-200 bg-white p-4"
+        className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
       >
         <h2 id="titulo-nuevo-bloqueo" className="text-lg font-semibold">
           Nuevo bloqueo

@@ -1,11 +1,110 @@
 import { useState, type ReactNode } from 'react';
+import { Link } from 'react-router';
 import { ErrorApi, mensajeDeError } from '@/api/errores';
 import type { components } from '@/api/esquema';
 import { Alerta } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Dialogo } from '@/components/ui/Dialogo';
+import { EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Icono, type NombreIcono } from '@/components/ui/Icono';
 import { AreaTexto } from '@/components/ui/Selector';
 import { TEXTO_ESTADO } from './textos';
+
+/** Tarjeta blanca de una sección o de un formulario de filtros del panel. */
+export const estiloPanel = 'rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5';
+
+/**
+ * Encabezado de cada pantalla del panel: enlace para volver (en detalles), título que recibe el foco, una frase
+ * de para qué sirve y las acciones principales a la derecha.
+ */
+export function EncabezadoPagina({
+  titulo,
+  descripcion,
+  volver,
+  acciones,
+  children,
+}: {
+  titulo: ReactNode;
+  descripcion?: ReactNode;
+  volver?: { a: string; texto: string };
+  acciones?: ReactNode;
+  /** Algo bajo el título, por ejemplo el estado de una cita. */
+  children?: ReactNode;
+}) {
+  return (
+    <header className="flex flex-col gap-3">
+      {volver && (
+        <Link
+          to={volver.a}
+          className="inline-flex min-h-11 items-center gap-1.5 self-start text-sm font-semibold text-slate-600 hover:text-guinda-800"
+        >
+          <Icono nombre="flechaIzquierda" className="size-4" />
+          {volver.texto}
+        </Link>
+      )}
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+        <div className="flex min-w-0 flex-col gap-1.5">
+          <EncabezadoPaso className="text-2xl tracking-tight text-slate-950 sm:text-3xl">
+            {titulo}
+          </EncabezadoPaso>
+          {descripcion && <p className="max-w-3xl text-slate-600">{descripcion}</p>}
+          {children}
+        </div>
+        {acciones && <div className="flex flex-wrap items-center gap-2">{acciones}</div>}
+      </div>
+    </header>
+  );
+}
+
+/** Sección con título dentro de una pantalla del panel. */
+export function Panel({
+  titulo,
+  descripcion,
+  acciones,
+  icono,
+  children,
+  className = '',
+}: {
+  titulo?: string;
+  descripcion?: ReactNode;
+  acciones?: ReactNode;
+  icono?: NombreIcono;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={`${estiloPanel} flex flex-col gap-4 ${className}`}>
+      {(titulo || acciones) && (
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex flex-col gap-1">
+            {titulo && (
+              <h2 className="flex items-center gap-2 text-lg font-bold text-slate-950">
+                {icono && <Icono nombre={icono} className="text-guinda-700" />}
+                {titulo}
+              </h2>
+            )}
+            {descripcion && <p className="text-sm text-slate-600">{descripcion}</p>}
+          </div>
+          {acciones}
+        </div>
+      )}
+      {children}
+    </section>
+  );
+}
+
+/** Lista o búsqueda sin resultados: dice qué pasó y, si aplica, qué hacer. */
+export function SinResultados({ titulo, children }: { titulo: string; children?: ReactNode }) {
+  return (
+    <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+      <span className="grid size-11 place-items-center rounded-full bg-slate-100 text-slate-500">
+        <Icono nombre="buscar" />
+      </span>
+      <p className="font-semibold text-slate-900">{titulo}</p>
+      {children && <div className="max-w-md text-sm text-slate-600">{children}</div>}
+    </div>
+  );
+}
 
 type EstadoCita = components['schemas']['EstadoCita'];
 
@@ -36,18 +135,22 @@ export function ErrorPanel({ error, alRecargar }: { error: unknown; alRecargar?:
   );
 }
 
-const coloresEstado: Record<EstadoCita, string> = {
-  Agendada: 'bg-blue-50 text-blue-900 border-blue-300',
-  Atendida: 'bg-green-50 text-green-900 border-green-300',
-  NoAsistio: 'bg-amber-50 text-amber-900 border-amber-300',
-  Cancelada: 'bg-slate-100 text-slate-800 border-slate-300',
-  Reprogramada: 'bg-slate-100 text-slate-800 border-slate-300',
+const coloresEstado: Record<EstadoCita, { caja: string; punto: string }> = {
+  Agendada: { caja: 'bg-blue-50 text-blue-900 ring-blue-200', punto: 'bg-blue-600' },
+  Atendida: { caja: 'bg-emerald-50 text-emerald-900 ring-emerald-200', punto: 'bg-emerald-600' },
+  NoAsistio: { caja: 'bg-amber-50 text-amber-900 ring-amber-200', punto: 'bg-amber-500' },
+  Cancelada: { caja: 'bg-slate-100 text-slate-800 ring-slate-200', punto: 'bg-slate-400' },
+  Reprogramada: { caja: 'bg-violet-50 text-violet-900 ring-violet-200', punto: 'bg-violet-500' },
 };
 
-/** Estado de la cita con texto: el color solo acompaña. */
+/** Estado de la cita con texto: el color y el punto solo acompañan. */
 export function EtiquetaEstado({ estado }: { estado: EstadoCita }) {
+  const color = coloresEstado[estado];
   return (
-    <span className={`inline-block rounded border px-2 py-0.5 text-sm font-medium ${coloresEstado[estado]}`}>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-sm font-medium whitespace-nowrap ring-1 ring-inset ${color.caja}`}
+    >
+      <span aria-hidden="true" className={`size-1.5 rounded-full ${color.punto}`} />
       {TEXTO_ESTADO[estado]}
     </span>
   );
@@ -67,15 +170,26 @@ export function Paginacion({ pagina, tamano, total, alCambiar }: PaginacionProps
   const hasta = Math.min(total, pagina * tamano);
   return (
     <nav aria-label="Páginas" className="flex flex-wrap items-center justify-between gap-2">
-      <p className="text-sm text-slate-700">
-        {total === 0 ? 'Sin resultados' : `${desde} a ${hasta} de ${total}`}
+      <p className="text-sm text-slate-600">
+        {total === 0 ? (
+          'Sin resultados'
+        ) : (
+          <>
+            <span className="font-semibold text-slate-900">
+              {desde} a {hasta}
+            </span>{' '}
+            de {total}
+          </>
+        )}
       </p>
       <div className="flex gap-2">
         <Boton variante="secundario" disabled={pagina <= 1} onClick={() => alCambiar(pagina - 1)}>
+          <Icono nombre="chevronIzquierda" className="size-4" />
           Anterior
         </Boton>
         <Boton variante="secundario" disabled={pagina >= paginas} onClick={() => alCambiar(pagina + 1)}>
           Siguiente
+          <Icono nombre="chevronDerecha" className="size-4" />
         </Boton>
       </div>
     </nav>
@@ -158,8 +272,8 @@ export function DialogoConfirmar({
 export function TablaDesplazable({ etiqueta, children }: { etiqueta: string; children: ReactNode }) {
   return (
     // relative: el texto sr-only de los encabezados es absoluto y, sin esto, se sale del desplazamiento en celular.
-    <div className="relative overflow-x-auto rounded-md border border-slate-200 bg-white">
-      <table className="w-full min-w-[40rem] border-collapse text-left text-sm">
+    <div className="relative overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+      <table className="w-full min-w-[40rem] border-collapse text-left text-sm [&_tbody_tr]:transition-colors [&_tbody_tr:hover]:bg-slate-50/80">
         <caption className="sr-only">{etiqueta}</caption>
         {children}
       </table>
@@ -167,5 +281,6 @@ export function TablaDesplazable({ etiqueta, children }: { etiqueta: string; chi
   );
 }
 
-export const celdaEncabezado = 'border-b border-slate-200 bg-slate-50 px-3 py-2 font-semibold text-slate-800';
-export const celda = 'border-b border-slate-100 px-3 py-2 align-top';
+export const celdaEncabezado =
+  'border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold tracking-wide text-slate-600 uppercase';
+export const celda = 'border-b border-slate-100 px-4 py-3 align-top';

@@ -2,16 +2,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useFieldArray, useForm, type Path } from 'react-hook-form';
-import { Link, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { api, datos } from '@/api/cliente';
 import type { components } from '@/api/esquema';
 import { copiarErroresAlFormulario } from '@/api/errores';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Campo, Casilla } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import { AreaTexto, Selector } from '@/components/ui/Selector';
-import { ErrorPanel } from '@/features/admin/comun/Componentes';
+import { EncabezadoPagina, ErrorPanel } from '@/features/admin/comun/Componentes';
 import { usePermisos } from '@/features/admin/comun/permisos';
 import { clavesAdmin, useCatalogosAdmin } from '@/features/admin/comun/useCatalogosAdmin';
 import {
@@ -45,10 +45,10 @@ export function PaginaTramite() {
 
   return (
     <section className="flex max-w-3xl flex-col gap-4">
-      <Link to="/admin/tramites" className="text-guinda-700 underline">
-        Volver a trámites
-      </Link>
-      <EncabezadoPaso>{nuevo ? 'Nuevo trámite' : (tramite.data?.nombre ?? 'Trámite')}</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo={nuevo ? 'Nuevo trámite' : (tramite.data?.nombre ?? 'Trámite')}
+        volver={{ a: '/admin/tramites', texto: 'Volver a trámites' }}
+      />
       {nuevo && !administrador && <Alerta tono="error">No tienes permiso para esta acción.</Alerta>}
       {nuevo && administrador && <FormularioTramite detalle={null} editable />}
       {!nuevo && tramite.isPending && <Cargando texto="Cargando el trámite…" />}
@@ -138,7 +138,7 @@ function FormularioTramite({ detalle, editable, alRecargar }: FormularioTramiteP
         />
         <Casilla etiqueta="Activo: se puede ofrecer y agendar" {...register('activo')} />
 
-        <fieldset className="flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4">
+        <fieldset className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
           <legend className="px-1 font-semibold">Requisitos</legend>
           <p className="text-sm text-slate-600">
             Se muestran en este orden. Un requisito sin nivel escolar aplica a todos los niveles.

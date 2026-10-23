@@ -2,10 +2,11 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { api, datos } from '@/api/cliente';
 import { Boton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
-import { Cargando, EncabezadoPaso } from '@/components/ui/Encabezado';
+import { Cargando } from '@/components/ui/Encabezado';
 import {
   celda,
   celdaEncabezado,
+  EncabezadoPagina,
   ErrorPanel,
   Paginacion,
   TablaDesplazable,
@@ -42,7 +43,10 @@ export function PaginaAuditoria() {
 
   return (
     <section className="flex flex-col gap-6">
-      <EncabezadoPaso>Auditoría</EncabezadoPaso>
+      <EncabezadoPagina
+        titulo="Auditoría"
+        descripcion="Última ejecución de los procesos programados y bitácora de las acciones del personal."
+      />
 
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold">Procesos programados</h2>
@@ -89,7 +93,7 @@ export function PaginaAuditoria() {
           key={firma}
           role="search"
           aria-label="Filtros de la bitácora"
-          className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 sm:grid-cols-2 lg:grid-cols-3"
           onSubmit={(e) => {
             e.preventDefault();
             aplicar(e.currentTarget);

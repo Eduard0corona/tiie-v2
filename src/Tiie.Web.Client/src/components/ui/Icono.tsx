@@ -104,7 +104,36 @@ const trazos = {
   cambiar: <path d="M4 12a8 8 0 0 1 14-5.3M18.5 3v4h-4M20 12a8 8 0 0 1-14 5.3M5.5 21v-4h4" />,
   salir: <path d="M15 4h3.5a1.5 1.5 0 0 1 1.5 1.5v13a1.5 1.5 0 0 1-1.5 1.5H15M10 17l5-5-5-5M15 12H3.5" />,
   chevronAbajo: <path d="M6 9l6 6 6-6" />,
+  chevronIzquierda: <path d="M15 6l-6 6 6 6" />,
+  chevronDerecha: <path d="M9 6l6 6-6 6" />,
   rayo: <path d="M13 2.5L4.5 13.5H12l-1 8 8.5-11H12l1-8z" />,
+  buscar: (
+    <>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M16 16l4.5 4.5" />
+    </>
+  ),
+  grafica: <path d="M4 20V10M10 20V4M16 20v-7M21 20H3" />,
+  grupo: (
+    <>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6" />
+    </>
+  ),
+  prohibido: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M5.6 5.6l12.8 12.8" />
+    </>
+  ),
+  menu: <path d="M4 7h16M4 12h16M4 17h16" />,
+  mas: <path d="M12 5v14M5 12h14" />,
+  ventanilla: (
+    <>
+      <path d="M3 10h18v10H3zM3 10l2-5h14l2 5" />
+      <path d="M9 20v-5h6v5" />
+    </>
+  ),
 } satisfies Record<string, ReactNode>;
 
 export type NombreIcono = keyof typeof trazos;

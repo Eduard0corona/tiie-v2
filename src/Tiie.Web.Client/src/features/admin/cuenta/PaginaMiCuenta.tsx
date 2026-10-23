@@ -6,8 +6,8 @@ import { ErrorApi, copiarErroresAlFormulario, mensajeDeError } from '@/api/error
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Campo } from '@/components/ui/Campo';
-import { EncabezadoPaso } from '@/components/ui/Encabezado';
 import { esquemaCambioContrasena, type ValoresCambioContrasena } from '@/features/admin/sesion/esquemas';
+import { EncabezadoPagina } from '@/features/admin/comun/Componentes';
 
 export function PaginaMiCuenta() {
   const formulario = useForm<ValoresCambioContrasena>({
@@ -34,10 +34,14 @@ export function PaginaMiCuenta() {
     cambiar.isError && !(cambiar.error instanceof ErrorApi && cambiar.error.codigo === 'Validacion');
 
   return (
-    <section className="max-w-md">
-      <form onSubmit={enviar} noValidate className="flex flex-col gap-4">
-        <EncabezadoPaso>Mi cuenta</EncabezadoPaso>
-        <h2 className="text-lg font-semibold">Cambiar contraseña</h2>
+    <section className="flex max-w-xl flex-col gap-6">
+      <EncabezadoPagina titulo="Mi cuenta" descripcion="Tu contraseña para entrar al panel." />
+      <form
+        onSubmit={enviar}
+        noValidate
+        className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
+      >
+        <h2 className="text-lg font-bold text-slate-950">Cambiar contraseña</h2>
         <RegionAnuncios>
           {cambiar.isSuccess && <Alerta tono="exito">Tu contraseña cambió.</Alerta>}
           {errorGeneral && <Alerta tono="error">{mensajeDeError(cambiar.error)}</Alerta>}

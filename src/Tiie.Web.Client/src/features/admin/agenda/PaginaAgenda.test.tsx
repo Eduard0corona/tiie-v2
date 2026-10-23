@@ -68,4 +68,72 @@ describe('Agenda del día', () => {
     expect(screen.queryByRole('button', { name: /Atendida/ })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /No asistió/ })).not.toBeInTheDocument();
   });
+
+  it('muestra cómo va el día: por atender, la siguiente cita y el avance de la asistencia', async () => {
+    servidor.use(
+      api.yo(() => sesionPersonal()),
+      admin.agenda(() => [
+        citaAgenda({ citaId: 1, folio: '261103-1000001', hora: '08:00', estado: 'Atendida' }),
+        citaAgenda({ citaId: 2, folio: '261103-1000002', hora: '09:00', estado: 'NoAsistio' }),
+        citaAgenda({ citaId: 3, folio: '261103-1000003', hora: '09:30' }),
+        citaAgenda({ citaId: 4, folio: '261103-1000004', hora: '10:30' }),
+        citaAgenda({ citaId: 5, folio: '261103-1000005', hora: '11:00', estado: 'Cancelada' }),
+      ]),
+    );
+    renderizarRuta('/admin/agenda');
+
+    const resumen = await screen.findByRole('list', { name: 'Resumen del día' });
+    const porAtender = within(resumen).getByText('Por atender').closest('li') as HTMLElement;
+    expect(within(porAtender).getByText('2')).toBeInTheDocument();
+    expect(within(porAtender).getByText('1 ya pasó su hora')).toBeInTheDocument();
+    expect(within(resumen).getByText('Sin contar 1 cancelada')).toBeInTheDocument();
+    expect(screen.getByText('Asistencia registrada: 2 de 4')).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('row', { name: /261103-1000004/ })).getByText('Siguiente'),
+    ).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('row', { name: /261103-1000003/ })).getByText('Pasó su hora'),
+    ).toBeInTheDocument();
+  });
+
+  it('filtra por estado y busca por nombre, folio o CURP', async () => {
+    servidor.use(
+      api.yo(() => sesionPersonal()),
+      admin.agenda(() => [
+        citaAgenda({ citaId: 1, folio: '261103-1000001', hora: '08:00', estado: 'Atendida' }),
+        citaAgenda({ citaId: 2, folio: '261103-1000002', hora: '09:00', nombreCompleto: 'Luis Pérez Soto' }),
+      ]),
+    );
+    const { usuario } = renderizarRuta('/admin/agenda');
+
+    await usuario.click(await screen.findByRole('radio', { name: /Atendidas/ }));
+    expect(screen.getByRole('row', { name: /261103-1000001/ })).toBeInTheDocument();
+    expect(screen.queryByRole('row', { name: /261103-1000002/ })).not.toBeInTheDocument();
+
+    await usuario.click(screen.getByRole('radio', { name: /Todas/ }));
+    await usuario.type(screen.getByRole('searchbox', { name: 'Buscar en la agenda' }), 'perez');
+    expect(screen.getByRole('row', { name: /261103-1000002/ })).toBeInTheDocument();
+    expect(screen.queryByRole('row', { name: /261103-1000001/ })).not.toBeInTheDocument();
+
+    await usuario.type(screen.getByRole('searchbox', { name: 'Buscar en la agenda' }), 'xyz');
+    expect(screen.getByText('Ninguna cita coincide con el filtro.')).toBeInTheDocument();
+  });
+
+  it('cambia de día con las flechas y vuelve a hoy', async () => {
+    servidor.use(
+      api.yo(() => sesionPersonal()),
+      admin.agenda(() => []),
+    );
+    const { router, usuario } = renderizarRuta('/admin/agenda');
+
+    expect(await screen.findByRole('button', { name: 'Hoy' })).toBeDisabled();
+    await usuario.click(screen.getByRole('button', { name: 'Día siguiente' }));
+    expect(await screen.findByText('miércoles 4 de noviembre de 2026')).toBeInTheDocument();
+    expect(router.state.location.search).toContain('fecha=2026-11-04');
+
+    await usuario.click(screen.getByRole('button', { name: 'Hoy' }));
+    expect(await screen.findByText('martes 3 de noviembre de 2026')).toBeInTheDocument();
+    await usuario.click(screen.getByRole('button', { name: 'Día anterior' }));
+    expect(router.state.location.search).toContain('fecha=2026-11-02');
+  });
 });

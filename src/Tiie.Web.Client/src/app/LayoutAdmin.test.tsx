@@ -1,5 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react';
-import { admin } from '@/test/admin';
+import { http, HttpResponse } from 'msw';
+import { admin, citaAgenda } from '@/test/admin';
 import { api, problema, sesionPersonal } from '@/test/api';
 import { renderizarRuta } from '@/test/renderizar';
 import { servidor } from '@/test/servidor';
@@ -119,5 +120,91 @@ describe('Guarda del panel', () => {
     await usuario.click(boton);
     expect(boton).toHaveAttribute('aria-expanded', 'true');
     expect(boton).toHaveAttribute('aria-controls', 'menu-panel');
+  });
+
+  it('Escape cierra el menú en celular', async () => {
+    servidor.use(
+      api.yo(() => sesionPersonal()),
+      admin.agenda(() => []),
+    );
+    const { usuario } = renderizarRuta('/admin/agenda');
+
+    const boton = await screen.findByRole('button', { name: 'Menú' });
+    await usuario.click(boton);
+    expect(boton).toHaveAttribute('aria-expanded', 'true');
+    await usuario.keyboard('{Escape}');
+    expect(boton).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('el menú agrupa por tarea y marca la pantalla actual', async () => {
+    servidor.use(
+      api.yo(() => sesionPersonal({ rol: 'Administrador' })),
+      admin.agenda(() => []),
+    );
+    renderizarRuta('/admin/agenda');
+
+    const menu = await screen.findByRole('navigation', { name: 'Panel' });
+    const operacion = within(menu).getByRole('list', { name: 'Operación' });
+    expect(within(operacion).getByRole('link', { name: 'Agenda' })).toHaveAttribute('aria-current', 'page');
+    expect(within(operacion).getByRole('link', { name: 'Ventanilla' })).not.toHaveAttribute('aria-current');
+    expect(within(menu).getByRole('list', { name: 'Configuración' })).toBeInTheDocument();
+    expect(
+      within(within(menu).getByRole('list', { name: 'Administración' })).getByRole('link', {
+        name: 'Usuarios',
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it('la búsqueda global lleva a Citas con el folio o la CURP ya aplicados', async () => {
+    let busqueda: string | null = null;
+    servidor.use(
+      api.yo(() => sesionPersonal()),
+      admin.agenda(() => []),
+      admin.modulos(),
+      admin.tiposTramite(),
+      http.get('/api/admin/citas', ({ request }) => {
+        busqueda = new URL(request.url).searchParams.get('busqueda');
+        return HttpResponse.json({ elementos: [], total: 0, pagina: 1, tamano: 20 });
+      }),
+    );
+    const { router, usuario } = renderizarRuta('/admin/agenda');
+
+    await screen.findByRole('heading', { name: 'Agenda del día' });
+    await usuario.type(
+      screen.getByRole('searchbox', { name: 'Buscar cita por folio o CURP' }),
+      ' 261103-1000042 {Enter}',
+    );
+
+    await waitFor(() => expect(router.state.location.pathname).toBe('/admin/citas'));
+    expect(router.state.location.search).toBe('?busqueda=261103-1000042');
+    expect(await screen.findByRole('heading', { name: 'Citas' })).toBeInTheDocument();
+    await waitFor(() => expect(busqueda).toBe('261103-1000042'));
+    expect(screen.getByLabelText('Folio o CURP')).toHaveValue('261103-1000042');
+  });
+
+  it('«/» enfoca la búsqueda global, salvo cuando ya se escribe en un campo', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(Date.UTC(2026, 10, 3, 17, 0));
+    try {
+      servidor.use(
+        api.yo(() => sesionPersonal()),
+        admin.agenda(() => [citaAgenda()]),
+      );
+      const { usuario } = renderizarRuta('/admin/agenda');
+      const global = await screen.findByRole('searchbox', { name: 'Buscar cita por folio o CURP' });
+      const enAgenda = await screen.findByRole('searchbox', { name: 'Buscar en la agenda' });
+
+      await usuario.click(enAgenda);
+      await usuario.keyboard('/');
+      expect(enAgenda).toHaveValue('/');
+      expect(global).not.toHaveFocus();
+
+      enAgenda.blur();
+      await usuario.keyboard('/');
+      expect(global).toHaveFocus();
+      expect(global).toHaveValue('');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

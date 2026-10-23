@@ -67,10 +67,11 @@ Objetivo: reducir el riesgo del sistema de 2016 mientras se construye la versió
 | E16 Información | H-3.11 Reportes con exportación · H-3.12 Tablero | RF-17, RF-18 |
 | E17 Administración | H-3.13 Usuarios, invitaciones y restablecimiento de MFA · H-3.14 Bitácora de auditoría y estado de procesos | RF-16, RF-19 |
 | E18 Procesos | H-3.15 Cierre diario · H-3.16 Retención (desactivada hasta definir el plazo) | RF-20 |
+| E23 Experiencia del panel | H-3.17 Marco con menú agrupado y búsqueda global · H-3.18 Agenda para el mostrador · H-3.19 Tablero legible · H-3.20 Estilo común de pantallas · H-3.21 Agenda en tarjetas en celular · H-3.22 Atajos en la agenda · H-3.23 Prueba con personal de módulo | [17](17-experiencia-del-panel.md#backlog), RF-09, RF-18 |
 
 **Puerta:** supervisores y capturistas aprueban en QA una semana simulada de operación; revisión contra OWASP ASVS nivel 2 sin pendientes altos.
 
-**Estado (2026-10-23):** H-3.1 a H-3.16 implementadas, con la matriz de autorización probada en cada endpoint de `/api/admin` y pruebas de componentes del panel. H-3.16 (retención) existe desactivada hasta definir el plazo. Falta la semana simulada con operación y la revisión ASVS.
+**Estado (2026-10-23):** H-3.1 a H-3.16 implementadas, con la matriz de autorización probada en cada endpoint de `/api/admin` y pruebas de componentes del panel. H-3.16 (retención) existe desactivada hasta definir el plazo. Falta la semana simulada con operación y la revisión ASVS. E23: H-3.17 a H-3.20 implementadas con pruebas de componentes; H-3.21 a H-3.23 pendientes.
 
 ## Fase 4 · Migración y salida
 

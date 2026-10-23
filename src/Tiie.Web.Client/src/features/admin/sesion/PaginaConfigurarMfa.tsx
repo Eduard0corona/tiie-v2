@@ -78,7 +78,7 @@ function PasoConfigurar({ alActivar }: { alActivar: (codigos: string[]) => void 
       {clave.isPending && <Cargando texto="Preparando tu clave…" />}
       {clave.isError && <Alerta tono="error">{mensajeDeError(clave.error)}</Alerta>}
       {clave.data && (
-        <div className="flex flex-col items-center gap-3 rounded-md border border-slate-200 p-4">
+        <div className="flex flex-col items-center gap-3 rounded-xl border border-slate-200 p-4">
           <QRCodeSVG
             value={clave.data.uriAutenticador}
             size={192}
@@ -146,7 +146,7 @@ function PasoCodigosRecuperacion({ codigos }: { codigos: string[] }) {
         Si pierdes tu celular, cada uno de estos códigos te deja entrar una sola vez. Guárdalos en un lugar
         seguro: no los volveremos a mostrar.
       </p>
-      <ol aria-label="Códigos de recuperación" className="grid grid-cols-2 gap-2 rounded-md bg-slate-100 p-4">
+      <ol aria-label="Códigos de recuperación" className="grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-4">
         {codigos.map((codigo) => (
           <li key={codigo} className="font-mono text-base tracking-wider">
             {codigo}

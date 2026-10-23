@@ -1,6 +1,6 @@
 # 16 · Experiencia de usuario y diseño del sitio público
 
-Diseño de la portada y del servicio de citas: el asistente de reserva, «Mi cita» y la recuperación del enlace. El panel `/admin` queda fuera; comparte los componentes base y hereda sus mejoras de accesibilidad, pero su diseño no cambia aquí. Las reglas siguen en el backend ([03](03-reglas-de-negocio.md)): la interfaz las explica, nunca las decide.
+Diseño de la portada y del servicio de citas: el asistente de reserva, «Mi cita» y la recuperación del enlace. El panel `/admin` tiene su propio documento ([17](17-experiencia-del-panel.md)) y comparte con el sitio los tokens y los componentes base. Las reglas siguen en el backend ([03](03-reglas-de-negocio.md)): la interfaz las explica, nunca las decide.
 
 ## Problema
 

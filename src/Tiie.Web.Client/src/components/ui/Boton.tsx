@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 
-export type Variante = 'primario' | 'secundario' | 'enlace' | 'peligro' | 'destructivo' | 'claro';
+export type Variante = 'primario' | 'secundario' | 'enlace' | 'peligro' | 'destructivo' | 'exito' | 'claro';
 export type Tamano = 'normal' | 'grande';
 
 const estilos: Record<Variante, string> = {
@@ -13,6 +13,8 @@ const estilos: Record<Variante, string> = {
     'border border-red-200 bg-white text-red-800 hover:border-red-300 hover:bg-red-50 disabled:text-slate-400',
   destructivo:
     'bg-red-700 text-white shadow-sm hover:bg-red-800 disabled:bg-slate-300 disabled:text-slate-600',
+  exito:
+    'bg-emerald-700 text-white shadow-sm hover:bg-emerald-800 disabled:bg-slate-300 disabled:text-slate-600',
   claro: 'bg-white text-guinda-800 shadow-sm hover:bg-guinda-50',
 };
 
