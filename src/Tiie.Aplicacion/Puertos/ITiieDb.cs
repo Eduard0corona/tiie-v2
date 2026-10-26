@@ -6,6 +6,7 @@ using Tiie.Dominio.Bitacora;
 using Tiie.Dominio.Catalogos;
 using Tiie.Dominio.Citas;
 using Tiie.Dominio.Notificaciones;
+using Tiie.Dominio.Sitio;
 using Tiie.Dominio.Solicitantes;
 
 namespace Tiie.Aplicacion.Puertos;
@@ -29,6 +30,8 @@ public interface ITiieDb
     DbSet<Notificacion> Notificaciones { get; }
     DbSet<Auditoria> Auditorias { get; }
     DbSet<EjecucionProceso> EjecucionesProceso { get; }
+    DbSet<ContenidoPortada> ContenidosPortada { get; }
+    DbSet<PreguntaFrecuente> PreguntasFrecuentes { get; }
 
     DatabaseFacade Database { get; }
 

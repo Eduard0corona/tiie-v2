@@ -59,6 +59,7 @@ Un solo sitio ASP.NET Core 10 que sirve una SPA de React. La parte pública agen
 | Procesos en segundo plano | `src/Tiie.Aplicacion/Procesos/`, registrados en `src/Tiie.Web/Program.cs` |
 | Cliente HTTP del frontend | `src/Tiie.Web.Client/src/api/` |
 | Fechas y zona horaria en React | `src/Tiie.Web.Client/src/lib/fechas.ts` |
+| Contenido editable de la portada | `src/Tiie.Aplicacion/Sitio/` y `src/Tiie.Web.Client/src/features/admin/portada/` (enlaces: `src/Tiie.Dominio/Sitio/ReglasPortada.cs` y `src/Tiie.Web.Client/src/lib/enlaces.ts`) |
 | Validación de CURP (ambos lados) | `src/Tiie.Dominio/Solicitantes/Curp.cs` y `src/Tiie.Web.Client/src/lib/curp.ts` |
 | Recursos de Azure | `infra/` (Bicep) |
 | Despliegue | `.github/workflows/despliegue.yml` y `tests/humo/humo.mjs` |

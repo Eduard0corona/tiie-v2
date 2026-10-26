@@ -41,6 +41,8 @@ Los errores de validación agregan `errors` por campo:
 }
 ```
 
+Las llaves de `errors` siguen el JSON, en camelCase en cada tramo: un campo de una lista se nombra `preguntas[0].respuesta`.
+
 El documento OpenAPI declara este formato como el esquema `ProblemaApi` (con `codigo` como la enumeración `CodigoError`) y lo asigna como respuesta `default` de cada operación; la SPA toma de ahí sus tipos de error.
 
 | HTTP | `codigo` | Cuándo |
@@ -77,6 +79,21 @@ Valores que la SPA necesita al arrancar.
 
 ```json
 { "claveSitioCaptcha": "1x00000000000000000000AA", "versionAvisoPrivacidad": "2026-01", "zonaHoraria": "America/Mazatlan" }
+```
+
+### `GET /api/publico/portada`
+
+Encabezado, aviso y preguntas frecuentes de la portada; los edita el administrador ([16](16-experiencia-de-usuario.md#contenido-editable)). Mientras no se guarde nada, responde el contenido predeterminado. `aviso` es `null` si no hay aviso o si hoy, en la hora de Sinaloa, está fuera de sus fechas. Los textos son planos; los enlaces se escriben `[texto](destino)`.
+
+```json
+{
+  "etiqueta": "Trámite presencial en los módulos de Sinaloa",
+  "titulo": "Agenda tu cita para la",
+  "tituloDestacado": "Tarjeta Inteligente de Identidad Estudiantil",
+  "descripcion": "Elige la sede, el día y la hora desde tu celular…",
+  "aviso": { "texto": "El 2 de noviembre no habrá servicio. Revisa [las sedes](/#sedes).", "tono": "Importante" },
+  "preguntas": [{ "pregunta": "¿Necesito crear una cuenta?", "respuesta": "No. Solo necesitas la CURP…" }]
+}
 ```
 
 ### `GET /api/publico/tipos-tramite`
@@ -327,6 +344,15 @@ Respuesta de `POST /api/admin/bloqueos`:
   "citasAfectadas": [{ "citaId": 5012, "folio": "261103-1000042", "fecha": "2026-11-16", "hora": "10:30" }]
 }
 ```
+
+### Sitio
+
+Solo Administrador.
+
+| Método | Ruta | Cuerpo | Notas |
+| --- | --- | --- | --- |
+| GET | `/api/admin/portada` | — | `{ etiqueta, titulo, tituloDestacado, descripcion, avisoTexto, avisoTono, avisoDesde, avisoHasta, estadoAviso, preguntas, version, modificadoEn }`. `version` es `null` mientras se muestre el contenido predeterminado; `estadoAviso` es `SinAviso`, `Programado`, `Visible` o `Vencido` según hoy en Sinaloa |
+| PUT | `/api/admin/portada` | `{ etiqueta, titulo, tituloDestacado, descripcion, avisoTexto, avisoTono, avisoDesde, avisoHasta, preguntas: [{ pregunta, respuesta }], version }` | Guarda todo y reemplaza las preguntas en el orden recibido (hasta 20). `version` es la que se leyó: `null` la primera vez. 409 `Conflicto` si alguien guardó antes; 422 si un texto falta o se pasa de largo, si las fechas están al revés o si un enlace no empieza con `/`, `https://`, `mailto:` o `tel:`. Registra `Portada.Guardar` en la bitácora |
 
 ### Usuarios
 

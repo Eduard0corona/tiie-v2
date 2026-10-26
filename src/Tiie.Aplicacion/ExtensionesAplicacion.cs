@@ -14,6 +14,7 @@ using Tiie.Aplicacion.Publico;
 using Tiie.Aplicacion.Reloj;
 using Tiie.Aplicacion.Reportes;
 using Tiie.Aplicacion.Reservas;
+using Tiie.Aplicacion.Sitio;
 
 namespace Tiie.Aplicacion;
 
@@ -53,6 +54,7 @@ public static class ExtensionesAplicacion
         services.AddScoped<ConsultarCatalogoPublicoManejador>();
         services.AddScoped<ConsultarDisponibilidadManejador>();
         services.AddScoped<ConsultarCuposManejador>();
+        services.AddScoped<PortadaManejador>();
         services.AddScoped<CrearCitaManejador>();
         services.AddScoped<RecuperarEnlaceManejador>();
         services.AddScoped<AccederConTokenManejador>();

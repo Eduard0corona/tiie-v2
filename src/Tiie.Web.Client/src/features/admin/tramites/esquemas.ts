@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import type { components } from '@/api/esquema';
-import { ErrorApi } from '@/api/errores';
 
 type DatosTipoTramite = components['schemas']['DatosTipoTramite'];
 type TipoTramiteDetalle = components['schemas']['TipoTramiteDetalle'];
@@ -70,13 +69,4 @@ export function datosDeTramite(v: ValoresTramite, version: string | null): Datos
     })),
     version,
   };
-}
-
-/** Los errores de la API llegan como `requisitos[0].texto`; el formulario los nombra `requisitos.0.texto`. */
-export function rutasDeFormulario(error: unknown): unknown {
-  if (!(error instanceof ErrorApi)) return error;
-  const errors = Object.fromEntries(
-    Object.entries(error.errors).map(([campo, mensajes]) => [campo.replace(/\[(\d+)\]/g, '.$1'), mensajes]),
-  );
-  return new ErrorApi(error.status, { ...error.problema, errors });
 }

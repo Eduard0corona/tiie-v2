@@ -48,6 +48,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/publico/portada": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PortadaPublica"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/publico/tipos-tramite": {
         parameters: {
             query?: never;
@@ -2959,6 +3003,82 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/portada": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PortadaAdmin"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DatosPortada"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PortadaAdmin"];
+                    };
+                };
+                /** @description Error como Problem Details con codigo. */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["ProblemaApi"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/auditoria": {
         parameters: {
             query?: never;
@@ -3083,6 +3203,10 @@ export interface components {
         };
         /** @enum {string} */
         AlcanceBloqueo: "General" | "Modulo" | "Oferta";
+        AvisoPortada: {
+            texto: string;
+            tono: components["schemas"]["TonoAviso"];
+        };
         BloqueoCreado: {
             /** Format: int32 */
             bloqueoId: number;
@@ -3266,6 +3390,20 @@ export interface components {
             longitud: null | number;
             version?: null | string;
         };
+        DatosPortada: {
+            etiqueta: string;
+            titulo: string;
+            tituloDestacado: null | string;
+            descripcion: string;
+            avisoTexto: null | string;
+            avisoTono: components["schemas"]["TonoAviso"];
+            /** Format: date */
+            avisoDesde: null | string;
+            /** Format: date */
+            avisoHasta: null | string;
+            preguntas: components["schemas"]["PreguntaPortada"][];
+            version: null | string;
+        };
         DatosTipoTramite: {
             nombre: string;
             descripcion: null | string;
@@ -3354,6 +3492,8 @@ export interface components {
             hasta: string;
             dias: components["schemas"]["DiaDisponible"][];
         };
+        /** @enum {string} */
+        EstadoAviso: "SinAviso" | "Programado" | "Visible" | "Vencido";
         /** @enum {string} */
         EstadoCita: "Agendada" | "Atendida" | "NoAsistio" | "Cancelada" | "Reprogramada";
         /** @enum {string} */
@@ -3569,6 +3709,35 @@ export interface components {
         PlantillaSemanal: {
             dias: components["schemas"]["DiaPlantilla"][];
         };
+        PortadaAdmin: {
+            etiqueta: string;
+            titulo: string;
+            tituloDestacado: null | string;
+            descripcion: string;
+            avisoTexto: null | string;
+            avisoTono: components["schemas"]["TonoAviso"];
+            /** Format: date */
+            avisoDesde: null | string;
+            /** Format: date */
+            avisoHasta: null | string;
+            estadoAviso: components["schemas"]["EstadoAviso"];
+            preguntas: components["schemas"]["PreguntaPortada"][];
+            version: null | string;
+            /** Format: date-time */
+            modificadoEn: null | string;
+        };
+        PortadaPublica: {
+            etiqueta: string;
+            titulo: string;
+            tituloDestacado: null | string;
+            descripcion: string;
+            aviso: null | components["schemas"]["AvisoPortada"];
+            preguntas: components["schemas"]["PreguntaPortada"][];
+        };
+        PreguntaPortada: {
+            pregunta: string;
+            respuesta: string;
+        };
         /** @description Problem Details (RFC 9457) con la extensión codigo. */
         ProblemaApi: {
             type?: string;
@@ -3773,6 +3942,8 @@ export interface components {
             /** Format: int32 */
             ofertas: number;
         };
+        /** @enum {string} */
+        TonoAviso: "Informativo" | "Importante";
         TotalEstado: {
             estado: components["schemas"]["EstadoCita"];
             /** Format: int32 */

@@ -95,7 +95,7 @@ Reglas:
 
 - `Agenda:MesesRetencion` define cuántos meses después de su última cita se anonimiza un solicitante. Mientras no se decida, está vacío y el proceso no hace nada.
 - Anonimizar: `Curp`, `Celular` y `Correo` a `NULL`; nombre y apellidos a «ANONIMIZADO»; `AnonimizadoEn = ahora`. Las citas se conservan para estadística.
-- Las notificaciones enviadas se borran a los 180 días.
+- Las notificaciones enviadas se borran a los 180 días, en lotes de 4 000 filas por sentencia: un solo `DELETE` escala a un candado de toda la tabla y detiene las reservas mientras dura ([18](18-analisis-de-base-de-datos.md)).
 - La base del sistema anterior queda en solo lectura y luego se archiva según la misma política ([14](14-migracion-de-datos.md)).
 
 ### Aviso de privacidad y derechos ARCO

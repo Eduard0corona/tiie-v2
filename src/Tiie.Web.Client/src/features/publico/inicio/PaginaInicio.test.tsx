@@ -1,6 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
-import { modulos, publico } from '@/test/publico';
+import { modulos, portada, publico } from '@/test/publico';
 import { renderizarRuta } from '@/test/renderizar';
 import { servidor } from '@/test/servidor';
 
@@ -78,5 +78,48 @@ describe('Inicio', () => {
     expect(within(filtros).getByRole('button', { name: 'Mazatlán' })).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByRole('heading', { name: 'Módulo Mazatlán' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Módulo Culiacán Centro' })).not.toBeInTheDocument();
+  });
+
+  it('muestra el aviso vigente y las respuestas con sus enlaces', async () => {
+    servidor.use(
+      http.get('/api/publico/portada', () =>
+        HttpResponse.json({
+          ...portada,
+          aviso: {
+            texto: 'No habrá servicio el 2 de noviembre. Revisa [las sedes](/#sedes).',
+            tono: 'Importante',
+          },
+        }),
+      ),
+      ...publico.catalogo(),
+    );
+    const { usuario } = renderizarRuta('/');
+
+    const aviso = await screen.findByRole('complementary', { name: 'Aviso importante' });
+    expect(aviso).toHaveTextContent('No habrá servicio el 2 de noviembre.');
+    expect(within(aviso).getByRole('link', { name: 'las sedes' })).toHaveAttribute('href', '/#sedes');
+
+    await usuario.click(screen.getByText('No encuentro el correo de mi cita'));
+    expect(screen.getByRole('link', { name: 'recupera tu enlace' })).toHaveAttribute('href', '/recuperar');
+    await usuario.click(screen.getByText('¿Dónde consulto mi CURP?'));
+    const externo = screen.getByRole('link', { name: 'gob.mx/curp (abre en una pestaña nueva)' });
+    expect(externo).toHaveAttribute('target', '_blank');
+    expect(externo).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('sin la API la portada conserva su título y sus acciones', async () => {
+    servidor.use(
+      http.get('/api/publico/portada', () => HttpResponse.json({ codigo: 'ErrorInterno' }, { status: 500 })),
+      ...publico.catalogo(),
+    );
+    renderizarRuta('/');
+
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Agenda tu cita para la Tarjeta Inteligente de Identidad Estudiantil',
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Agendar cita' })).toBeInTheDocument();
   });
 });

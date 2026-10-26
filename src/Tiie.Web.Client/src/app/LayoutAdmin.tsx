@@ -43,6 +43,7 @@ const grupos: readonly { titulo: string; enlaces: readonly Enlace[] }[] = [
     titulo: 'Administración',
     enlaces: [
       { a: '/admin/reportes', texto: 'Reportes', icono: 'documento', acceso: 'supervisor' },
+      { a: '/admin/portada', texto: 'Portada del sitio', icono: 'portada', acceso: 'administrador' },
       { a: '/admin/usuarios', texto: 'Usuarios', icono: 'grupo', acceso: 'administrador' },
       { a: '/admin/auditoria', texto: 'Auditoría', icono: 'escudo', acceso: 'administrador' },
     ],

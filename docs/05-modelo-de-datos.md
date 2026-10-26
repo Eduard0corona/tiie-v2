@@ -1,6 +1,6 @@
 # 05 · Modelo de datos
 
-17 tablas propias más las de Identity, con llave foránea en cada relación. La pieza central es `Cupo`: una fila por oferta, fecha y hora con su capacidad, que hace imposible la sobreventa ([ADR 0004](adr/0004-cupo-materializado.md)). El esquema se crea solo con migraciones de EF Core.
+19 tablas propias más las de Identity, con llave foránea en cada relación. La pieza central es `Cupo`: una fila por oferta, fecha y hora con su capacidad, que hace imposible la sobreventa ([ADR 0004](adr/0004-cupo-materializado.md)). El esquema se crea solo con migraciones de EF Core.
 
 ## Diagrama
 
@@ -25,6 +25,7 @@ erDiagram
     Modulo ||--o{ UsuarioModulo : tiene
     Usuario |o--o{ Auditoria : registra
     Usuario |o--o{ Cita : "crea o actualiza"
+    ContenidoPortada ||--o{ PreguntaFrecuente : contiene
 ```
 
 ## Convenciones
@@ -36,7 +37,7 @@ erDiagram
 - Enums como `tinyint` con restricción `CHECK`.
 - `CreadoEn` y `ModificadoEn` los llena un interceptor de EF Core con `TimeProvider`.
 - `RowVersion rowversion` en las tablas que edita el personal; un conflicto se responde con 409 `Conflicto`.
-- Llaves foráneas con `ON DELETE NO ACTION`, salvo filas de configuración hijas (`Requisito`, `PlantillaHorario`, `UsuarioModulo`), que usan `CASCADE`.
+- Llaves foráneas con `ON DELETE NO ACTION`, salvo filas de configuración hijas (`Requisito`, `PlantillaHorario`, `UsuarioModulo`, `PreguntaFrecuente`), que usan `CASCADE`.
 - Baja lógica con `Activo`: nunca se borra lo que tiene historia (RN-11).
 
 ## Tablas
@@ -209,7 +210,7 @@ Totales diarios del sistema anterior, sin datos personales ([14](14-migracion-de
 | `Estado` | `tinyint` | No | 1 Agendada, 2 Atendida, 3 No asistió, 4 Cancelada, 5 Reprogramada |
 | `Origen` | `tinyint` | No | 1 Web, 2 Ventanilla, 3 Migración |
 | `TokenHash` | `binary(32)` | No | Único; SHA-256 del token |
-| `TokenProtegido` | `nvarchar(600)` | No | Token cifrado con Data Protection |
+| `TokenProtegido` | `varchar(600)` | No | Token cifrado con Data Protection; Base64url, solo ASCII (176 caracteres hoy) |
 | `TokenVenceEn` | `datetimeoffset(0)` | No | RN-16 |
 | `ClaveIdempotencia` | `uniqueidentifier` | Sí | Único filtrado `UX_Cita_ClaveIdempotencia` (`WHERE ClaveIdempotencia IS NOT NULL`) |
 | `VersionAvisoPrivacidad` | `varchar(20)` | Sí | Versión aceptada |
@@ -225,9 +226,14 @@ Totales diarios del sistema anterior, sin datos personales ([14](14-migracion-de
 
 Índices:
 
+- Únicos `UX_Cita_Folio (Folio)`, `UX_Cita_TokenHash (TokenHash)` y `UX_Cita_ClaveIdempotencia (ClaveIdempotencia) WHERE ClaveIdempotencia IS NOT NULL`.
 - `UX_Cita_SolicitanteActiva (SolicitanteId) WHERE Estado = 1` — RN-01.
-- `IX_Cita_Cupo (CupoId) INCLUDE (Estado)` — agenda del día y reportes.
+- `IX_Cita_Solicitante (SolicitanteId, Estado)` — búsqueda por CURP y retención.
+- `IX_Cita_Cupo (CupoId) INCLUDE (Estado, SolicitanteId, Folio, Origen)` — agenda del día, listados, tablero y reportes sin volver a la tabla.
 - `IX_Cita_FolioAnterior (FolioAnterior) WHERE FolioAnterior IS NOT NULL` — búsqueda del personal.
+- `IX_Cita_CitaOrigen`, `IX_Cita_CreadaPor` e `IX_Cita_ActualizadaPor`, de las llaves foráneas, filtrados con `IS NOT NULL` porque casi siempre están vacías.
+
+La búsqueda del personal por folio, folio anterior o CURP se resuelve con tres búsquedas exactas unidas, nunca con un `OR` entre `Cita` y `Solicitante`, que recorrería todas las citas ([18](18-analisis-de-base-de-datos.md)).
 
 **Notificacion**
 
@@ -246,6 +252,37 @@ Totales diarios del sistema anterior, sin datos personales ([14](14-migracion-de
 | `CreadaEn` | `datetimeoffset(0)` | No | |
 
 Índices: `IX_Notificacion_Pendientes (ProximoIntentoEn) WHERE Estado IN (1, 3)` y único `UX_Notificacion_Recordatorio (CitaId, Tipo) WHERE Tipo = 2` (RN-14).
+
+### Sitio
+
+Contenido de la portada que edita el administrador ([16](16-experiencia-de-usuario.md#contenido-editable)). Mientras no hay fila, el sitio muestra el contenido predeterminado de `PortadaPredeterminada`; no se siembra, para que un cambio en ese texto no pise lo que ya se editó.
+
+**ContenidoPortada**
+
+| Columna | Tipo | Nulo | Notas |
+| --- | --- | --- | --- |
+| `ContenidoPortadaId` | `tinyint` | No | PK; `CHECK (ContenidoPortadaId = 1)`: una sola fila |
+| `Etiqueta` | `nvarchar(80)` | No | Frase sobre el título |
+| `Titulo` | `nvarchar(120)` | No | |
+| `TituloDestacado` | `nvarchar(120)` | Sí | Continuación del título en guinda |
+| `Descripcion` | `nvarchar(300)` | No | |
+| `AvisoTexto` | `nvarchar(300)` | Sí | Vacío: sin aviso |
+| `AvisoTono` | `tinyint` | No | 1 Informativo, 2 Importante |
+| `AvisoDesde`, `AvisoHasta` | `date` | Sí | Inclusivos, en la hora de Sinaloa; `CHECK (AvisoDesde <= AvisoHasta)` |
+| `CreadoEn`, `ModificadoEn` | `datetimeoffset(0)` | No / Sí | |
+| `RowVersion` | `rowversion` | No | Cambia en cada guardado, aunque solo cambien las preguntas |
+
+**PreguntaFrecuente**
+
+| Columna | Tipo | Nulo | Notas |
+| --- | --- | --- | --- |
+| `PreguntaFrecuenteId` | `int` | No | PK identity |
+| `ContenidoPortadaId` | `tinyint` | No | FK → `ContenidoPortada`, cascada |
+| `Pregunta` | `nvarchar(200)` | No | |
+| `Respuesta` | `nvarchar(1500)` | No | Texto plano con enlaces `[texto](destino)` |
+| `Orden` | `smallint` | No | |
+
+Índice `IX_PreguntaFrecuente_Contenido (ContenidoPortadaId)`.
 
 ### Personal y auditoría
 
@@ -277,7 +314,7 @@ Las tablas de Identity se renombran en `OnModelCreating`: `Usuario`, `Rol`, `Usu
 | `Cambios` | `nvarchar(max)` | Sí | JSON con valores anteriores y nuevos, datos personales enmascarados |
 | `Ip` | `varchar(45)` | Sí | |
 
-Índices `IX_Auditoria_Fecha (Fecha)` e `IX_Auditoria_Usuario (UsuarioId, Fecha)`. El usuario de base de datos de la aplicación solo tiene `INSERT` y `SELECT` sobre esta tabla.
+Índices `IX_Auditoria_Fecha (Fecha)`, `IX_Auditoria_Usuario (UsuarioId, Fecha)` e `IX_Auditoria_Entidad (Entidad, EntidadId)`, para los movimientos del detalle de una cita. El usuario de base de datos de la aplicación solo tiene `INSERT` y `SELECT` sobre esta tabla.
 
 **EjecucionProceso**
 

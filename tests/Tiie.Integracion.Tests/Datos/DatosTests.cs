@@ -43,6 +43,16 @@ public sealed class DatosTests(FabricaTiie fabrica) : PruebaIntegracion(fabrica)
     };
 
     [Fact]
+    public async Task La_base_de_pruebas_usa_read_committed_snapshot_como_Azure_SQL()
+    {
+        var activo = await ConDbAsync(async db => (await db.Database
+            .SqlQuery<bool>($"SELECT is_read_committed_snapshot_on AS Value FROM sys.databases WHERE database_id = DB_ID()")
+            .ToListAsync()).Single());
+
+        activo.ShouldBeTrue();
+    }
+
+    [Fact]
     public async Task La_migracion_siembra_los_roles_y_los_niveles_escolares()
     {
         var (roles, niveles) = await ConDbAsync(async db =>

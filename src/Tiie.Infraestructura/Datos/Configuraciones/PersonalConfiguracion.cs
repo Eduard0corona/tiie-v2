@@ -59,6 +59,8 @@ internal sealed class AuditoriaConfiguracion : IEntityTypeConfiguration<Auditori
         b.Property(a => a.Ip).HasMaxLength(45).IsUnicode(false);
         b.HasIndex(a => a.Fecha).HasDatabaseName("IX_Auditoria_Fecha");
         b.HasIndex(a => new { a.UsuarioId, a.Fecha }).HasDatabaseName("IX_Auditoria_Usuario");
+        // Movimientos de un registro en el detalle de la cita; sin él se recorre toda la bitácora.
+        b.HasIndex(a => new { a.Entidad, a.EntidadId }).HasDatabaseName("IX_Auditoria_Entidad");
         b.HasOne<Usuario>().WithMany().HasForeignKey(a => a.UsuarioId);
     }
 }

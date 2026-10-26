@@ -13,6 +13,25 @@ export const configuracion: Esquemas['ConfiguracionPublica'] = {
   zonaHoraria: 'America/Mazatlan',
 };
 
+export const portada: Esquemas['PortadaPublica'] = {
+  etiqueta: 'Trámite presencial en los módulos de Sinaloa',
+  titulo: 'Agenda tu cita para la',
+  tituloDestacado: 'Tarjeta Inteligente de Identidad Estudiantil',
+  descripcion: 'Elige la sede, el día y la hora desde tu celular.',
+  aviso: null,
+  preguntas: [
+    { pregunta: '¿Necesito crear una cuenta?', respuesta: 'No. Solo necesitas la CURP.' },
+    {
+      pregunta: 'No encuentro el correo de mi cita',
+      respuesta: 'Revisa el correo no deseado o [recupera tu enlace](/recuperar).',
+    },
+    {
+      pregunta: '¿Dónde consulto mi CURP?',
+      respuesta: 'En [gob.mx/curp](https://www.gob.mx/curp/).',
+    },
+  ],
+};
+
 export const municipios: Esquemas['MunicipioPublico'][] = [
   { municipioId: 6, nombre: 'Culiacán' },
   { municipioId: 12, nombre: 'Mazatlán' },
@@ -135,6 +154,9 @@ export const publico = {
   catalogo: () => [
     http.get<never, never, Esquemas['ConfiguracionPublica']>('/api/publico/configuracion', () =>
       HttpResponse.json(configuracion),
+    ),
+    http.get<never, never, Esquemas['PortadaPublica']>('/api/publico/portada', () =>
+      HttpResponse.json(portada),
     ),
     http.get<never, never, Esquemas['MunicipioPublico'][]>('/api/publico/municipios', () =>
       HttpResponse.json(municipios),

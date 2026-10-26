@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import type { components } from '@/api/esquema';
 import { estiloBoton } from '@/components/ui/Boton';
 import { Contenedor } from '@/components/ui/Contenedor';
 import { Icono, type NombreIcono } from '@/components/ui/Icono';
@@ -9,8 +10,16 @@ const beneficios: readonly { icono: NombreIcono; texto: string }[] = [
   { icono: 'cambiar', texto: 'Cambia o cancela en línea' },
 ];
 
-/** Primera pantalla: qué se hace aquí, la acción principal y el camino para quien ya tiene cita. */
-export function Portada() {
+export type EncabezadoPortada = Pick<
+  components['schemas']['PortadaPublica'],
+  'etiqueta' | 'titulo' | 'tituloDestacado' | 'descripcion'
+>;
+
+/**
+ * Primera pantalla: qué se hace aquí, la acción principal y el camino para quien ya tiene cita. Los textos los
+ * edita el administrador; mientras llegan, unas barras ocupan su lugar para que la página no salte.
+ */
+export function Portada({ encabezado }: { encabezado: EncabezadoPortada | null }) {
   return (
     <section
       aria-labelledby="titulo-inicio"
@@ -25,21 +34,7 @@ export function Portada() {
         className="relative grid items-center gap-12 py-12 sm:py-16 lg:grid-cols-[1.15fr_0.85fr] lg:py-24"
       >
         <div className="flex flex-col">
-          <p className="inline-flex items-center gap-2 self-start rounded-full border border-guinda-200 bg-white/80 px-3 py-1 text-sm font-semibold text-guinda-800 shadow-sm">
-            <Icono nombre="sede" className="size-4" />
-            Trámite presencial en los módulos de Sinaloa
-          </p>
-          <h1
-            id="titulo-inicio"
-            className="mt-6 text-4xl leading-[1.1] font-extrabold tracking-tight text-slate-950 sm:text-5xl lg:text-[3.4rem]"
-          >
-            Agenda tu cita para la{' '}
-            <span className="text-guinda-700">Tarjeta Inteligente de Identidad Estudiantil</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-slate-700 sm:text-xl">
-            Elige la sede, el día y la hora desde tu celular. Te enviamos el comprobante y un enlace para
-            consultar, cambiar o cancelar tu cita.
-          </p>
+          {encabezado ? <TextosPortada encabezado={encabezado} /> : <TextosCargando />}
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link to="/agendar" className={estiloBoton({ tamano: 'grande' })}>
               Agendar cita
@@ -63,6 +58,55 @@ export function Portada() {
         <IlustracionTarjeta />
       </Contenedor>
     </section>
+  );
+}
+
+function TextosPortada({ encabezado }: { encabezado: EncabezadoPortada }) {
+  return (
+    <>
+      {encabezado.etiqueta && (
+        <p className="inline-flex items-center gap-2 self-start rounded-full border border-guinda-200 bg-white/80 px-3 py-1 text-sm font-semibold text-guinda-800 shadow-sm">
+          <Icono nombre="sede" className="size-4" />
+          {encabezado.etiqueta}
+        </p>
+      )}
+      <h1
+        id="titulo-inicio"
+        className="mt-6 text-4xl leading-[1.1] font-extrabold tracking-tight text-slate-950 sm:text-5xl lg:text-[3.4rem]"
+      >
+        {encabezado.titulo}
+        {encabezado.tituloDestacado && (
+          <>
+            {' '}
+            <span className="text-guinda-700">{encabezado.tituloDestacado}</span>
+          </>
+        )}
+      </h1>
+      {encabezado.descripcion && (
+        <p className="mt-6 max-w-xl text-lg whitespace-pre-line text-slate-700 sm:text-xl">
+          {encabezado.descripcion}
+        </p>
+      )}
+    </>
+  );
+}
+
+/** Mismo alto aproximado que los textos, para que los botones no se muevan al llegar. */
+function TextosCargando() {
+  return (
+    <div role="status" className="flex flex-col">
+      <span className="sr-only">Cargando la portada…</span>
+      <div aria-hidden="true" className="h-8 w-72 max-w-full animate-pulse rounded-full bg-guinda-100" />
+      <div aria-hidden="true" className="mt-6 flex flex-col gap-3">
+        <div className="h-10 w-11/12 animate-pulse rounded-xl bg-slate-200/80 sm:h-12" />
+        <div className="h-10 w-full animate-pulse rounded-xl bg-slate-200/80 sm:h-12" />
+        <div className="h-10 w-2/3 animate-pulse rounded-xl bg-slate-200/80 sm:h-12" />
+      </div>
+      <div aria-hidden="true" className="mt-6 flex max-w-xl flex-col gap-2">
+        <div className="h-6 w-full animate-pulse rounded-lg bg-slate-200/70" />
+        <div className="h-6 w-5/6 animate-pulse rounded-lg bg-slate-200/70" />
+      </div>
+    </div>
   );
 }
 

@@ -35,6 +35,35 @@
         }
       }
     },
+    "/api/publico/portada": {
+      "get": {
+        "tags": [
+          "Público"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortadaPublica"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/publico/tipos-tramite": {
       "get": {
         "tags": [
@@ -2775,6 +2804,72 @@
         }
       }
     },
+    "/api/admin/portada": {
+      "get": {
+        "tags": [
+          "Administración · Sitio"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortadaAdmin"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Administración · Sitio"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatosPortada"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortadaAdmin"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error como Problem Details con codigo.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemaApi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/auditoria": {
       "get": {
         "tags": [
@@ -3006,6 +3101,21 @@
           "Oferta"
         ],
         "type": "string"
+      },
+      "AvisoPortada": {
+        "required": [
+          "texto",
+          "tono"
+        ],
+        "type": "object",
+        "properties": {
+          "texto": {
+            "type": "string"
+          },
+          "tono": {
+            "$ref": "#/components/schemas/TonoAviso"
+          }
+        }
       },
       "BloqueoCreado": {
         "required": [
@@ -3725,6 +3835,73 @@
           }
         }
       },
+      "DatosPortada": {
+        "required": [
+          "etiqueta",
+          "titulo",
+          "tituloDestacado",
+          "descripcion",
+          "avisoTexto",
+          "avisoTono",
+          "avisoDesde",
+          "avisoHasta",
+          "preguntas",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "etiqueta": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "tituloDestacado": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "avisoTexto": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "avisoTono": {
+            "$ref": "#/components/schemas/TonoAviso"
+          },
+          "avisoDesde": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "avisoHasta": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "preguntas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PreguntaPortada"
+            }
+          },
+          "version": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "DatosTipoTramite": {
         "required": [
           "nombre",
@@ -4063,6 +4240,15 @@
             }
           }
         }
+      },
+      "EstadoAviso": {
+        "enum": [
+          "SinAviso",
+          "Programado",
+          "Visible",
+          "Vencido"
+        ],
+        "type": "string"
       },
       "EstadoCita": {
         "enum": [
@@ -4852,6 +5038,144 @@
           }
         }
       },
+      "PortadaAdmin": {
+        "required": [
+          "etiqueta",
+          "titulo",
+          "tituloDestacado",
+          "descripcion",
+          "avisoTexto",
+          "avisoTono",
+          "avisoDesde",
+          "avisoHasta",
+          "estadoAviso",
+          "preguntas",
+          "version",
+          "modificadoEn"
+        ],
+        "type": "object",
+        "properties": {
+          "etiqueta": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "tituloDestacado": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "avisoTexto": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "avisoTono": {
+            "$ref": "#/components/schemas/TonoAviso"
+          },
+          "avisoDesde": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "avisoHasta": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date"
+          },
+          "estadoAviso": {
+            "$ref": "#/components/schemas/EstadoAviso"
+          },
+          "preguntas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PreguntaPortada"
+            }
+          },
+          "version": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "modificadoEn": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "PortadaPublica": {
+        "required": [
+          "etiqueta",
+          "titulo",
+          "tituloDestacado",
+          "descripcion",
+          "aviso",
+          "preguntas"
+        ],
+        "type": "object",
+        "properties": {
+          "etiqueta": {
+            "type": "string"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "tituloDestacado": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "descripcion": {
+            "type": "string"
+          },
+          "aviso": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AvisoPortada"
+              }
+            ]
+          },
+          "preguntas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PreguntaPortada"
+            }
+          }
+        }
+      },
+      "PreguntaPortada": {
+        "required": [
+          "pregunta",
+          "respuesta"
+        ],
+        "type": "object",
+        "properties": {
+          "pregunta": {
+            "type": "string"
+          },
+          "respuesta": {
+            "type": "string"
+          }
+        }
+      },
       "ProblemaApi": {
         "required": [
           "title",
@@ -5629,6 +5953,13 @@
           }
         }
       },
+      "TonoAviso": {
+        "enum": [
+          "Informativo",
+          "Importante"
+        ],
+        "type": "string"
+      },
       "TotalEstado": {
         "required": [
           "estado",
@@ -5857,6 +6188,9 @@
     },
     {
       "name": "Administración · Usuarios"
+    },
+    {
+      "name": "Administración · Sitio"
     },
     {
       "name": "Administración · Auditoría"

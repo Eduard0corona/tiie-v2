@@ -179,6 +179,12 @@ export const rutas: RouteObject[] = [
                 }),
               },
               {
+                path: 'portada',
+                lazy: async () => ({
+                  Component: (await import('@/features/admin/portada/PaginaPortada')).PaginaPortada,
+                }),
+              },
+              {
                 path: 'mi-cuenta',
                 lazy: async () => ({
                   Component: (await import('@/features/admin/cuenta/PaginaMiCuenta')).PaginaMiCuenta,

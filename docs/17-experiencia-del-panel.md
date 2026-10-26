@@ -1,6 +1,6 @@
 # 17 · Experiencia del panel del personal
 
-Diseño de `/admin`: el marco (menú, búsqueda, cuenta), la entrada al panel, la agenda del día, el tablero y el estilo común de todas las pantallas. Usa el mismo sistema de diseño que el sitio público ([16](16-experiencia-de-usuario.md#sistema-de-diseño)). El objetivo es distinto: el ciudadano necesita orientación, el personal necesita rapidez. La API sigue decidiendo el acceso y las reglas ([07](07-autenticacion-y-autorizacion.md)); ocultar un menú o un botón es solo comodidad.
+Diseño de `/admin`: el marco (menú, búsqueda, cuenta), la entrada al panel, la agenda del día, el tablero, la portada del sitio y el estilo común de todas las pantallas. Usa el mismo sistema de diseño que el sitio público ([16](16-experiencia-de-usuario.md#sistema-de-diseño)). El objetivo es distinto: el ciudadano necesita orientación, el personal necesita rapidez. La API sigue decidiendo el acceso y las reglas ([07](07-autenticacion-y-autorizacion.md)); ocultar un menú o un botón es solo comodidad.
 
 ## Problema
 
@@ -80,6 +80,17 @@ Sigue la guía de visualización del proyecto: un número principal por vista, e
 
 Las barras siguen dentro de tablas HTML, como decide [08](08-frontend.md#stack): el valor está escrito junto a cada barra, así que no hace falta una capa de información al pasar el puntero.
 
+## Portada del sitio
+
+`/admin/portada`, en «Administración» y solo para el administrador. Edita lo que la portada pública toma de la API ([16](16-experiencia-de-usuario.md#contenido-editable)).
+
+- **Editar y Vista previa:** dos botones arriba. La vista previa usa los mismos componentes del sitio con los valores sin guardar; es inerte (no recibe el foco) porque el formulario ya tiene el mismo contenido.
+- **Encabezado:** etiqueta, título, continuación del título en guinda y descripción, cada uno con su límite.
+- **Aviso:** texto, tipo (Informativo o Importante) y fechas opcionales. Una insignia dice el estado de lo guardado según hoy en Sinaloa: Sin aviso, Programado, Visible hoy o Vencido.
+- **Preguntas frecuentes:** lista con Subir, Bajar y Quitar, como los requisitos de un trámite; hasta 20.
+- **Guardar:** un solo botón para todo. Debajo dice si hay cambios sin guardar, cuándo se guardó o que el sitio muestra el contenido predeterminado. Si alguien más guardó antes, se ofrece «Recargar».
+- La ayuda de los campos explica la sintaxis de los enlaces: `[texto](/ruta)` o `[texto](https://…)`.
+
 ## Compatibilidad con las pruebas
 
 Las pruebas E2E del panel (`tests/e2e/pruebas/personal.spec.ts`) y las de componentes dependen de:
@@ -108,3 +119,4 @@ Playwright compara por subcadena: ningún otro título debe contener «agenda de
 | H-3.21 Agenda en tarjetas en celular | En menos de 640 px cada cita es una tarjeta con sus acciones a la vista, sin desplazamiento horizontal y sin perder la semántica de lista | Should | Pendiente |
 | H-3.22 Atajos en la agenda | Con una fila enfocada, A marca Atendida y N marca No asistió, con confirmación accesible | Could | Pendiente |
 | H-3.23 Prueba con personal de módulo | Tres capturistas registran una mañana simulada; tiempo por persona atendida y errores | Must antes de la puerta de la Fase 3 | Pendiente |
+| H-3.24 Portada editable | Encabezado, aviso con fechas y preguntas frecuentes desde el panel; vista previa con los componentes del sitio; control de versión y bitácora | Must | Hecha |

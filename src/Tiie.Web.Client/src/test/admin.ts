@@ -93,6 +93,27 @@ export function cupoAdmin(parcial: Partial<Esquemas['CupoAdmin']> = {}): Esquema
   };
 }
 
+export function portadaAdmin(parcial: Partial<Esquemas['PortadaAdmin']> = {}): Esquemas['PortadaAdmin'] {
+  return {
+    etiqueta: 'Trámite presencial en los módulos de Sinaloa',
+    titulo: 'Agenda tu cita para la',
+    tituloDestacado: 'Tarjeta Inteligente de Identidad Estudiantil',
+    descripcion: 'Elige la sede, el día y la hora desde tu celular.',
+    avisoTexto: null,
+    avisoTono: 'Informativo',
+    avisoDesde: null,
+    avisoHasta: null,
+    estadoAviso: 'SinAviso',
+    preguntas: [
+      { pregunta: '¿Necesito crear una cuenta?', respuesta: 'No.' },
+      { pregunta: '¿Cuántas citas puedo tener?', respuesta: 'Una a la vez.' },
+    ],
+    version: null,
+    modificadoEn: null,
+    ...parcial,
+  };
+}
+
 export const admin = {
   catalogos: () => http.get('/api/admin/catalogos', () => HttpResponse.json(catalogos)),
 
@@ -108,6 +129,17 @@ export const admin = {
   actualizarModulo: (respuesta: (cuerpo: Esquemas['DatosModulo']) => Respuesta<Esquemas['ModuloDetalle']>) =>
     http.put<{ moduloId: string }, Esquemas['DatosModulo'], Esquemas['ModuloDetalle'] | ProblemaApi>(
       '/api/admin/modulos/:moduloId',
+      async ({ request }) => json(respuesta(await request.json())),
+    ),
+
+  portada: (respuesta: () => Respuesta<Esquemas['PortadaAdmin']>) =>
+    http.get<never, never, Esquemas['PortadaAdmin'] | ProblemaApi>('/api/admin/portada', () =>
+      json(respuesta()),
+    ),
+
+  guardarPortada: (respuesta: (cuerpo: Esquemas['DatosPortada']) => Respuesta<Esquemas['PortadaAdmin']>) =>
+    http.put<never, Esquemas['DatosPortada'], Esquemas['PortadaAdmin'] | ProblemaApi>(
+      '/api/admin/portada',
       async ({ request }) => json(respuesta(await request.json())),
     ),
 

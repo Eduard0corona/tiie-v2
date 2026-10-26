@@ -134,7 +134,7 @@ El restablecimiento usa el mismo mecanismo con la ruta `/admin/restablecer`. `ol
 | `PersonalSinMfa` | Sesión del personal | `yo`, configuración de MFA, `salir` |
 | `Personal` | Sesión + claim `mfa = true` | Todo `/api/admin` salvo lo anterior |
 | `Supervisor` | `Personal` + rol Administrador o Supervisor | Ofertas, plantillas, bloqueos, reportes, correcciones |
-| `Administrador` | `Personal` + rol Administrador | Usuarios, módulos, tipos de trámite, días inhábiles, auditoría |
+| `Administrador` | `Personal` + rol Administrador | Usuarios, módulos, tipos de trámite, días inhábiles, portada del sitio, auditoría |
 | `Cita` | Esquema `Cita` + claim `cita_id` | `/api/mi-cita` |
 
 ```csharp
@@ -177,6 +177,7 @@ services.AddAuthorizationBuilder()
 | Reportes | Sí | Sus módulos | No |
 | Tablero | Sí | Sus módulos | Sus módulos |
 | Bitácora de auditoría y procesos | Sí | No | No |
+| Portada del sitio (encabezado, aviso y preguntas) | Sí | No | No |
 
 ## Alcance por módulo
 

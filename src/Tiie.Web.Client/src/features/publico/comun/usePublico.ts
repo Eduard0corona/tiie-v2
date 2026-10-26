@@ -5,6 +5,7 @@ import { api, datos } from '@/api/cliente';
 export const clavesPublicas = {
   todo: ['publico'] as const,
   configuracion: ['publico', 'configuracion'] as const,
+  portada: ['publico', 'portada'] as const,
   tiposTramite: ['publico', 'tipos-tramite'] as const,
   municipios: ['publico', 'municipios'] as const,
   modulos: ['publico', 'modulos'] as const,
@@ -20,6 +21,15 @@ export function useConfiguracion() {
   return useQuery({
     queryKey: clavesPublicas.configuracion,
     queryFn: async () => datos(await api.GET('/api/publico/configuracion')),
+    staleTime: CINCO_MINUTOS,
+  });
+}
+
+/** Encabezado, aviso y preguntas frecuentes de la portada; los edita el administrador. */
+export function usePortada() {
+  return useQuery({
+    queryKey: clavesPublicas.portada,
+    queryFn: async () => datos(await api.GET('/api/publico/portada')),
     staleTime: CINCO_MINUTOS,
   });
 }
