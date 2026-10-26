@@ -74,6 +74,10 @@ public sealed class ManejadorExcepciones(IProblemDetailsService problemas, ILogg
 
     private static Dictionary<string, string[]> ErroresPorCampo(ValidationException validacion) =>
         validacion.Errors
-            .GroupBy(e => JsonNamingPolicy.CamelCase.ConvertName(e.PropertyName))
+            .GroupBy(e => NombreCampo(e.PropertyName))
             .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).Distinct().ToArray());
+
+    /// <summary>Cada tramo de la ruta en camelCase, como el JSON: <c>Preguntas[0].Respuesta</c> → <c>preguntas[0].respuesta</c>.</summary>
+    private static string NombreCampo(string propiedad) =>
+        string.Join('.', propiedad.Split('.').Select(JsonNamingPolicy.CamelCase.ConvertName));
 }

@@ -3,17 +3,28 @@ import { Link, useLocation } from 'react-router';
 import { estiloBoton } from '@/components/ui/Boton';
 import { Contenedor } from '@/components/ui/Contenedor';
 import { Icono, type NombreIcono } from '@/components/ui/Icono';
+import { usePortada } from '../comun/usePublico';
+import { AvisoPortada } from './AvisoPortada';
 import { EncabezadoSeccion } from './EncabezadoSeccion';
-import { Portada } from './Portada';
+import { Portada, type EncabezadoPortada } from './Portada';
 import { PreguntasFrecuentes } from './PreguntasFrecuentes';
 import { SeccionSedes } from './SeccionSedes';
 import { SeccionTramites } from './SeccionTramites';
 
+/** Si la API no responde, la portada conserva su mensaje y sus acciones. */
+const ENCABEZADO_RESPALDO: EncabezadoPortada = {
+  etiqueta: '',
+  titulo: 'Agenda tu cita para la',
+  tituloDestacado: 'Tarjeta Inteligente de Identidad Estudiantil',
+  descripcion: '',
+};
+
 /**
  * Portada del sitio (RF-01): qué se hace aquí, cómo, qué llevar, dónde y las dudas comunes. Cada sección
- * termina en la misma acción: agendar.
+ * termina en la misma acción: agendar. El encabezado, el aviso y las preguntas los edita el administrador.
  */
 export function PaginaInicio() {
+  const portada = usePortada();
   const { hash } = useLocation();
   // React Router no desplaza a los anclas al navegar dentro de la SPA (por ejemplo, «Sedes» del encabezado).
   useEffect(() => {
@@ -22,11 +33,12 @@ export function PaginaInicio() {
 
   return (
     <>
-      <Portada />
+      {portada.data?.aviso && <AvisoPortada aviso={portada.data.aviso} />}
+      <Portada encabezado={portada.data ?? (portada.isError ? ENCABEZADO_RESPALDO : null)} />
       <ComoFunciona />
       <SeccionTramites />
       <SeccionSedes />
-      <PreguntasFrecuentes />
+      <PreguntasFrecuentes preguntas={portada.data?.preguntas} error={portada.error ?? undefined} />
       <LlamadaFinal />
     </>
   );

@@ -1,6 +1,6 @@
 # 05 · Modelo de datos
 
-17 tablas propias más las de Identity, con llave foránea en cada relación. La pieza central es `Cupo`: una fila por oferta, fecha y hora con su capacidad, que hace imposible la sobreventa ([ADR 0004](adr/0004-cupo-materializado.md)). El esquema se crea solo con migraciones de EF Core.
+19 tablas propias más las de Identity, con llave foránea en cada relación. La pieza central es `Cupo`: una fila por oferta, fecha y hora con su capacidad, que hace imposible la sobreventa ([ADR 0004](adr/0004-cupo-materializado.md)). El esquema se crea solo con migraciones de EF Core.
 
 ## Diagrama
 
@@ -25,6 +25,7 @@ erDiagram
     Modulo ||--o{ UsuarioModulo : tiene
     Usuario |o--o{ Auditoria : registra
     Usuario |o--o{ Cita : "crea o actualiza"
+    ContenidoPortada ||--o{ PreguntaFrecuente : contiene
 ```
 
 ## Convenciones
@@ -36,7 +37,7 @@ erDiagram
 - Enums como `tinyint` con restricción `CHECK`.
 - `CreadoEn` y `ModificadoEn` los llena un interceptor de EF Core con `TimeProvider`.
 - `RowVersion rowversion` en las tablas que edita el personal; un conflicto se responde con 409 `Conflicto`.
-- Llaves foráneas con `ON DELETE NO ACTION`, salvo filas de configuración hijas (`Requisito`, `PlantillaHorario`, `UsuarioModulo`), que usan `CASCADE`.
+- Llaves foráneas con `ON DELETE NO ACTION`, salvo filas de configuración hijas (`Requisito`, `PlantillaHorario`, `UsuarioModulo`, `PreguntaFrecuente`), que usan `CASCADE`.
 - Baja lógica con `Activo`: nunca se borra lo que tiene historia (RN-11).
 
 ## Tablas
@@ -251,6 +252,37 @@ La búsqueda del personal por folio, folio anterior o CURP se resuelve con tres 
 | `CreadaEn` | `datetimeoffset(0)` | No | |
 
 Índices: `IX_Notificacion_Pendientes (ProximoIntentoEn) WHERE Estado IN (1, 3)` y único `UX_Notificacion_Recordatorio (CitaId, Tipo) WHERE Tipo = 2` (RN-14).
+
+### Sitio
+
+Contenido de la portada que edita el administrador ([16](16-experiencia-de-usuario.md#contenido-editable)). Mientras no hay fila, el sitio muestra el contenido predeterminado de `PortadaPredeterminada`; no se siembra, para que un cambio en ese texto no pise lo que ya se editó.
+
+**ContenidoPortada**
+
+| Columna | Tipo | Nulo | Notas |
+| --- | --- | --- | --- |
+| `ContenidoPortadaId` | `tinyint` | No | PK; `CHECK (ContenidoPortadaId = 1)`: una sola fila |
+| `Etiqueta` | `nvarchar(80)` | No | Frase sobre el título |
+| `Titulo` | `nvarchar(120)` | No | |
+| `TituloDestacado` | `nvarchar(120)` | Sí | Continuación del título en guinda |
+| `Descripcion` | `nvarchar(300)` | No | |
+| `AvisoTexto` | `nvarchar(300)` | Sí | Vacío: sin aviso |
+| `AvisoTono` | `tinyint` | No | 1 Informativo, 2 Importante |
+| `AvisoDesde`, `AvisoHasta` | `date` | Sí | Inclusivos, en la hora de Sinaloa; `CHECK (AvisoDesde <= AvisoHasta)` |
+| `CreadoEn`, `ModificadoEn` | `datetimeoffset(0)` | No / Sí | |
+| `RowVersion` | `rowversion` | No | Cambia en cada guardado, aunque solo cambien las preguntas |
+
+**PreguntaFrecuente**
+
+| Columna | Tipo | Nulo | Notas |
+| --- | --- | --- | --- |
+| `PreguntaFrecuenteId` | `int` | No | PK identity |
+| `ContenidoPortadaId` | `tinyint` | No | FK → `ContenidoPortada`, cascada |
+| `Pregunta` | `nvarchar(200)` | No | |
+| `Respuesta` | `nvarchar(1500)` | No | Texto plano con enlaces `[texto](destino)` |
+| `Orden` | `smallint` | No | |
+
+Índice `IX_PreguntaFrecuente_Contenido (ContenidoPortadaId)`.
 
 ### Personal y auditoría
 

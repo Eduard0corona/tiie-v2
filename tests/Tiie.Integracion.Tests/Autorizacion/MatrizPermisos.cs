@@ -69,6 +69,10 @@ public static class MatrizPermisos
         ["POST /api/admin/bloqueos/{bloqueoId:int}/cancelacion-citas"] = S,
         ["DELETE /api/admin/bloqueos/{bloqueoId:int}"] = S,
 
+        // Sitio
+        ["GET /api/admin/portada"] = A,
+        ["PUT /api/admin/portada"] = A,
+
         // Usuarios
         ["GET /api/admin/usuarios"] = A,
         ["POST /api/admin/usuarios"] = A,

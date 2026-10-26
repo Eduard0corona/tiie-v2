@@ -7,6 +7,7 @@ using Tiie.Dominio.Bitacora;
 using Tiie.Dominio.Catalogos;
 using Tiie.Dominio.Citas;
 using Tiie.Dominio.Notificaciones;
+using Tiie.Dominio.Sitio;
 using Tiie.Dominio.Solicitantes;
 using Tiie.Infraestructura.Identidad;
 
@@ -35,6 +36,8 @@ public sealed class TiieDbContext(DbContextOptions<TiieDbContext> options)
     public DbSet<Auditoria> Auditorias => Set<Auditoria>();
     public DbSet<EjecucionProceso> EjecucionesProceso => Set<EjecucionProceso>();
     public DbSet<UsuarioModulo> UsuariosModulos => Set<UsuarioModulo>();
+    public DbSet<ContenidoPortada> ContenidosPortada => Set<ContenidoPortada>();
+    public DbSet<PreguntaFrecuente> PreguntasFrecuentes => Set<PreguntaFrecuente>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -58,6 +61,7 @@ public sealed class TiieDbContext(DbContextOptions<TiieDbContext> options)
             (typeof(Requisito), typeof(TipoTramite)),
             (typeof(PlantillaHorario), typeof(Oferta)),
             (typeof(UsuarioModulo), typeof(Usuario)),
+            (typeof(PreguntaFrecuente), typeof(ContenidoPortada)),
         };
         foreach (var fk in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
         {

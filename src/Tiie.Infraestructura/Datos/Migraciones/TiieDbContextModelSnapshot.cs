@@ -883,6 +883,101 @@ namespace Tiie.Infraestructura.Datos.Migraciones
                         });
                 });
 
+            modelBuilder.Entity("Tiie.Dominio.Sitio.ContenidoPortada", b =>
+                {
+                    b.Property<byte>("ContenidoPortadaId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateOnly?>("AvisoDesde")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("AvisoHasta")
+                        .HasColumnType("date");
+
+                    b.Property<string>("AvisoTexto")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<byte>("AvisoTono")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTimeOffset>("CreadoEn")
+                        .HasPrecision(0)
+                        .HasColumnType("datetimeoffset(0)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Etiqueta")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<DateTimeOffset?>("ModificadoEn")
+                        .HasPrecision(0)
+                        .HasColumnType("datetimeoffset(0)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("TituloDestacado")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.HasKey("ContenidoPortadaId");
+
+                    b.ToTable("ContenidoPortada", "dbo", t =>
+                        {
+                            t.HasCheckConstraint("CK_ContenidoPortada_AvisoRango", "[AvisoDesde] IS NULL OR [AvisoHasta] IS NULL OR [AvisoDesde] <= [AvisoHasta]");
+
+                            t.HasCheckConstraint("CK_ContenidoPortada_AvisoTono", "[AvisoTono] BETWEEN 1 AND 2");
+
+                            t.HasCheckConstraint("CK_ContenidoPortada_Unico", "[ContenidoPortadaId] = 1");
+                        });
+                });
+
+            modelBuilder.Entity("Tiie.Dominio.Sitio.PreguntaFrecuente", b =>
+                {
+                    b.Property<int>("PreguntaFrecuenteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PreguntaFrecuenteId"));
+
+                    b.Property<byte>("ContenidoPortadaId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short>("Orden")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Pregunta")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Respuesta")
+                        .IsRequired()
+                        .HasMaxLength(1500)
+                        .HasColumnType("nvarchar(1500)");
+
+                    b.HasKey("PreguntaFrecuenteId");
+
+                    b.HasIndex("ContenidoPortadaId")
+                        .HasDatabaseName("IX_PreguntaFrecuente_Contenido");
+
+                    b.ToTable("PreguntaFrecuente", "dbo");
+                });
+
             modelBuilder.Entity("Tiie.Dominio.Solicitantes.Solicitante", b =>
                 {
                     b.Property<int>("SolicitanteId")
@@ -1337,6 +1432,15 @@ namespace Tiie.Infraestructura.Datos.Migraciones
                     b.Navigation("Cita");
                 });
 
+            modelBuilder.Entity("Tiie.Dominio.Sitio.PreguntaFrecuente", b =>
+                {
+                    b.HasOne("Tiie.Dominio.Sitio.ContenidoPortada", null)
+                        .WithMany("Preguntas")
+                        .HasForeignKey("ContenidoPortadaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Tiie.Infraestructura.Identidad.UsuarioModulo", b =>
                 {
                     b.HasOne("Tiie.Dominio.Catalogos.Modulo", null)
@@ -1386,6 +1490,11 @@ namespace Tiie.Infraestructura.Datos.Migraciones
             modelBuilder.Entity("Tiie.Dominio.Citas.Cita", b =>
                 {
                     b.Navigation("Notificaciones");
+                });
+
+            modelBuilder.Entity("Tiie.Dominio.Sitio.ContenidoPortada", b =>
+                {
+                    b.Navigation("Preguntas");
                 });
 
             modelBuilder.Entity("Tiie.Infraestructura.Identidad.Usuario", b =>

@@ -23,6 +23,7 @@ export const clavesAdmin = {
   tablero: (moduloId?: number) => ['admin', 'tablero', { moduloId }] as const,
   auditoria: (filtros: object) => ['admin', 'auditoria', filtros] as const,
   procesos: ['admin', 'procesos'] as const,
+  portada: ['admin', 'portada'] as const,
 };
 
 const CINCO_MINUTOS = 5 * 60_000;

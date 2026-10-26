@@ -106,3 +106,12 @@ export function copiarErroresAlFormulario<T extends FieldValues>(
   }
   return marcado;
 }
+
+/** Los errores de la API llegan como `requisitos[0].texto`; el formulario los nombra `requisitos.0.texto`. */
+export function rutasDeFormulario(error: unknown): unknown {
+  if (!(error instanceof ErrorApi)) return error;
+  const errors = Object.fromEntries(
+    Object.entries(error.errors).map(([campo, mensajes]) => [campo.replace(/\[(\d+)\]/g, '.$1'), mensajes]),
+  );
+  return new ErrorApi(error.status, { ...error.problema, errors });
+}

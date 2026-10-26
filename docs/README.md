@@ -19,8 +19,8 @@ Esta carpeta es la referencia para construir la versión 2. El análisis del sis
 | 13 | [Despliegue y operación](13-despliegue-y-operacion.md) | Recursos de Azure, CI/CD, migraciones, monitoreo y runbooks |
 | 14 | [Migración de datos](14-migracion-de-datos.md) | Mapeo desde la base de 2016, ensayos y corte |
 | 15 | [Plan de implementación](15-plan-de-implementacion.md) | Fases, épicas, historias y definición de terminado |
-| 16 | [Experiencia de usuario](16-experiencia-de-usuario.md) | Diseño de la portada y del servicio de citas: personas, principios, sistema de diseño, pantallas, métricas y backlog |
-| 17 | [Experiencia del panel](17-experiencia-del-panel.md) | Diseño de `/admin`: marco, búsqueda global, agenda del día, tablero, componentes del panel y backlog |
+| 16 | [Experiencia de usuario](16-experiencia-de-usuario.md) | Diseño de la portada y del servicio de citas: personas, principios, sistema de diseño, pantallas, contenido editable, métricas y backlog |
+| 17 | [Experiencia del panel](17-experiencia-del-panel.md) | Diseño de `/admin`: marco, búsqueda global, agenda del día, tablero, portada del sitio, componentes del panel y backlog |
 | 18 | [Análisis de la base de datos](18-analisis-de-base-de-datos.md) | Revisión de estructura, índices, consultas y scripts con medición sobre volumen sintético; dictamen y cambios |
 | — | [Decisiones de arquitectura (ADR)](adr/README.md) | Registro de decisiones y su contexto |
 

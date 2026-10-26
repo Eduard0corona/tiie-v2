@@ -5,7 +5,7 @@ import { useFieldArray, useForm, type Path } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { api, datos } from '@/api/cliente';
 import type { components } from '@/api/esquema';
-import { copiarErroresAlFormulario } from '@/api/errores';
+import { copiarErroresAlFormulario, rutasDeFormulario } from '@/api/errores';
 import { Alerta, RegionAnuncios } from '@/components/ui/Alerta';
 import { Boton } from '@/components/ui/Boton';
 import { Campo, Casilla } from '@/components/ui/Campo';
@@ -18,7 +18,6 @@ import {
   TRAMITE_VACIO,
   datosDeTramite,
   esquemaTramite,
-  rutasDeFormulario,
   valoresDeTramite,
   type ValoresTramite,
 } from './esquemas';

@@ -4,6 +4,7 @@ using Tiie.Aplicacion.MiCita;
 using Tiie.Aplicacion.Publico;
 using Tiie.Aplicacion.Puertos;
 using Tiie.Aplicacion.Reservas;
+using Tiie.Aplicacion.Sitio;
 using Tiie.Dominio.Citas;
 using Tiie.Web.Infraestructura;
 using Tiie.Web.Seguridad;
@@ -41,6 +42,8 @@ public static class PublicoEndpoints
             .RequireRateLimiting(Limites.PublicoLectura);
 
         g.MapGet("/configuracion", (ConsultarConfiguracionManejador m) => TypedResults.Ok(m.Ejecutar()));
+
+        g.MapGet("/portada", async (PortadaManejador m, CancellationToken ct) => TypedResults.Ok(await m.PublicaAsync(ct)));
 
         g.MapGet("/tipos-tramite", async (ConsultarCatalogoPublicoManejador m, CancellationToken ct) =>
             TypedResults.Ok(await m.TiposTramiteAsync(ct)));

@@ -11,6 +11,7 @@ Cada decisión que cambia la forma del sistema se registra aquí, con su context
 | [0005](0005-acceso-ciudadano-por-token.md) | Acceso del ciudadano por token, sin cuenta | Propuesto |
 | [0006](0006-zona-horaria-america-mazatlan.md) | Zona `America/Mazatlan` y `TimeProvider` | Propuesto |
 | [0007](0007-outbox-y-procesos-en-el-sitio.md) | Bandeja de salida en SQL y procesos dentro del sitio | Propuesto |
+| [0008](0008-contenido-editable-de-la-portada.md) | Contenido de la portada editable en la base, como texto plano con enlaces | Propuesto |
 
 Los ADR propuestos se ratifican o se ajustan en la primera semana de la Fase 1.
 

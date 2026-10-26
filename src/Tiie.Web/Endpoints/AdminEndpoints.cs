@@ -35,6 +35,7 @@ public static class AdminEndpoints
         AdminCatalogosEndpoints.Map(personal, supervisor, administrador);
         AdminHorariosEndpoints.Map(personal, supervisor);
         AdminUsuariosEndpoints.Map(administrador);
+        AdminSitioEndpoints.Map(administrador);
         AdminInformacionEndpoints.Map(personal, supervisor, administrador);
     }
 }
