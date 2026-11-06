@@ -131,7 +131,7 @@ Tokens en `src/styles/index.css` (`@theme`). Guinda es la marca y las acciones; 
 - Franja «Sitio oficial del Gobierno del Estado de Sinaloa» y encabezado fijo con Trámites, Sedes, Preguntas (escritorio), «Mi cita» y «Agendar» (se oculta dentro del asistente).
 - Pie con enlaces a las tareas y a la información, y el aviso de privacidad.
 - «Ir al contenido» lleva el foco a `<main>`.
-- **Aviso del administrador** (opcional), al inicio de `<main>` en la portada, el asistente (`/agendar`) y Mi cita: franja con un ícono y el texto, informativa (guinda clara) o importante (ámbar). Solo aparece entre sus fechas ([contenido editable](#contenido-editable)). No se muestra en recuperar, el aviso de privacidad ni las páginas de error. Al estar dentro de `<main>`, «Ir al contenido» no lo salta.
+- **Aviso del administrador** (opcional), al inicio de `<main>` en la portada, el asistente (`/agendar`), Mi cita y recuperar (`/recuperar`): franja con un ícono y el texto, informativa (guinda clara) o importante (ámbar). Solo aparece entre sus fechas ([contenido editable](#contenido-editable)). No se muestra en el aviso de privacidad ni en las páginas de error. Al estar dentro de `<main>`, «Ir al contenido» no lo salta.
 
 ### Portada (`/`)
 
@@ -152,7 +152,7 @@ El administrador cambia desde el panel ([17](17-experiencia-del-panel.md#portada
 | Se edita | Queda fijo |
 | --- | --- |
 | Etiqueta, título, continuación del título y descripción del encabezado | Botones, beneficios e ilustración |
-| Aviso: texto, tono y fechas; se ve en la portada, el asistente y Mi cita | «Agenda en cuatro pasos» |
+| Aviso: texto, tono y fechas; se ve en la portada, el asistente, Mi cita y recuperar | «Agenda en cuatro pasos» |
 | Preguntas frecuentes: hasta 20, en orden | Trámites y sedes, que vienen de sus catálogos |
 | | Llamada final, encabezado y pie del sitio |
 
@@ -222,7 +222,7 @@ Además de lo que exige [08](08-frontend.md#accesibilidad):
 | H-2.27 Identidad institucional | Gobierno: que el sitio cumpla sus lineamientos | Logotipo, tipografía e imagen de la tarjeta aprobados por Comunicación Social | Must antes de abrir al público | Pendiente |
 | H-2.28 Sede más cercana | Ciudadano: ordenar sedes por distancia | Ubicación opcional; requiere cambiar `Permissions-Policy` (hoy `geolocation=()`) | Could | Pendiente |
 | H-2.29 Modo oscuro | Ciudadano: leer de noche | Tokens para `prefers-color-scheme: dark` con contraste AA | Could | Pendiente |
-| H-2.30 Aviso del administrador | Ciudadano: enterarme de un cierre o cambio antes de agendar o al revisar mi cita | Franja informativa o importante en la portada, el asistente y Mi cita, solo entre sus fechas en la hora de Sinaloa; con enlaces | Must | Hecha |
+| H-2.30 Aviso del administrador | Ciudadano: enterarme de un cierre o cambio antes de agendar, al revisar mi cita o al recuperar su enlace | Franja informativa o importante en la portada, el asistente, Mi cita y recuperar, solo entre sus fechas en la hora de Sinaloa; con enlaces | Must | Hecha |
 
 ## Preguntas abiertas de diseño
 

@@ -12,6 +12,7 @@ describe('Aviso del sitio', () => {
     ['la portada', '/'],
     ['el asistente para agendar', '/agendar'],
     ['Mi cita', '/mi-cita'],
+    ['recuperar el enlace', '/recuperar'],
   ])('aparece una sola vez en %s', async (_, ruta) => {
     servidor.use(
       publico.portadaConAviso(aviso),
@@ -34,9 +35,9 @@ describe('Aviso del sitio', () => {
     expect(screen.getByRole('main')).toContainElement(franja);
   });
 
-  it('no aparece en otras páginas, como recuperar el enlace', async () => {
+  it('no aparece en otras páginas, como el aviso de privacidad', async () => {
     servidor.use(publico.portadaConAviso(aviso), ...publico.catalogo());
-    renderizarRuta('/recuperar');
+    renderizarRuta('/aviso-de-privacidad');
 
     expect(await screen.findByRole('heading', { level: 1 })).toBeInTheDocument();
     expect(screen.queryByRole('complementary', { name: 'Aviso importante' })).not.toBeInTheDocument();

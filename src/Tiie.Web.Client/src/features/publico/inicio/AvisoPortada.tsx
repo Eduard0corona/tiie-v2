@@ -43,7 +43,7 @@ export function AvisoPortada({ aviso }: { aviso: Aviso }) {
 }
 
 /**
- * El aviso vigente, en la portada, el asistente y Mi cita. Comparte la consulta de la portada: al pasar de una
+ * El aviso vigente, en la portada, el asistente, Mi cita y recuperar. Comparte la consulta de la portada: al pasar de una
  * página a otra no se vuelve a pedir. Si la API falla, no se muestra nada.
  */
 export function AvisoDelSitio() {
