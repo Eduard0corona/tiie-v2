@@ -14,8 +14,9 @@ const secciones = [
 const enlaceNavegacion =
   'inline-flex min-h-11 items-center rounded-lg px-3 font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950';
 
-/** Páginas donde se muestra el aviso del administrador: donde se decide o se consulta una cita. */
-const conAviso = (ruta: string) => ruta === '/' || ruta.startsWith('/agendar') || ruta.startsWith('/mi-cita');
+/** Páginas donde se muestra el aviso del administrador: donde se decide, se consulta o se recupera una cita. */
+const RUTAS_CON_AVISO = ['/agendar', '/mi-cita', '/recuperar'];
+const conAviso = (ruta: string) => ruta === '/' || RUTAS_CON_AVISO.some((r) => ruta.startsWith(r));
 
 /**
  * Marco del sitio público. La franja superior identifica el sitio oficial (contra copias que piden datos);
