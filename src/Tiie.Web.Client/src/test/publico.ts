@@ -175,6 +175,12 @@ export const publico = {
     ),
   ],
 
+  /** Portada con un aviso vigente; va antes de `catalogo()`, porque MSW usa el primer manejador que coincide. */
+  portadaConAviso: (aviso: NonNullable<Esquemas['PortadaPublica']['aviso']>) =>
+    http.get<never, never, Esquemas['PortadaPublica']>('/api/publico/portada', () =>
+      HttpResponse.json({ ...portada, aviso }),
+    ),
+
   disponibilidad: (respuesta: () => Esquemas['DisponibilidadOferta'] = () => disponibilidad) =>
     http.get<never, never, Esquemas['DisponibilidadOferta']>(
       '/api/publico/ofertas/:ofertaId/disponibilidad',

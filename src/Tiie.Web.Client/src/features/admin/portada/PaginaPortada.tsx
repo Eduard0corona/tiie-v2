@@ -208,7 +208,7 @@ function EditorPortada({ portada, alRecargar }: { portada: PortadaAdmin; alRecar
         <Panel
           titulo="Aviso"
           icono="alerta"
-          descripcion="Una franja sobre la portada para cierres, temporadas o cambios de requisitos. Déjalo vacío si no hay aviso."
+          descripcion="Una franja en la portada, en el asistente para agendar y en Mi cita, para cierres, temporadas o cambios de requisitos. Déjalo vacío si no hay aviso."
           acciones={
             <span className="flex flex-col items-end gap-1">
               <Insignia tono={estado.tono}>{estado.texto}</Insignia>
@@ -362,7 +362,8 @@ function VistaPrevia({ valores }: { valores: ValoresPortada }) {
         </h2>
         <p className="text-sm text-slate-600">
           Así se verá la portada con estos cambios, aún sin guardar. El aviso aparece aquí aunque no esté en
-          sus fechas; en el sitio solo se muestra mientras está vigente.
+          sus fechas; en el sitio solo se muestra mientras está vigente, en la portada, al agendar y en Mi
+          cita.
         </p>
       </div>
       <div inert className="overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-sm">

@@ -2,6 +2,7 @@ import type { components } from '@/api/esquema';
 import { TextoConEnlaces } from '@/components/TextoConEnlaces';
 import { Contenedor } from '@/components/ui/Contenedor';
 import { Icono } from '@/components/ui/Icono';
+import { usePortada } from '../comun/usePublico';
 
 type Aviso = components['schemas']['AvisoPortada'];
 
@@ -21,8 +22,8 @@ const estilos = {
 } as const;
 
 /**
- * Aviso que publica el administrador sobre la portada: cierres, temporadas, cambios de requisitos. La API solo
- * lo envía mientras está vigente.
+ * Aviso que publica el administrador: cierres, temporadas, cambios de requisitos. La API solo lo envía mientras
+ * está vigente.
  */
 export function AvisoPortada({ aviso }: { aviso: Aviso }) {
   const estilo = estilos[aviso.tono];
@@ -39,4 +40,13 @@ export function AvisoPortada({ aviso }: { aviso: Aviso }) {
       </Contenedor>
     </aside>
   );
+}
+
+/**
+ * El aviso vigente, en la portada, el asistente y Mi cita. Comparte la consulta de la portada: al pasar de una
+ * página a otra no se vuelve a pedir. Si la API falla, no se muestra nada.
+ */
+export function AvisoDelSitio() {
+  const aviso = usePortada().data?.aviso;
+  return aviso ? <AvisoPortada aviso={aviso} /> : null;
 }

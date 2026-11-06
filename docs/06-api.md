@@ -83,7 +83,7 @@ Valores que la SPA necesita al arrancar.
 
 ### `GET /api/publico/portada`
 
-Encabezado, aviso y preguntas frecuentes de la portada; los edita el administrador ([16](16-experiencia-de-usuario.md#contenido-editable)). Mientras no se guarde nada, responde el contenido predeterminado. `aviso` es `null` si no hay aviso o si hoy, en la hora de Sinaloa, está fuera de sus fechas. Los textos son planos; los enlaces se escriben `[texto](destino)`.
+Encabezado, aviso y preguntas frecuentes de la portada; los edita el administrador ([16](16-experiencia-de-usuario.md#contenido-editable)). Mientras no se guarde nada, responde el contenido predeterminado. `aviso` es `null` si no hay aviso o si hoy, en la hora de Sinaloa, está fuera de sus fechas; la SPA lo muestra en la portada, el asistente y Mi cita con esta misma consulta. Los textos son planos; los enlaces se escriben `[texto](destino)`.
 
 ```json
 {
