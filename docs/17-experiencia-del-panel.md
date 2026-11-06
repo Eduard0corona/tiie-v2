@@ -86,7 +86,7 @@ Las barras siguen dentro de tablas HTML, como decide [08](08-frontend.md#stack):
 
 - **Editar y Vista previa:** dos botones arriba. La vista previa usa los mismos componentes del sitio con los valores sin guardar; es inerte (no recibe el foco) porque el formulario ya tiene el mismo contenido.
 - **Encabezado:** etiqueta, título, continuación del título en guinda y descripción, cada uno con su límite.
-- **Aviso:** texto, tipo (Informativo o Importante) y fechas opcionales. Una insignia dice el estado de lo guardado según hoy en Sinaloa: Sin aviso, Programado, Visible hoy o Vencido.
+- **Aviso:** texto, tipo (Informativo o Importante) y fechas opcionales. Se ve en la portada, el asistente para agendar y Mi cita. Una insignia dice el estado de lo guardado según hoy en Sinaloa: Sin aviso, Programado, Visible hoy o Vencido.
 - **Preguntas frecuentes:** lista con Subir, Bajar y Quitar, como los requisitos de un trámite; hasta 20.
 - **Guardar:** un solo botón para todo. Debajo dice si hay cambios sin guardar, cuándo se guardó o que el sitio muestra el contenido predeterminado. Si alguien más guardó antes, se ofrece «Recargar».
 - La ayuda de los campos explica la sintaxis de los enlaces: `[texto](/ruta)` o `[texto](https://…)`.

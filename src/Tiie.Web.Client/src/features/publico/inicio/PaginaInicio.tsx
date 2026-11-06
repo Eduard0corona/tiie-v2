@@ -4,7 +4,6 @@ import { estiloBoton } from '@/components/ui/Boton';
 import { Contenedor } from '@/components/ui/Contenedor';
 import { Icono, type NombreIcono } from '@/components/ui/Icono';
 import { usePortada } from '../comun/usePublico';
-import { AvisoPortada } from './AvisoPortada';
 import { EncabezadoSeccion } from './EncabezadoSeccion';
 import { Portada, type EncabezadoPortada } from './Portada';
 import { PreguntasFrecuentes } from './PreguntasFrecuentes';
@@ -21,7 +20,8 @@ const ENCABEZADO_RESPALDO: EncabezadoPortada = {
 
 /**
  * Portada del sitio (RF-01): qué se hace aquí, cómo, qué llevar, dónde y las dudas comunes. Cada sección
- * termina en la misma acción: agendar. El encabezado, el aviso y las preguntas los edita el administrador.
+ * termina en la misma acción: agendar. El encabezado y las preguntas los edita el administrador; el aviso lo
+ * muestra el marco del sitio.
  */
 export function PaginaInicio() {
   const portada = usePortada();
@@ -33,7 +33,6 @@ export function PaginaInicio() {
 
   return (
     <>
-      {portada.data?.aviso && <AvisoPortada aviso={portada.data.aviso} />}
       <Portada encabezado={portada.data ?? (portada.isError ? ENCABEZADO_RESPALDO : null)} />
       <ComoFunciona />
       <SeccionTramites />

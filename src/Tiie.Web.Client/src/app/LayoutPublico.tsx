@@ -3,6 +3,7 @@ import { estiloBoton } from '@/components/ui/Boton';
 import { Contenedor } from '@/components/ui/Contenedor';
 import { Icono } from '@/components/ui/Icono';
 import { Marca } from '@/components/Marca';
+import { AvisoDelSitio } from '@/features/publico/inicio/AvisoPortada';
 
 const secciones = [
   { a: '/#tramites', texto: 'Trámites' },
@@ -13,9 +14,13 @@ const secciones = [
 const enlaceNavegacion =
   'inline-flex min-h-11 items-center rounded-lg px-3 font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950';
 
+/** Páginas donde se muestra el aviso del administrador: donde se decide o se consulta una cita. */
+const conAviso = (ruta: string) => ruta === '/' || ruta.startsWith('/agendar') || ruta.startsWith('/mi-cita');
+
 /**
  * Marco del sitio público. La franja superior identifica el sitio oficial (contra copias que piden datos);
- * el encabezado es fijo y siempre ofrece «Agendar» y «Mi cita», salvo «Agendar» dentro del asistente.
+ * el encabezado es fijo y siempre ofrece «Agendar» y «Mi cita», salvo «Agendar» dentro del asistente. El aviso
+ * va dentro de `main`, para que «Ir al contenido» no lo salte.
  */
 export function LayoutPublico() {
   const { pathname } = useLocation();
@@ -60,6 +65,7 @@ export function LayoutPublico() {
         </Contenedor>
       </header>
       <main id="contenido" tabIndex={-1} className="flex-1 focus:outline-none">
+        {conAviso(pathname) && <AvisoDelSitio />}
         <Outlet />
       </main>
       <PiePagina />
